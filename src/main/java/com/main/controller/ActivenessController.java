@@ -1,0 +1,24 @@
+package com.main.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.main.model.Activeness;
+import com.main.service.ActivenessService;
+
+//Experimenteller Controller
+
+@RestController
+public class ActivenessController {
+
+	@Autowired
+	private ActivenessService service;
+
+	@GetMapping("/api/activeness")
+	public List<Activeness> getActiveness() {
+		return service.getAll();
+	}
+}
