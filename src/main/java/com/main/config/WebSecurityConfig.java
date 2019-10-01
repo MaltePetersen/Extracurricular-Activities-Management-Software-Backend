@@ -33,10 +33,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().exceptionHandling().authenticationEntryPoint(entryPoint).and().authorizeRequests()
-				.antMatchers("/api/activeness").authenticated().and().httpBasic().realmName(REALM)
-				.authenticationEntryPoint(getBasicAuthEntryPoint()).and().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().logout();
+		http.csrf().disable().exceptionHandling().authenticationEntryPoint(entryPoint)
+				.and().authorizeRequests().antMatchers("/api/activeness").authenticated()
+				.and().httpBasic().realmName(REALM).authenticationEntryPoint(getBasicAuthEntryPoint())
+				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.and().logout();
 	}
 
 	@Bean

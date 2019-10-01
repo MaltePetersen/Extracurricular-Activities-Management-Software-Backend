@@ -3,6 +3,7 @@ package com.main.model;
 import java.sql.Date;
 import java.util.Calendar;
 
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 
-@javax.persistence.Entity
+@Entity
 public class VerificationToken {
 
 	private static final int EXPIRATION = 60 * 24;

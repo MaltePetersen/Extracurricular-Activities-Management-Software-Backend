@@ -1,6 +1,5 @@
 package com.main.controller;
 
-import java.security.Principal;
 import java.util.Calendar;
 
 import javax.validation.Valid;
@@ -14,13 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +29,6 @@ import com.main.utility.MemberValidator;
 import com.main.utility.OnRegistrationCompleteEvent;
 
 @RestController
-@PreAuthorize("hasRole('ROLE_ANONYMOUS')")
 public class MemberController {
 
 	@Autowired

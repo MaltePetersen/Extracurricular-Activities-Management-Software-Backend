@@ -17,10 +17,10 @@ import com.main.repository.MemberRepository;
 import com.main.utility.MemberRole;
 
 @SpringBootApplication
-public class FitnesstrackerBackendApplication {
+public class FjoerdeBackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FitnesstrackerBackendApplication.class, args);
+		SpringApplication.run(FjoerdeBackendApplication.class, args);
 	}
 
 	@Autowired
