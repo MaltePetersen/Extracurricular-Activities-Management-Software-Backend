@@ -9,7 +9,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,10 +50,7 @@ public class MemberController {
 			bindingResult.addError(new ObjectError("password", "password.notequal"));
 		HttpHeaders headers = new HttpHeaders();
 		
-		if (bindingResult.hasErrors()) {
-			headers.add("Successfull", "False");
-			return new ResponseEntity<Void>(headers, HttpStatus.UNAUTHORIZED );
-		}
+
 
 		Member member = memberService.createAndRegister(memberForm);
 		try {
@@ -65,7 +61,7 @@ public class MemberController {
 		}
 		headers.add("Successfull", "True");
 		
-		return new ResponseEntity<Void>(headers, HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(headers, HttpStatus.ACCEPTED);
 	}
 
 	@GetMapping("/registrationConfirm")
@@ -77,20 +73,20 @@ public class MemberController {
 		if (myToken == null) {
 
 			headers.add("Successfull", "False");
-			return new ResponseEntity<Void>(headers, HttpStatus.UNAUTHORIZED );
+			return new ResponseEntity<>(headers, HttpStatus.UNAUTHORIZED );
 		}
 
 		Member member = myToken.getMember();
 		Calendar cal = Calendar.getInstance();
 		if ((myToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
 			headers.add("Successfull", "False");
-			return new ResponseEntity<Void>(headers, HttpStatus.UNAUTHORIZED );
+			return new ResponseEntity<>(headers, HttpStatus.UNAUTHORIZED );
 		}
 
 		member.setEnabled(true);
 		memberService.refresh(member);
 		headers.add("Successfull", "True");
-		return new ResponseEntity<Void>(headers, HttpStatus.ACCEPTED );
+		return new ResponseEntity<>(headers, HttpStatus.ACCEPTED );
 	}
 
 	@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No Such Member")
