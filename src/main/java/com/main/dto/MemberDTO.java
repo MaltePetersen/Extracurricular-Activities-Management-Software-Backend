@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MemberDTO {
 
-
+	//Warum hat die DTO eine Id, sollte diese erst nicht bei der Generierung der Objekts erstellt werden?
 	private long id;
 
 	@NotEmpty(message = "{username.notempty}")
