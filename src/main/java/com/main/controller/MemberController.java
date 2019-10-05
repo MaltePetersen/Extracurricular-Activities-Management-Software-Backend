@@ -50,7 +50,7 @@ public class MemberController {
 		if (!password.equals(confirmPassword))
 			bindingResult.addError(new ObjectError("password", "password.notequal"));
 		HttpHeaders headers = new HttpHeaders();
-		
+		//TODO: Funktioniert bei mir nur, wenn man diese Abfrage löscht. Muss ich noch weitere Headers einfügen? Hat es kein BindingResult, wenn es ein HTTP Post ist?
 		if (bindingResult.hasErrors()) {
 			headers.add("Successfull", "False");
 			return new ResponseEntity<Void>(headers, HttpStatus.UNAUTHORIZED );
