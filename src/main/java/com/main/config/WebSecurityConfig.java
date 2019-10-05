@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
-@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -23,9 +22,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UserDetailsService userDetailsService;
 
-	@Autowired
-	private RestAuthenticationEntryPoint entryPoint;
-
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -33,21 +29,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().exceptionHandling().authenticationEntryPoint(entryPoint)
-				.and().authorizeRequests().antMatchers("/api/activeness").authenticated()
-				.and().httpBasic().realmName(REALM).authenticationEntryPoint(getBasicAuthEntryPoint())
+		http.httpBasic()
+				.and().authorizeRequests().antMatchers("/api/activeness").authenticated().antMatchers("/register").permitAll()
 				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				.and().logout();
+				.and().logout().and().csrf().disable();
 	}
 
 	@Bean
 	public AuthenticationManager customAuthenticationManager() throws Exception {
 		return authenticationManager();
-	}
-
-	@Bean
-	public MyBasicAuthenticationEntryPoint getBasicAuthEntryPoint() {
-		return new MyBasicAuthenticationEntryPoint();
 	}
 
 	@Autowired
