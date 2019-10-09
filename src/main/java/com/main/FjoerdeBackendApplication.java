@@ -1,41 +1,33 @@
 package com.main;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import com.main.model.Activeness;
-import com.main.model.Member;
-import com.main.repository.ActivenessRepository;
-import com.main.repository.MemberRepository;
-import com.main.utility.MemberRole;
+import com.main.model.User;
+import com.main.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class FjoerdeBackendApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(FjoerdeBackendApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(FjoerdeBackendApplication.class, args);
+    }
 
-	@Autowired
-	public BCryptPasswordEncoder encoder;
 
-	@Bean
-	CommandLineRunner runner(MemberRepository memberRepository, ActivenessRepository activenessRepository) {
-		return args -> {
-			Member user = new Member(new HashSet<>(Arrays.asList(MemberRole.ROLE_USER, MemberRole.ROLE_ADMIN)),
-					"oberstrike", encoder.encode("mewtu123"), "markus.juergens@gmx.de");
-			user.setEnabled(true);
-			memberRepository.save(user);
-			activenessRepository.save(new Activeness(0, "Test", "Date"));
+    @Bean
+    public CommandLineRunner dataLoader(        UserRepository userRepo, PasswordEncoder encoder) { // user repo for ease of testing with a built-in user
+        return new CommandLineRunner() {
+            @Override
+            public void run(String... args) throws Exception {
+                userRepo.save(new User("habuma", encoder.encode("password"),
+                        "Craig Walls", "123 North Street", "Cross Roads", "TX",
+                        "76227", "123-123-1234", "ADMIN"));
+                System.out.println(        userRepo.findByUsername("habuma").getAuthorities());
 
-		};
-	}
+            }
+        };
+    }
 
 }
