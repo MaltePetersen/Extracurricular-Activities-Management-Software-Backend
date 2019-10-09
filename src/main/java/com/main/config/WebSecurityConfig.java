@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
 @Configuration
 public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
@@ -28,7 +27,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                     .httpBasic()
                     .and()
                     .authorizeRequests()
-                    .antMatchers(HttpMethod.GET, "/api/**").hasRole("ADMIN")
+                    .antMatchers(HttpMethod.GET, "/api/**").hasAnyRole("CHILD","PARENT","EMPLOYEE","MANAGEMENT","SCHOOLCOORDINATOR","TEACHER","USER")
                     .antMatchers(HttpMethod.POST, "/register").hasRole("ADMIN")
                     .and()
                     .csrf().disable()
