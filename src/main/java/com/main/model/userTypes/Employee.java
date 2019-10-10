@@ -6,29 +6,34 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
 import java.util.Arrays;
 import java.util.Collection;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 public class Employee extends User {
-
+    @NotBlank(message = "Email is mandatory")
     private String email;
+    @NotBlank(message = "PhoneNumber is mandatory")
     private String phoneNumber;
-    private String Studienfach;
+    @NotBlank(message = "Subject is mandatory")
+    private String subject;
+    @NotBlank(message = "Iban is mandatory")
     private String iban;
-    private String Adresse;
+    @NotBlank(message = "Address is mandatory")
+    private String address;
     public Employee(){
         super();
     }
 
-    public Employee(String username, String password, String fullname, String email, String phoneNumber, String studienfach, String iban, String adresse) {
+    public Employee(String username, String password, String fullname, String email, String phoneNumber, String subject, String iban, String address) {
         super(username, password, fullname);
         this.email = email;
         this.phoneNumber = phoneNumber;
-        Studienfach = studienfach;
+        this.subject = subject;
         this.iban = iban;
-        Adresse = adresse;
+        this.address = address;
     }
 
 

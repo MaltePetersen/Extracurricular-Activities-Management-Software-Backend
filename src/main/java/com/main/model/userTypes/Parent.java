@@ -2,6 +2,7 @@ package com.main.model.userTypes;
 import java.util.Arrays;
 import java.util.Collection;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,8 +13,9 @@ import org.springframework.security.core.authority.
 @Entity
 @Data
 public class Parent extends User {
-
+    @NotBlank(message = "Email is mandatory")
     private String email;
+    @NotBlank(message = "PhoneNumber is mandatory")
     private String phoneNumber;
 
     public String getEmail() {

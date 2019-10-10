@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -18,8 +19,11 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotBlank(message = "Username is mandatory")
     private final String username;
+    @NotBlank(message = "Password is mandatory")
     private final String password;
+    @NotBlank(message = "Fullname is mandatory")
     private final String fullname;
 
     //TODO: School Attribute??

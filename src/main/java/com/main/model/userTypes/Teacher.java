@@ -5,14 +5,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 @Entity
 @Data
 public class Teacher extends User {
-
+    @NotBlank(message = "Email is mandatory")
     private String email;
+    @NotBlank(message = "PhoneNumber is mandatory")
     private String phoneNumber;
 
     public Teacher(String username, String password, String fullname, String email, String phoneNumber) {

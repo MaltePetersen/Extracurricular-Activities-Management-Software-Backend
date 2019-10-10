@@ -2,27 +2,34 @@ package com.main.controller;
 
 import javax.validation.Valid;
 
+import com.main.dto.UserDTO;
+import com.main.model.userTypes.User;
+import com.main.repository.UserRepository;
+import com.main.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
 
-import com.main.dto.MemberDTO;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class UserController {
 
+    private UserService userService;
+
+    UserController(UserService userService) {
+        this.userService = userService;
+    }
 
 
     @PostMapping("/register")
-    public ResponseEntity<Void> registration(@Valid @RequestBody MemberDTO memberForm, BindingResult bindingResult,
-                                             WebRequest request) {
-
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    public ResponseEntity<String> registration(@Valid @RequestBody UserDTO user) {
+        userService.save(user);
+        return new ResponseEntity<>("Created", HttpStatus.CREATED);
     }
 
 
@@ -34,5 +41,18 @@ public class UserController {
             super("No such Member found");
         }
 
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
     }
 }

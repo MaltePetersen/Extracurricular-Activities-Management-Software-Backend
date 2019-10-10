@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -13,7 +14,7 @@ import java.util.Collection;
 @Entity
 @Data
 public class Child extends User {
-
+    @NotBlank(message = "SchoolClass is mandatory")
     private String schoolClass;
 
     public Child() {
