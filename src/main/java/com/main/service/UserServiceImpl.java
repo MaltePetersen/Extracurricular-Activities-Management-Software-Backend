@@ -24,32 +24,32 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public ResponseEntity<String> saveUser(@Valid User user) {
+    private ResponseEntity<String> saveUser(@Valid User user) {
         userRepository.save(user);
         return new ResponseEntity<>("Created User", HttpStatus.CREATED);
     }
 
-    public ResponseEntity<String> saveUser(@Valid Employee employee) {
+    private ResponseEntity<String> saveUser(@Valid Employee employee) {
         userRepository.save(employee);
         return new ResponseEntity<>("Created Employee", HttpStatus.CREATED);
     }
 
-    public ResponseEntity<String> saveUser(@Valid Parent parent) {
+    private ResponseEntity<String> saveUser(@Valid Parent parent) {
         userRepository.save(parent);
         return new ResponseEntity<>("Created Parent", HttpStatus.CREATED);
     }
 
-    public ResponseEntity<String> saveUser(@Valid SchoolCoordinator schoolCoordinator) {
+    private ResponseEntity<String> saveUser(@Valid SchoolCoordinator schoolCoordinator) {
         userRepository.save(schoolCoordinator);
         return new ResponseEntity<>("Created SchoolCoordinator", HttpStatus.CREATED);
     }
 
-    public ResponseEntity<String> saveUser(@Valid Teacher teacher) {
+    private ResponseEntity<String> saveUser(@Valid Teacher teacher) {
         userRepository.save(teacher);
         return new ResponseEntity<>("Created Teacher", HttpStatus.CREATED);
     }
 
-    public ResponseEntity<String> saveUser(@Valid Child child) {
+    private ResponseEntity<String> saveUser(@Valid Child child) {
         userRepository.save(child);
         return new ResponseEntity<>("Created child", HttpStatus.CREATED);
     }

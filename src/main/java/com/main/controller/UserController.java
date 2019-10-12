@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import com.main.dto.UserDTO;
 import com.main.model.userTypes.User;
 import com.main.repository.UserRepository;
+import com.main.service.EmailService;
 import com.main.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +22,16 @@ import java.util.Map;
 public class UserController {
 
     private UserService userService;
-
-    UserController(UserService userService) {
+    private EmailService emailService;
+    UserController(UserService userService, EmailService emailService) {
         this.userService = userService;
+        this.emailService = emailService;
     }
 
 
     @PostMapping("/register")
     public ResponseEntity<String> registration(@Valid @RequestBody UserDTO user, Authentication auth) {
+    emailService.sendSimpleMessage("petersen-malte@web.de","test","Verfified");
         return userService.save(user,auth);
     }
 

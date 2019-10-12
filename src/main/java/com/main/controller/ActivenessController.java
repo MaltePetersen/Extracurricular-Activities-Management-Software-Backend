@@ -22,12 +22,7 @@ public class ActivenessController {
 
     @CrossOrigin
 	@GetMapping("/api/activeness")
-	public List<Activeness> getActiveness(Authentication authentication) {
-        for (GrantedAuthority a:
-        authentication.getAuthorities()) {
-            System.out.println(a.getAuthority());
-        }
-
+	public List<Activeness> getActiveness() {
 	    return service.getAll();
 	}
 }
