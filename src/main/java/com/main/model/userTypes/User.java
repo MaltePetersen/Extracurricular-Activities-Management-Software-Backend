@@ -22,14 +22,65 @@ public class User implements UserDetails {
     private final String password;
     @NotBlank(message = "Fullname is mandatory")
     private final String fullname;
+    @NotBlank(message = "Role is mandatory")
+    private String role;
+    private String email;
+    private String phoneNumber;
+    private String address;
+    private String subject;
+    private String iban;
+    private String schoolClass;
+    private boolean isSchoolCoordinator;
 
-
-    //TODO: School Attribute??
+    //Constructur normal User
     public User(String username, String password, String fullname) {
         this.username = username;
         this.password = password;
         this.fullname = fullname;
+        role = "USER";
     }
+
+    //Constructor Child
+    public User(String username, String password, String fullname, String schoolClass) {
+        this(username, password, fullname);
+        this.schoolClass = schoolClass;
+        role = "CHILD";
+
+    }
+
+    //Constructer Parent
+    public User(String username, String password, String fullname, String email, String phoneNumber) {
+        this(username, password, fullname);
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        role = "PARENT";
+    }
+
+    //Constructor Teacher and SchoolCoordinator
+    public User(String username, String password, String fullname, String email, String phoneNumber, String subject, boolean isSchoolCoordinator) {
+    this(username, password, fullname, email, phoneNumber);
+        this.subject = subject;
+        role = "TEACHER";
+    this.isSchoolCoordinator = isSchoolCoordinator;
+    }
+    //Constructor Employee and SchoolCoordinator
+    public User(String username, String password, String fullname, String email, String phoneNumber, String address,String subject, String iban, boolean isSchoolCoordinator) {
+        this(username, password, fullname, email, phoneNumber, address);
+        this.subject = subject;
+        this.iban = iban;
+        this.isSchoolCoordinator = isSchoolCoordinator;
+        role = "EMPLOYEE";
+    }
+
+    //Constructor Management
+    public User(String username, String password, String fullname, String email, String phoneNumber, String address) {
+        this(username, password, fullname, email, phoneNumber);
+        this.address = address;
+        role = "MANAGEMENT";
+    }
+
+
+
 
     public User() {
         username = null;
@@ -39,7 +90,9 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        if(isSchoolCoordinator)
+            return Arrays.asList(new SimpleGrantedAuthority("ROLE_" + role), new SimpleGrantedAuthority("ROLE_SCHOOLCOORDINATOR"));
+        return Arrays.asList(new SimpleGrantedAuthority("ROLE_" + role));
     }
 
 

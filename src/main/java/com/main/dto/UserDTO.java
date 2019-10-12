@@ -27,5 +27,6 @@ public class UserDTO {
     private String subject;
     private String iban;
     private String address;
+    private boolean isSchoolCoordinator;
 
 }

@@ -1,5 +1,4 @@
 package com.main.service;
-import com.main.model.userTypes.Parent;
 import com.main.model.userTypes.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -88,9 +88,6 @@ public class UserDTOValidator {
                 validateEmail(userDTO.getEmail(), errors);
                 validatePhoneNumber(userDTO.getPhoneNumber(), errors);
                 break;
-            case "SCHOOLCOORDINATOR":
-                validateUser(userDTO, errors);
-                break;
             case "TEACHER":
                 validateUser(userDTO, errors);
                 validateEmail(userDTO.getEmail(), errors);
@@ -99,6 +96,7 @@ public class UserDTOValidator {
             case "CHILD":
                 validateUser(userDTO, errors);
                 validateSchoolClass(userDTO.getSchoolClass(), errors);
+                break;
             default:
                 errors.reject("User Type is missing or wrong");
         }
