@@ -1,13 +1,10 @@
 package com.main.repository;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
-
 import com.main.model.VerificationToken;
+import org.springframework.data.repository.CrudRepository;
 
-@Repository
-public interface VerificationTokenRepository extends CrudRepository<VerificationToken, Long>{
+import java.util.Optional;
 
-	VerificationToken findByToken(String token);
-
+public interface VerificationTokenRepository extends CrudRepository<VerificationToken,Long> {
+    VerificationToken findByToken(String token);
 }

@@ -1,48 +1,52 @@
 package com.main.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
 
-    public static String REALM = "REALM";
-
+    @Qualifier("userDetailsServiceImpl")
     @Autowired
-    private UserDetailsService userDetailsService;
+        private UserDetailsService userDetailsService;
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+
+            http
+                    //HTTP Basic authentication
+                    .httpBasic()
+                    .and()
+                    .authorizeRequests()
+                    .antMatchers(HttpMethod.GET, "/api/**").hasAnyRole("CHILD","PARENT","EMPLOYEE","MANAGEMENT","SCHOOLCOORDINATOR","TEACHER","USER")
+                    .antMatchers(HttpMethod.POST, "/register").permitAll()
+                    .and()
+                    .csrf().disable()
+                    .formLogin().disable();
+        }
+        @Bean
+        public PasswordEncoder encoder() {
+            return new BCryptPasswordEncoder();
+        }
+
+
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth)
+                throws Exception {
+
+            auth
+                    .userDetailsService(userDetailsService)
+                    .passwordEncoder(encoder());
+
+        }
+
     }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic()
-				.and().authorizeRequests().antMatchers("/api/activeness").authenticated().antMatchers("/register").permitAll()
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().logout().and().csrf().disable();
-    }
-
-    @Bean
-    public AuthenticationManager customAuthenticationManager() throws Exception {
-        return authenticationManager();
-    }
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
-    }
-
-}

@@ -83,3 +83,18 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 * Hat tip to anyone whose code was used
 * Inspiration
 * etc
+
+## Example Body User Creation with Rest Endpoint /register
+
+{
+"id": "3",
+"username": "Malte3",
+"password": "password",
+"email": "malte.peterse@gmail.com",
+"isAdmin": true,
+"enabled": true,
+"passwordConfirm": "password",
+"agb": true
+}
+
+Header should include Content-Type application/json 

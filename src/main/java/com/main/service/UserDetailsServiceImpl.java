@@ -1,46 +1,29 @@
 package com.main.service;
-
-import java.util.HashSet;
-import java.util.Set;
-
+import com.main.model.userTypes.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.main.model.Member;
-import com.main.model.MyUser;
-import com.main.repository.MemberRepository;
-import com.main.utility.MemberRole;
+import com.main.repository.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-	@Autowired
-	private MemberRepository memberRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Override
-	@Transactional(readOnly = true)
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Member member = memberRepository.findByUsername(username).orElse(null);
+    @Override
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException {
+        User user= userRepository.findByUsername(username);
+        if (user != null) {
+            return user;
+        }
+        throw new UsernameNotFoundException(
+                "User '" + username + "' not found");
+    }
 
-		if (member == null)
-			throw new UsernameNotFoundException(username);
-		if( !member.isEnabled())
-			throw new UsernameNotFoundException(username);
-		
-		
-		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-		for (MemberRole role : member.getRoles()) {
-			grantedAuthorities.add(new SimpleGrantedAuthority(role.toString()));
-		}
+    }
 
-		return new MyUser(member, member.isEnabled(), true, true, true, grantedAuthorities);
-
-	}
-
-}

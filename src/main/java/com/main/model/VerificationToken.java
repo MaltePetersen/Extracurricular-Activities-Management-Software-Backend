@@ -1,85 +1,79 @@
 package com.main.model;
 
-import java.sql.Date;
+import com.main.model.userTypes.User;
+
+import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Calendar;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-
+import java.util.Date;
 
 @Entity
 public class VerificationToken {
+    private static final int EXPIRATION = 60 * 24;
 
-	private static final int EXPIRATION = 60 * 24;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	public VerificationToken() {
+    private String token;
 
-	}
+    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "user_id")
+    private User user;
 
-	public VerificationToken(String token2, Member member) {
-		this.token = token2;
-		this.member = member;
-		this.expiryDate = calculateExpiryDate(EXPIRATION);
-	}
+    private Date expiryDate;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+    public VerificationToken(String token, User user) {
+        this.token = token;
+        this.user = user;
+        this.expiryDate = calculateExpiryDate(1440);
+    }
+    public VerificationToken(){}
 
-	private String token;
+    public VerificationToken(String token) {
+        this.token = token;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    private Date calculateExpiryDate(int expiryTimeInMinutes) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Timestamp(cal.getTime().getTime()));
+        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
+        return new Date(cal.getTime().getTime());
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public static int getEXPIRATION() {
+        return EXPIRATION;
+    }
 
-	public String getToken() {
-		return token;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setToken(String token) {
-		this.token = token;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Member getMember() {
-		return member;
-	}
+    public String getToken() {
+        return token;
+    }
 
-	public void setMember(Member user) {
-		this.member = user;
-	}
+    public void setToken(String token) {
+        this.token = token;
+    }
 
-	public Date getExpiryDate() {
-		return expiryDate;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public void setExpiryDate(Date expiryDate) {
-		this.expiryDate = expiryDate;
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-	public static int getExpiration() {
-		return EXPIRATION;
-	}
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
 
-	@OneToOne(targetEntity = Member.class, fetch = FetchType.EAGER)
-	@JoinColumn(nullable = false, name = "user_id")
-	private Member member;
-
-	private Date expiryDate;
-
-	private Date calculateExpiryDate(int expiryTimeInMinutes) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(new Date(cal.getTime().getTime()));
-		cal.add(Calendar.MINUTE, expiryTimeInMinutes);
-		return new Date(cal.getTime().getTime());
-	}
-
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
+    }
 }
