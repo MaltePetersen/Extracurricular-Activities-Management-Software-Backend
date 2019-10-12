@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
 import java.util.Arrays;
 import java.util.Collection;
+
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
@@ -23,7 +24,9 @@ public class Employee extends User {
     private String iban;
     @NotBlank(message = "Address is mandatory")
     private String address;
-    public Employee(){
+    private boolean enabled;
+
+    public Employee() {
         super();
     }
 
@@ -34,6 +37,7 @@ public class Employee extends User {
         this.subject = subject;
         this.iban = iban;
         this.address = address;
+        this.enabled = false;
     }
 
 

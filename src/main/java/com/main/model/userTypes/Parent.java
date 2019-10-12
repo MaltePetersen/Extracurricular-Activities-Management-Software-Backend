@@ -17,6 +17,7 @@ public class Parent extends User {
     private String email;
     @NotBlank(message = "PhoneNumber is mandatory")
     private String phoneNumber;
+    private boolean enabled;
 
     public String getEmail() {
         return email;
@@ -42,6 +43,7 @@ public class Parent extends User {
         super(username, password, fullname);
         this.email = email;
         this.phoneNumber = phoneNumber;
+        enabled = false;
     }
 
     @Override

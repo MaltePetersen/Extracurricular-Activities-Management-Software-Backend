@@ -5,10 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,6 +22,7 @@ public class User implements UserDetails {
     private final String password;
     @NotBlank(message = "Fullname is mandatory")
     private final String fullname;
+
 
     //TODO: School Attribute??
     public User(String username, String password, String fullname) {

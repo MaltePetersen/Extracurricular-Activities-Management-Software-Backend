@@ -16,11 +16,12 @@ public class Teacher extends User {
     private String email;
     @NotBlank(message = "PhoneNumber is mandatory")
     private String phoneNumber;
-
+    private boolean enabled;
     public Teacher(String username, String password, String fullname, String email, String phoneNumber) {
         super(username, password, fullname);
         this.email = email;
         this.phoneNumber = phoneNumber;
+        enabled = false;
     }
     public Teacher(){
 
