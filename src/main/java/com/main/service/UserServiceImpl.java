@@ -89,4 +89,7 @@ public class UserServiceImpl implements UserService {
                 return new ResponseEntity<>("Role not valid", HttpStatus.BAD_REQUEST);
         }
     }
+    public void update(User user){
+        userRepository.save(user);
+    }
 }

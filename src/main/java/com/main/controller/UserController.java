@@ -1,7 +1,6 @@
 package com.main.controller;
 
 
-
 import com.main.dto.UserDTO;
 
 import com.main.model.VerificationToken;
@@ -33,7 +32,8 @@ public class UserController {
     private UserService userService;
     private VerificationTokenRepository verificationTokenRepository;
     private UserDTOValidator userDTOValidator;
-    UserController(UserService userService, VerificationTokenRepository verificationTokenRepository,UserDTOValidator userDTOValidator ) {
+
+    UserController(UserService userService, VerificationTokenRepository verificationTokenRepository, UserDTOValidator userDTOValidator) {
         this.userService = userService;
         this.verificationTokenRepository = verificationTokenRepository;
         this.userDTOValidator = userDTOValidator;
@@ -46,13 +46,12 @@ public class UserController {
         if (errors.hasErrors()) {
             return new ResponseEntity<>(createErrorString(errors), HttpStatus.BAD_REQUEST);
         }
-        return userService.save(user,auth);
+        return userService.save(user, auth);
     }
 
     private String createErrorString(Errors errors) {
         return errors.getAllErrors().stream().map(ObjectError::toString).collect(Collectors.joining(","));
     }
-
 
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -67,6 +66,7 @@ public class UserController {
         });
         return errors;
     }
+
     @RequestMapping(value = "/regitrationConfirm", method = RequestMethod.GET)
     public ResponseEntity<String> confirmRegistration(WebRequest request, @RequestParam("token") String token) {
 
@@ -83,8 +83,8 @@ public class UserController {
             return new ResponseEntity<>("Token is already expired", HttpStatus.BAD_REQUEST);
         }
 
-       // user.setEnabled(true);
-       // service.saveRegisteredUser(user);
+        user.setEnabled(true);
+        userService.update(user);
         return new ResponseEntity<>("User is confirmed", HttpStatus.ACCEPTED);
     }
 }
