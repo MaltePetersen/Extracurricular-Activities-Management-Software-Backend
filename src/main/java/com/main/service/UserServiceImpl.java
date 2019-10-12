@@ -5,10 +5,14 @@ import com.main.model.userTypes.*;
 import com.main.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -51,22 +55,45 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<String> save(UserDTO userDTO) {
+    public ResponseEntity<String> save(UserDTO userDTO, Authentication auth) {
+        List<String> roles = new ArrayList<>();
+        if(auth != null)
+        auth.getAuthorities().forEach((a) -> {
+            roles.add(a.getAuthority());
+        });
+        if (userRepository.findByUsername(userDTO.getUsername()) != null)
+            return new ResponseEntity<>("Username already exists", HttpStatus.BAD_REQUEST);
         switch (userDTO.getUserType()) {
             case "USER":
-                return saveUser(new User(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()), userDTO.getFullname()));
+                if ( roles.contains("ROLE_MANAGEMENT") || roles.contains("ROLE_SCHOOLCOORDINATOR") )
+                    return saveUser(new User(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()), userDTO.getFullname()));
+                return new ResponseEntity<>("You are lacking permissions to create this user Type", HttpStatus.BAD_REQUEST);
             case "EMPLOYEE":
-                return saveUser(new Employee(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()), userDTO.getFullname(), userDTO.getEmail(), userDTO.getPhoneNumber(), userDTO.getSubject(), userDTO.getIban(), userDTO.getAddress()));
+                if (  roles.contains("ROLE_MANAGEMENT") )
+                    return saveUser(new Employee(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()), userDTO.getFullname(), userDTO.getEmail(), userDTO.getPhoneNumber(), userDTO.getSubject(), userDTO.getIban(), userDTO.getAddress()));
+                return new ResponseEntity<>("You are lacking permissions to create this user Type", HttpStatus.BAD_REQUEST);
+
             case "MANAGEMENT":
-                return saveUser(new Mangement(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()), userDTO.getFullname(), userDTO.getEmail(), userDTO.getPhoneNumber(), userDTO.getAddress()));
+                if ( roles.contains("ROLE_MANAGEMENT") )
+                    return saveUser(new Mangement(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()), userDTO.getFullname(), userDTO.getEmail(), userDTO.getPhoneNumber(), userDTO.getAddress()));
+                return new ResponseEntity<>("You are lacking permissions to create this user Type", HttpStatus.BAD_REQUEST);
+
             case "PARENT":
-                return saveUser(new Parent(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()), userDTO.getFullname(), userDTO.getEmail(), userDTO.getPhoneNumber()));
+                    return saveUser(new Parent(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()), userDTO.getFullname(), userDTO.getEmail(), userDTO.getPhoneNumber()));
             case "SCHOOLCOORDINATOR":
-                return saveUser(new SchoolCoordinator(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()), userDTO.getFullname()));
+                if ( roles.contains("ROLE_MANAGEMENT"))
+                    return saveUser(new SchoolCoordinator(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()), userDTO.getFullname()));
+                return new ResponseEntity<>("You are lacking permissions to create this user Type", HttpStatus.BAD_REQUEST);
+
             case "TEACHER":
-                return saveUser(new Teacher(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()), userDTO.getFullname(), userDTO.getEmail(), userDTO.getPhoneNumber()));
+                if ( roles.contains("ROLE_MANAGEMENT") || roles.contains("ROLE_PARENT") || roles.contains("ROLE_SCHOOLCOORDINATOR") )
+                    return saveUser(new Teacher(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()), userDTO.getFullname(), userDTO.getEmail(), userDTO.getPhoneNumber()));
+                return new ResponseEntity<>("You are lacking permissions to create this user Type", HttpStatus.BAD_REQUEST);
+
             case "CHILD":
-                return saveUser(new Child(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()), userDTO.getFullname(), userDTO.getSchoolClass()));
+                if ( roles.contains("ROLE_MANAGEMENT") || roles.contains("ROLE_PARENT") || roles.contains("ROLE_SCHOOLCOORDINATOR") || roles.contains("ROLE_TEACHER"))
+                    return saveUser(new Child(userDTO.getUsername(), passwordEncoder.encode(userDTO.getPassword()), userDTO.getFullname(), userDTO.getSchoolClass()));
+                return new ResponseEntity<>("You are lacking permissions to create this user Type", HttpStatus.BAD_REQUEST);
             default:
                 return new ResponseEntity<>("Role not valid", HttpStatus.BAD_REQUEST);
         }
