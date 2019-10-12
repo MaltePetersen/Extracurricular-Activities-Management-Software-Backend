@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -28,26 +29,21 @@ public class UserServiceImpl implements UserService {
         this.emailService = emailService;
         this.verificationTokenRepository = verificationTokenRepository;
     }
-
-
-
-
-
-    /*Verification Token code:
-    String token = UUID.randomUUID().toString();
-        verificationTokenRepository.save(new VerificationToken(token, teacher));
-        String message = "localhost:8080/regitrationConfirm.html?token=" + token;
-        emailService.sendSimpleMessage(teacher.getEmail(),"Verification",message );
-*/
-
+    private void creatingAndSendingVerficationToken(User user){
+        String token = UUID.randomUUID().toString();
+        verificationTokenRepository.save(new VerificationToken(token, user));
+        String message = "localhost:8080/regitrationConfirm?token=" + token;
+        emailService.sendSimpleMessage(user.getEmail(),"Verification",message );
+    }
 
     private ResponseEntity<String> saveUser(@Valid User user) {
         userRepository.save(user);
+        if(user.getEmail() != null && !user.getEmail().equals("")){
+            creatingAndSendingVerficationToken(user);
+        }
         String message = "Created "+ Arrays.toString(user.getAuthorities().toArray());
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
-
-
 
     @Override
     public ResponseEntity<String> save(UserDTO userDTO, Authentication auth) {

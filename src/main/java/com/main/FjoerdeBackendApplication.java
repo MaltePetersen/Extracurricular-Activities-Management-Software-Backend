@@ -23,7 +23,7 @@ public class FjoerdeBackendApplication {
             public void run(String... args) throws Exception {
                 userRepo.save(new User("Parent_Test", encoder.encode("password"),"Craig Walls", "craig@walls.com", "123-123-1234"));
                 userRepo.save(new User("Employee_Test",encoder.encode("password"),"Malte Petersen","malte.petersen@web.de","123-123-1234","Geschichte","1374816241982437","Schloßstraße 33",false));
-                userRepo.save(new User("Employee_SchoolCoordinator_Test",encoder.encode("password"),"Malte Petersen","malte.petersen@web.de","123-123-1234","Geschichte","1374816241982437","Schloßstraße 33",true));
+                userRepo.save(new User("Employee_SchoolCoordinator_Test",encoder.encode("password"),"Malte Petersen","malte.petersen11@gmail.com","123-123-1234","Geschichte","1374816241982437","Schloßstraße 33",true));
                 userRepo.save(new User("Teacher_SchoolCoordinator_Test",encoder.encode("password"),"Malte Petersen","7a","123-123-1234","Schloßstraße 33", true));
                 userRepo.save(new User("Management_Test",encoder.encode("password"),"Malte Petersen", "malte.petersen@web.de","123-123-1234","Street 7"));
                 userRepo.save(new User("Teacher_Test",encoder.encode("password"),"Malte Petersen","malte.petersen@web.de","123-123-1234","Geschichte",false));
