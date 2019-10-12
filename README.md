@@ -1,4 +1,38 @@
+## Example Body User Creation with Rest Endpoint /register
+
+```
+{
+"userType":"TEACHER",
+"username": "REST_Teacher",
+"password": "password",
+"email": "malte.petersen11@gmail.com",
+"fullname": "Rest_Test",
+"phoneNumber":"13141",
+"subject":"Geschichte",
+"iban":"23465732456",
+"address":"Hans-Detlev-Prien Str. 8", 
+"schoolClass":"7a",
+"isSchoolCoordinator" : false
+}
+```
+Header should include Content-Type application/json 
+
+You will need to verify the use before using it(if it isnt a CHILD or a USER.
+ 
+There are following test user to play around with: 
+ * Parent_Test 
+ * Employee_Test 
+ * Employee_SchoolCoordinator_Test 
+ * Management_Test 
+ * Teacher_Test 
+ * Teacher_SchoolCoordinator_Test 
+ * User_Test 
+ * Child_Test
+ 
+The password is always password
 One Paragraph of project description goes here
+
+
 
 ## Getting Started
 
@@ -84,17 +118,3 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 * Inspiration
 * etc
 
-## Example Body User Creation with Rest Endpoint /register
-
-{
-"id": "3",
-"username": "Malte3",
-"password": "password",
-"email": "malte.peterse@gmail.com",
-"isAdmin": true,
-"enabled": true,
-"passwordConfirm": "password",
-"agb": true
-}
-
-Header should include Content-Type application/json 

@@ -82,6 +82,8 @@ public class User implements UserDetails {
         this(username, password, fullname, email, phoneNumber);
         this.address = address;
         role = "MANAGEMENT";
+        enabled = true;
+
     }
 
 

@@ -43,7 +43,6 @@ public class FjoerdeBackendApplication {
                 userRepo.save(user);
                 userRepo.save(child);
 
-
             }
         };
     }
