@@ -2,7 +2,6 @@ package com.main.service;
 
 import com.main.model.School;
 import com.main.repository.SchoolRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,10 +11,13 @@ import java.util.stream.StreamSupport;
 @Service
 public class SchoolServiceImpl implements SchoolService {
 
-	@Autowired
 	private SchoolRepository repository;
 
-	@Override
+    SchoolServiceImpl(SchoolRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
 	public List<School> getAll() {
 		return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
 	}

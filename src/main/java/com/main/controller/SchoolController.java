@@ -2,7 +2,6 @@ package com.main.controller;
 
 import com.main.model.School;
 import com.main.service.SchoolService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,10 +11,13 @@ import java.util.List;
 @RestController
 public class SchoolController {
 
-	@Autowired
 	private SchoolService service;
 
-	// Index
+    SchoolController(SchoolService service) {
+        this.service = service;
+    }
+
+    // Index
 	@GetMapping("/api/schools")
 	public List<School> getSchools() {
 	    return service.getAll();
