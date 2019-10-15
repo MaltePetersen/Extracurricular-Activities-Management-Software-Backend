@@ -5,6 +5,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.main.model.userTypes.interfaces.IChild;
+import com.main.model.userTypes.interfaces.IEmployee;
+import com.main.model.userTypes.interfaces.IManagement;
+import com.main.model.userTypes.interfaces.IParent;
+import com.main.model.userTypes.interfaces.ITeacher;
+import com.main.model.userTypes.interfaces.IUser;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Arrays;
@@ -12,16 +19,20 @@ import java.util.Collection;
 
 @Entity
 @Data
-public class User implements UserDetails {
-    @Id
+@Getter
+@Setter
+public class User implements UserDetails, IChild, IEmployee, IManagement, IParent, IUser, ITeacher {
+	private static final long serialVersionUID = 1337L;
+	
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotBlank(message = "Username is mandatory")
-    private final String username;
+    private String username;
     @NotBlank(message = "Password is mandatory")
-    private final String password;
+    private String password;
     @NotBlank(message = "Fullname is mandatory")
-    private final String fullname;
+    private String fullname;
     @NotBlank(message = "Role is mandatory")
     private String role;
     private String email;
@@ -33,6 +44,7 @@ public class User implements UserDetails {
     private boolean isSchoolCoordinator;
     @Column(name = "enabled")
     private boolean enabled;
+    
     //Constructur normal User
     public User(String username, String password, String fullname) {
         this.username = username;
@@ -86,9 +98,6 @@ public class User implements UserDetails {
 
     }
 
-
-
-
     public User() {
         username = null;
         password = null;
@@ -122,4 +131,7 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
+
+
 }
