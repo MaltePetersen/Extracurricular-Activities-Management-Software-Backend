@@ -44,6 +44,7 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
     private boolean isSchoolCoordinator;
     @Column(name = "enabled")
     private boolean enabled;
+    
     //Constructur normal User
     public User(String username, String password, String fullname) {
         this.username = username;
