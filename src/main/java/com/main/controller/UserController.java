@@ -10,6 +10,7 @@ import com.main.service.UserService;
 import com.main.util.UserDTOValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 
 import org.springframework.validation.Errors;
