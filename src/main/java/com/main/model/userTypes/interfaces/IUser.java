@@ -10,5 +10,6 @@ public interface IUser {
 	String getFullname();
 	void setFullname(String fullname);
 
-	
+	String getRole();
+	void setRole(String role);
 }

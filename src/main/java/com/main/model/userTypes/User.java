@@ -46,7 +46,7 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
     private boolean enabled;
     
     //Constructur normal User
-    public User(String username, String password, String fullname) {
+    User(String username, String password, String fullname) {
         this.username = username;
         this.password = password;
         this.fullname = fullname;
@@ -55,7 +55,7 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
     }
 
     //Constructor Child
-    public User(String username, String password, String fullname, String schoolClass) {
+    User(String username, String password, String fullname, String schoolClass) {
         this(username, password, fullname);
         this.schoolClass = schoolClass;
         role = "CHILD";
@@ -63,7 +63,7 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
     }
 
     //Constructer Parent
-    public User(String username, String password, String fullname, String email, String phoneNumber) {
+    User(String username, String password, String fullname, String email, String phoneNumber) {
         this(username, password, fullname);
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -72,7 +72,7 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
     }
 
     //Constructor Teacher and SchoolCoordinator
-    public User(String username, String password, String fullname, String email, String phoneNumber, String subject, boolean isSchoolCoordinator) {
+    User(String username, String password, String fullname, String email, String phoneNumber, String subject, boolean isSchoolCoordinator) {
     this(username, password, fullname, email, phoneNumber);
         this.subject = subject;
         role = "TEACHER";
@@ -80,7 +80,7 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
         enabled = false;
     }
     //Constructor Employee and SchoolCoordinator
-    public User(String username, String password, String fullname, String email, String phoneNumber, String address,String subject, String iban, boolean isSchoolCoordinator) {
+    User(String username, String password, String fullname, String email, String phoneNumber, String address,String subject, String iban, boolean isSchoolCoordinator) {
         this(username, password, fullname, email, phoneNumber, address);
         this.subject = subject;
         this.iban = iban;
@@ -90,7 +90,7 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
     }
 
     //Constructor Management
-    public User(String username, String password, String fullname, String email, String phoneNumber, String address) {
+    User(String username, String password, String fullname, String email, String phoneNumber, String address) {
         this(username, password, fullname, email, phoneNumber);
         this.address = address;
         role = "MANAGEMENT";
@@ -98,7 +98,7 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 
     }
 
-    public User() {
+    User() {
         username = null;
         password = null;
         fullname = null;

@@ -34,7 +34,7 @@ public class UserController {
     private VerificationTokenRepository verificationTokenRepository;
     private UserDTOValidator userDTOValidator;
 
-    UserController(UserService userService, VerificationTokenRepository verificationTokenRepository, UserDTOValidator userDTOValidator) {
+   public UserController(UserService userService, VerificationTokenRepository verificationTokenRepository, UserDTOValidator userDTOValidator) {
         this.userService = userService;
         this.verificationTokenRepository = verificationTokenRepository;
         this.userDTOValidator = userDTOValidator;
