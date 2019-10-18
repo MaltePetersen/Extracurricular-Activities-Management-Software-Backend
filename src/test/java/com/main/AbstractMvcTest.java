@@ -34,17 +34,20 @@ import com.main.util.UserDTOValidator;
 public abstract class AbstractMvcTest {
 
 	protected MockMvc mockMvc;
+	
+	protected ObjectMapper objectMapper;
 
 	@Autowired
 	WebApplicationContext context;
 
 	protected void setUp() {
 		mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+		objectMapper = new ObjectMapper();
 	}
 	
 	protected String mapToJson(Object obj) throws JsonProcessingException {
-		ObjectMapper objectMapper = new ObjectMapper();
 		return objectMapper.writeValueAsString(obj);
 	}
 
+	
 }

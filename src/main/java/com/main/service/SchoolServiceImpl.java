@@ -1,6 +1,7 @@
 package com.main.service;
 
 import com.main.model.School;
+import com.main.model.interfaces.ISchool;
 import com.main.repository.SchoolRepository;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
-	public School save(School newSchool) {
+	public ISchool save(School newSchool) {
 		repository.save(newSchool);
 
 		return newSchool;

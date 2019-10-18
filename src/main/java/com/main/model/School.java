@@ -1,85 +1,87 @@
 package com.main.model;
 
-import com.main.model.userTypes.User;
-import lombok.Data;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
+
+import com.main.model.interfaces.ISchool;
+import com.main.model.userTypes.User;
+import com.main.model.userTypes.interfaces.IContactDetails;
+import com.main.model.userTypes.interfaces.IEmployee;
+import com.main.model.userTypes.interfaces.ISchoolCoordinator;
+
+import lombok.Data;
 
 @Entity
 @Data
-public class School {
-    @Id
-    @GeneratedValue
-    private Long id;
+public class School implements IContactDetails, ISchool {
 
-    @NotBlank(message = "school name is mandatory")
-    private String name;
+	@Id
+	@GeneratedValue
+	private Long id;
 
-    @NotBlank(message = "school address is mandatory")
-    private String address;
-    private User contact;
-    private String email;
-    private String phoneNumber;
+	@NotBlank(message = "school name is mandatory")
+	private String name;
 
-    private ArrayList<User> schoolCoordinators;
+	@NotBlank(message = "school address is mandatory")
+	private String address;
 
-    public School() {
-        name = null;
-        address = null;
-    }
+	private String email;
+	private String phoneNumber;
 
-    public School(String name, String address) {
-        this.name = name;
-        this.address = address;
-    }
+	@ManyToMany(mappedBy = "employeesSchools")
+	private List<User> employees = new ArrayList<User>();
 
-    public School(String name, String address, String email, String phoneNumber) {
-        this(name, address);
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-    }
+	@ManyToMany(mappedBy = "schoolCoordinatorsSchools")
+	private List<User> schoolCoordinators = new ArrayList<>();
 
-    public Long getId() {
-        return id;
-    }
+	@OneToMany(mappedBy = "childSchool", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<User> children = new ArrayList<>();
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public School() {
+		name = null;
+		address = null;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public School(String name, String address) {
+		this();
+		this.name = name;
+		this.address = address;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public School(String name, String address, String email, String phoneNumber) {
+		this(name, address);
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+	}
 
-    public String getAddress() {
-        return address;
-    }
+	public boolean removeEmployee(IEmployee employee) {
+		int oldSize = employees.size();
+		employees = employees.stream().filter(each -> each.getId() != employee.getId()).collect(Collectors.toList());
+		return oldSize > employees.size();
+	}
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+	public void addEmployee(IEmployee employee) {
+		employees.add((User) employee);
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public boolean removeSchoolCoordinator(ISchoolCoordinator schoolCoordinator) {
+		int oldSize = schoolCoordinators.size();
+		schoolCoordinators = schoolCoordinators.stream().filter(each -> each.getId() != schoolCoordinator.getId())
+				.collect(Collectors.toList());
+		return oldSize > schoolCoordinators.size();
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void addSchoolCoordinator(ISchoolCoordinator schoolCoordinator) {
+		schoolCoordinators.add((User) schoolCoordinator);
+	}
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
 }

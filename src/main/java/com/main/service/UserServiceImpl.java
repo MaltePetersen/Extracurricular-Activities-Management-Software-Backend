@@ -1,6 +1,6 @@
 package com.main.service;
 
-import com.main.dto.UserDTO;
+import com.main.dto.interfaces.IUserDTO;
 import com.main.model.VerificationToken;
 import com.main.model.userTypes.*;
 import com.main.repository.UserRepository;
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<String> save(UserDTO userDTO, Authentication auth) {
+    public ResponseEntity<String> save(IUserDTO userDTO, Authentication auth) {
         List<String> roles = new ArrayList<>();
         if (auth != null)
             auth.getAuthorities().forEach((a) -> {
@@ -57,32 +57,32 @@ public class UserServiceImpl implements UserService {
         switch (userDTO.getUserType()) {
             case "USER":
                 if (roles.contains("ROLE_MANAGEMENT") || roles.contains("ROLE_SCHOOLCOORDINATOR")) 
-                	return saveUser( UserBuilder.<User>next().withDto(userDTO).withRole("USER").build());
+                	return saveUser( User.UserBuilder.<User>next().withDto(userDTO).withRole("USER").build());
                 return new ResponseEntity<>("You are lacking permissions to create this user Type", HttpStatus.BAD_REQUEST);
             case "EMPLOYEE":
                 if (roles.contains("ROLE_MANAGEMENT"))
-                    return saveUser( UserBuilder.<User>next().withDto(userDTO).withRole("EMPLOYEE").build());
+                    return saveUser( User.UserBuilder.<User>next().withDto(userDTO).withRole("EMPLOYEE").build());
                 return new ResponseEntity<>("You are lacking permissions to create this user Type", HttpStatus.BAD_REQUEST);
 
             case "MANAGEMENT":
                 if (roles.contains("ROLE_MANAGEMENT"))
-                    return saveUser( UserBuilder.<User>next().withDto(userDTO).withRole("MANAGEMENT").build());
+                    return saveUser( User.UserBuilder.<User>next().withDto(userDTO).withRole("MANAGEMENT").build());
                 return new ResponseEntity<>("You are lacking permissions to create this user Type", HttpStatus.BAD_REQUEST);
             case "PARENT":
-                return saveUser( UserBuilder.<User>next().withDto(userDTO).withRole("PARENT").build());
+                return saveUser( User.UserBuilder.<User>next().withDto(userDTO).withRole("PARENT").build());
             case "SCHOOLCOORDINATOR":
                 if (roles.contains("ROLE_MANAGEMENT"))
-                    return saveUser( UserBuilder.<User>next().withDto(userDTO).withRole("SCHOOLCOORDINATOR").build());
+                    return saveUser( User.UserBuilder.<User>next().withDto(userDTO).withRole("SCHOOLCOORDINATOR").build());
                 return new ResponseEntity<>("You are lacking permissions to create this user Type", HttpStatus.BAD_REQUEST);
 
             case "TEACHER":
                 if (roles.contains("ROLE_MANAGEMENT") || roles.contains("ROLE_PARENT") || roles.contains("ROLE_SCHOOLCOORDINATOR"))
-                    return saveUser( UserBuilder.<User>next().withDto(userDTO).withRole("TEACHER").build());
+                    return saveUser( User.UserBuilder.<User>next().withDto(userDTO).withRole("TEACHER").build());
                 return new ResponseEntity<>("You are lacking permissions to create this user Type", HttpStatus.BAD_REQUEST);
 
             case "CHILD":
                 if (roles.contains("ROLE_MANAGEMENT") || roles.contains("ROLE_PARENT") || roles.contains("ROLE_SCHOOLCOORDINATOR") || roles.contains("ROLE_TEACHER"))
-                    return saveUser( UserBuilder.<User>next().withDto(userDTO).withRole("CHILD").build());
+                    return saveUser( User.UserBuilder.<User>next().withDto(userDTO).withRole("CHILD").build());
                 return new ResponseEntity<>("You are lacking permissions to create this user Type", HttpStatus.BAD_REQUEST);
             default:
                 return new ResponseEntity<>("Role not valid", HttpStatus.BAD_REQUEST);

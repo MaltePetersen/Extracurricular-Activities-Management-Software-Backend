@@ -1,5 +1,9 @@
 package com.main.model.userTypes.interfaces;
 
+import java.util.List;
+
+import com.main.model.School;
+
 public interface IEmployee extends IUser, IContactDetails, ITeacher {
 
 	String getAddress();
@@ -7,5 +11,8 @@ public interface IEmployee extends IUser, IContactDetails, ITeacher {
 	
 	String getIban();
 	void setIban(String adress);
+	
+	List<School> getEmployeesSchools();
+	void setEmployeesSchools(List<School> employeesSchools);
 	
 }

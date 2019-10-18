@@ -1,31 +1,35 @@
 package com.main.controller;
 
 
-import com.main.dto.UserDTO;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import com.main.model.VerificationToken;
-import com.main.model.userTypes.User;
-import com.main.repository.VerificationTokenRepository;
-import com.main.service.UserService;
-import com.main.util.UserDTOValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
-import java.util.Calendar;
-import java.util.HashMap;
-
-import java.util.Locale;
-import java.util.Map;
-import java.util.stream.Collectors;
+import com.main.dto.UserDTO;
+import com.main.dto.interfaces.IUserDTO;
+import com.main.model.interfaces.IVerificationToken;
+import com.main.model.userTypes.User;
+import com.main.repository.VerificationTokenRepository;
+import com.main.service.UserService;
+import com.main.util.UserDTOValidator;
 
 @RestController
 public class UserController {
@@ -71,9 +75,9 @@ public class UserController {
     @RequestMapping(value = "/regitrationConfirm", method = RequestMethod.GET)
     public ResponseEntity<String> confirmRegistration(WebRequest request, @RequestParam("token") String token) {
 
-        Locale locale = request.getLocale();
+     //   Locale locale = request.getLocale();
 
-        VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
+        IVerificationToken verificationToken = verificationTokenRepository.findByToken(token);
         if (verificationToken == null) {
             return new ResponseEntity<>("Verification Token is null", HttpStatus.BAD_REQUEST);
         }

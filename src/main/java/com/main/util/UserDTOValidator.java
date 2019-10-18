@@ -1,8 +1,9 @@
 package com.main.util;
 
-import com.main.dto.UserDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+
+import com.main.dto.interfaces.IUserDTO;
 
 @Component
 public class UserDTOValidator {
@@ -11,7 +12,7 @@ public class UserDTOValidator {
         return element == null || element.isEmpty();
     }
 
-    private void validateUser(UserDTO userDTO, Errors errors) {
+    private void validateUser(IUserDTO userDTO, Errors errors) {
         validateUsername(userDTO.getUsername(), errors);
         validatePassword(userDTO.getPassword(), errors);
         validateFullname(userDTO.getFullname(), errors);
@@ -64,7 +65,7 @@ public class UserDTOValidator {
     }
 
 
-    public void validate(UserDTO userDTO, Errors errors) {
+    public void validate(IUserDTO userDTO, Errors errors) {
         switch (userDTO.getUserType()) {
             case "USER":
                 validateUser(userDTO, errors);

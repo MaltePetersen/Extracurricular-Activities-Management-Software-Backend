@@ -1,6 +1,10 @@
 package com.main.model.userTypes.interfaces;
 
 public interface IUser {
+	
+	Long getId();
+	void setId(Long id);
+	
 	String getPassword();
 	void setPassword(String password);
 	

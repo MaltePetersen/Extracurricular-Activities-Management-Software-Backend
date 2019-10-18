@@ -1,6 +1,9 @@
 package com.main.model;
 
+import com.main.model.interfaces.IVerificationToken;
 import com.main.model.userTypes.User;
+
+import lombok.Data;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -8,7 +11,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 @Entity
-public class VerificationToken {
+@Data
+public class VerificationToken implements IVerificationToken {
     private static final int EXPIRATION = 60 * 24;
 
     @Id
@@ -45,35 +49,4 @@ public class VerificationToken {
         return EXPIRATION;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Date getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(Date expiryDate) {
-        this.expiryDate = expiryDate;
-    }
 }

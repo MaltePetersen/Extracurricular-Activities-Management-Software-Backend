@@ -4,7 +4,7 @@
   <interface id="1" language="java" name="com.main.model.userTypes.interfaces.IChild" project="fjoerde_backend" 
     file="/fjoerde_backend/src/main/java/com/main/model/userTypes/interfaces/IChild.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="146" y="308"/>    
+    <position height="-1" width="-1" x="162" y="242"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -14,7 +14,7 @@
   <interface id="2" language="java" name="com.main.model.userTypes.interfaces.IContactDetails" project="fjoerde_backend" 
     file="/fjoerde_backend/src/main/java/com/main/model/userTypes/interfaces/IContactDetails.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="459" y="57"/>    
+    <position height="-1" width="-1" x="570" y="-155"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -34,7 +34,7 @@
   <interface id="4" language="java" name="com.main.model.userTypes.interfaces.IEmployee" project="fjoerde_backend" 
     file="/fjoerde_backend/src/main/java/com/main/model/userTypes/interfaces/IEmployee.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1217" y="295"/>    
+    <position height="-1" width="-1" x="1127" y="303"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -44,7 +44,7 @@
   <interface id="5" language="java" name="com.main.model.userTypes.interfaces.IParent" project="fjoerde_backend" 
     file="/fjoerde_backend/src/main/java/com/main/model/userTypes/interfaces/IParent.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="145" y="190"/>    
+    <position height="-1" width="-1" x="163" y="109"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -55,7 +55,7 @@
     project="fjoerde_backend" 
     file="/fjoerde_backend/src/main/java/com/main/model/userTypes/interfaces/ISchoolCoordinator.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="149" y="515"/>    
+    <position height="-1" width="-1" x="217" y="482"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -65,7 +65,7 @@
   <interface id="7" language="java" name="com.main.model.userTypes.interfaces.IUser" project="fjoerde_backend" 
     file="/fjoerde_backend/src/main/java/com/main/model/userTypes/interfaces/IUser.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="989" y="39"/>    
+    <position height="-1" width="-1" x="517" y="-436"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -75,56 +75,89 @@
   <interface id="8" language="java" name="com.main.model.userTypes.interfaces.ITeacher" project="fjoerde_backend" 
     file="/fjoerde_backend/src/main/java/com/main/model/userTypes/interfaces/ITeacher.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="417" y="427"/>    
+    <position height="-1" width="-1" x="560" y="369"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <generalization id="9">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="7"/>  
-  </generalization>  
+  <class id="9" language="java" name="com.main.model.userTypes.User" project="fjoerde_backend" 
+    file="/fjoerde_backend/src/main/java/com/main/model/userTypes/User.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1356" y="-65"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
   <generalization id="10">    
-    <end type="SOURCE" refId="8"/>    
+    <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="7"/>  
   </generalization>  
   <generalization id="11">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="8"/>  
-  </generalization>  
-  <generalization id="12">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="7"/>  
-  </generalization>  
-  <generalization id="13">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="2"/>  
-  </generalization>  
-  <generalization id="14">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="7"/>  
-  </generalization>  
-  <generalization id="15">    
     <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="6"/>  
   </generalization>  
-  <generalization id="16">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="2"/>  
-  </generalization>  
-  <generalization id="17">    
+  <realization id="12">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="3"/>  
+  </realization>  
+  <generalization id="13">    
     <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="2"/>  
   </generalization>  
-  <generalization id="18">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="7"/>  
-  </generalization>  
-  <generalization id="19">    
+  <realization id="14">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="5"/>  
+  </realization>  
+  <generalization id="15">    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <generalization id="16">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <generalization id="17">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <generalization id="18">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <realization id="19">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="4"/>  
+  </realization>  
+  <realization id="20">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="7"/>  
+  </realization>  
+  <generalization id="21">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <generalization id="22">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <realization id="23">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="8"/>  
+  </realization>  
+  <realization id="24">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <generalization id="25">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <generalization id="26">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="7"/>  
   </generalization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    

@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.main.data.TestUserData;
-import com.main.dto.UserDTO;
+import com.main.dto.interfaces.IUserDTO;
 
 /**
  * Klasse zum Testen der Funktionalitäten des
@@ -35,7 +35,7 @@ public class UserControllerTest extends  AbstractMvcTest{
 	@WithMockUser(authorities = "ROLE_MANAGEMENT")
 	public void createTeacherTest() throws Exception {
 		String uri = "/register";
-		UserDTO teacher = TestUserData.TEST_TEACHER.getUserDTO();
+		IUserDTO teacher = TestUserData.TEST_TEACHER.getUserDTO();
 		
 		String inputJson = super.mapToJson(teacher);
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(uri)
@@ -53,7 +53,7 @@ public class UserControllerTest extends  AbstractMvcTest{
 	@WithAnonymousUser
 	public void createParentTest() throws Exception {
 		String uri = "/register";
-		UserDTO parent = TestUserData.TEST_PARENT.getUserDTO();
+		IUserDTO parent = TestUserData.TEST_PARENT.getUserDTO();
 		
 		String inputJson = super.mapToJson(parent);
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(uri)
@@ -62,15 +62,14 @@ public class UserControllerTest extends  AbstractMvcTest{
 				 .andReturn();
 		int status = mvcResult.getResponse().getStatus();
 		assertEquals(201, status);
-		String content = mvcResult.getResponse().getContentAsString();
-	    assertEquals("Created [ROLE_PARENT]", content);
+	 assertEquals("Created [ROLE_PARENT]",  mvcResult.getResponse().getContentAsString());
 	}
 
 	@Test
 	@WithMockUser(authorities = "ROLE_PARENT")
 	public void createChildTest() throws Exception {
 		String uri = "/register";
-		UserDTO child = TestUserData.TEST_CHILD.getUserDTO();
+		IUserDTO child = TestUserData.TEST_CHILD.getUserDTO();
 		
 		String inputJson = super.mapToJson(child);
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(uri)
@@ -78,10 +77,8 @@ public class UserControllerTest extends  AbstractMvcTest{
 		         .content(inputJson))
 				 .andReturn();
 		int status = mvcResult.getResponse().getStatus();
-		System.out.println(mvcResult.getResponse().getContentAsString());
 		assertEquals(201, status);
-		String content = mvcResult.getResponse().getContentAsString();
-	    assertEquals("Created [ROLE_CHILD]", content);
+	    assertEquals("Created [ROLE_CHILD]", mvcResult.getResponse().getContentAsString());
 	}
 
 	

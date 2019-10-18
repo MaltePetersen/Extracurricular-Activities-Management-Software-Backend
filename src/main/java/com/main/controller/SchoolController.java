@@ -1,6 +1,7 @@
 package com.main.controller;
 
 import com.main.model.School;
+import com.main.model.interfaces.ISchool;
 import com.main.service.SchoolService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -26,20 +27,20 @@ public class SchoolController {
 	// Save
 	@PostMapping("/api/schools")
 	@ResponseStatus(HttpStatus.CREATED)
-	School newSchool(@RequestBody School newSchool) {
+	ISchool newSchool(@RequestBody School newSchool) {
 		return service.save(newSchool);
 	}
 
 	// Find
     @GetMapping("/api/schools/{id}")
-    School findOne(@PathVariable @Min(1) Long id) {
+    ISchool findOne(@PathVariable @Min(1) Long id) {
         return service.findOne(id);
     }
 
 
     // Update school entry
     @PatchMapping("/api/schools/{id}")
-    School patch(@RequestBody School newSchool, @PathVariable Long id) {
+    ISchool patch(@RequestBody School newSchool, @PathVariable Long id) {
         School school = service.findOne(id);
 
         school.setName(newSchool.getName());

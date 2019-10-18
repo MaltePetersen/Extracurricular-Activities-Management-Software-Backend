@@ -1,8 +1,9 @@
 package com.main.data;
 
-import com.main.dto.UserDTO;
+
+
+import com.main.dto.interfaces.IUserDTO;
 import com.main.model.userTypes.User;
-import com.main.model.userTypes.UserBuilder;
 import com.main.model.userTypes.interfaces.*;
 
 /**
@@ -15,27 +16,27 @@ import com.main.model.userTypes.interfaces.*;
  */
 
 public enum TestUserData {
-	TEST_TEACHER(UserBuilder.<ITeacher>next().withName("Max_Teacher").withFullname("Mustermann").withPassword("password")
+	TEST_TEACHER(User.UserBuilder.<ITeacher>next().withName("Max_Teacher").withFullname("Mustermann").withPassword("password")
 			.withRole("TEACHER").withEmail("max.mustermann@gmail.com").withPhoneNumber("0153323123").toDto("TEACHER")),
-	TEST_PARENT(UserBuilder.<IParent>next().withName("Max_Parent").withFullname("Mustermann").withPassword("password")
+	TEST_PARENT(User.UserBuilder.<IParent>next().withName("Max_Parent").withFullname("Mustermann").withPassword("password")
 			.withRole("PARENT").withEmail("max.mustermann@gmail.com").withPhoneNumber("0153323123").toDto("PARENT")),
-	TEST_USER(UserBuilder.<IUser>next().withName("Max_User").withFullname("Mustermann").withPassword("password")
+	TEST_USER(User.UserBuilder.<IUser>next().withName("Max_User").withFullname("Mustermann").withPassword("password")
 			.withRole("USER").withEmail("max.mustermann@gmail.com").withPhoneNumber("0153323123").toDto("USER")),
-	TEST_CHILD(UserBuilder.<IChild>next().withName("Max_Child").withFullname("Mustermann").withPassword("password")
+	TEST_CHILD(User.UserBuilder.<IChild>next().withName("Max_Child").withFullname("Mustermann").withPassword("password")
 			.withRole("CHILD").withEmail("max.mustermann@gmail.com").withSchoolClass("1a").withPhoneNumber("0153323123").toDto("CHILD"));
 	
 	
-	public UserDTO getUserDTO() {
+	public IUserDTO getUserDTO() {
 		return userDTO;
 	}
 	
 	public User getUser() {
-		return UserBuilder.<User>next().withDto(userDTO).build();
+		return User.UserBuilder.<User>next().withDto(userDTO).build();
 	}
 
-	private UserDTO userDTO;
+	private IUserDTO userDTO;
 
-	private TestUserData(UserDTO userDTO) {
+	private TestUserData(IUserDTO userDTO) {
 		this.userDTO = userDTO;
 	}
 
