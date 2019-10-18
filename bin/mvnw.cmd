@@ -43,7 +43,11 @@ title %0
 @REM set %HOME% to equivalent of $HOME
 if "%HOME%" == "" (set "HOME=%HOMEDRIVE%%HOMEPATH%")
 
+<<<<<<< HEAD
 @REM Execute a parent defined script before this one
+=======
+@REM Execute a user defined script before this one
+>>>>>>> refs/remotes/origin/development
 if not "%MAVEN_SKIP_RC%" == "" goto skipRcPre
 @REM check for pre script, once with legacy .bat ending and once with .cmd ending
 if exist "%HOME%\mavenrc_pre.bat" call "%HOME%\mavenrc_pre.bat"
