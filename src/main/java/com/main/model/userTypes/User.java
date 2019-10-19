@@ -66,14 +66,13 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 
 	@Column(name = "enabled")
 	private boolean enabled;
-
+	
 	// Constructur normal User
 	User(String username, String password, String fullname) {
 		this.username = username;
 		this.password = password;
 		this.fullname = fullname;
 		role = "USER";
-		enabled = true;
 	}
 
 	// Constructor Child
@@ -81,7 +80,6 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 		this(username, password, fullname);
 		this.schoolClass = schoolClass;
 		role = "CHILD";
-		enabled = true;
 	}
 
 	// Constructer Parent
@@ -90,7 +88,6 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		role = "PARENT";
-		enabled = false;
 	}
 
 	// Constructor Teacher and SchoolCoordinator
@@ -111,7 +108,6 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 		this.iban = iban;
 		this.isSchoolCoordinator = isSchoolCoordinator;
 		role = "EMPLOYEE";
-		enabled = false;
 	}
 
 	// Constructor Management
@@ -119,13 +115,14 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 		this(username, password, fullname, email, phoneNumber);
 		this.address = address;
 		role = "MANAGEMENT";
-		enabled = true;
+	
 	}
 
 	User() {
 		username = null;
 		password = null;
 		fullname = null;
+		enabled = false;
 	}
 
 	@Override

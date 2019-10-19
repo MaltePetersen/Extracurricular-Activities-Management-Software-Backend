@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface VerificationTokenRepository extends CrudRepository<VerificationToken,Long> {
     IVerificationToken findByToken(String token);
+    
+    IVerificationToken findByUser_Username(String username);
 }

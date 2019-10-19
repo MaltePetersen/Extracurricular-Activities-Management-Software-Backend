@@ -22,4 +22,6 @@ public interface IVerificationToken {
 
 	void setExpiryDate(Date expiryDate);
 
+	void reset();
+
 }

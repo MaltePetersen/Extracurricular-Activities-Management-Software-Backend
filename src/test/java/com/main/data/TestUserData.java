@@ -17,13 +17,13 @@ import com.main.model.userTypes.interfaces.*;
 
 public enum TestUserData {
 	TEST_TEACHER(User.UserBuilder.<ITeacher>next().withName("Max_Teacher").withFullname("Mustermann").withPassword("password")
-			.withRole("TEACHER").withEmail("max.mustermann@gmail.com").withPhoneNumber("0153323123").toDto("TEACHER")),
+			.withRole("TEACHER").withEmail("max.teacher@gmail.com").withPhoneNumber("0153323123").toDto("TEACHER")),
 	TEST_PARENT(User.UserBuilder.<IParent>next().withName("Max_Parent").withFullname("Mustermann").withPassword("password")
-			.withRole("PARENT").withEmail("max.mustermann@gmail.com").withPhoneNumber("0153323123").toDto("PARENT")),
+			.withRole("PARENT").withEmail("max.parent@gmx.de").withPhoneNumber("0153323123").toDto("PARENT")),
 	TEST_USER(User.UserBuilder.<IUser>next().withName("Max_User").withFullname("Mustermann").withPassword("password")
-			.withRole("USER").withEmail("max.mustermann@gmail.com").withPhoneNumber("0153323123").toDto("USER")),
+			.withRole("USER").withEmail("max.user@gmail.com").withPhoneNumber("0153323123").toDto("USER")),
 	TEST_CHILD(User.UserBuilder.<IChild>next().withName("Max_Child").withFullname("Mustermann").withPassword("password")
-			.withRole("CHILD").withEmail("max.mustermann@gmail.com").withSchoolClass("1a").withPhoneNumber("0153323123").toDto("CHILD"));
+			.withRole("CHILD").withEmail("max.child@gmail.com").withSchoolClass("1a").withPhoneNumber("0153323123").toDto("CHILD"));
 	
 	
 	public IUserDTO getUserDTO() {

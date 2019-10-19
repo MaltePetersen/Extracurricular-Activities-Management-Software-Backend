@@ -1,11 +1,12 @@
 package com.main.controller;
 
-
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,72 +25,88 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
 import com.main.dto.UserDTO;
-import com.main.dto.interfaces.IUserDTO;
 import com.main.model.interfaces.IVerificationToken;
 import com.main.model.userTypes.User;
 import com.main.repository.VerificationTokenRepository;
 import com.main.service.UserService;
 import com.main.util.UserDTOValidator;
+import com.main.util.register.OnRegistrationCompleteEvent;
 
 @RestController
 public class UserController {
 
-    private UserService userService;
-    private VerificationTokenRepository verificationTokenRepository;
-    private UserDTOValidator userDTOValidator;
+	private UserService userService;
+	private VerificationTokenRepository verificationTokenRepository;
+	private UserDTOValidator userDTOValidator;
 
-   public UserController(UserService userService, VerificationTokenRepository verificationTokenRepository, UserDTOValidator userDTOValidator) {
-        this.userService = userService;
-        this.verificationTokenRepository = verificationTokenRepository;
-        this.userDTOValidator = userDTOValidator;
-    }
+	@Autowired
+	ApplicationEventPublisher eventPublisher;
 
+	public UserController(UserService userService, VerificationTokenRepository verificationTokenRepository,
+			UserDTOValidator userDTOValidator) {
+		this.userService = userService;
+		this.verificationTokenRepository = verificationTokenRepository;
+		this.userDTOValidator = userDTOValidator;
+	}
 
-    @PostMapping("/register")
-    public ResponseEntity<String> registration(@RequestBody UserDTO user, Authentication auth, Errors errors) {
-        userDTOValidator.validate(user, errors);
-        if (errors.hasErrors()) {
-            return new ResponseEntity<>(createErrorString(errors), HttpStatus.BAD_REQUEST);
-        }
-        return userService.save(user, auth);
-    }
+	@PostMapping("/register")
+	public ResponseEntity<String> registration(@RequestBody UserDTO userDTO, Authentication auth, Errors errors,
+			WebRequest request) {
+		userDTOValidator.validate(userDTO, errors);
+		if (errors.hasErrors()) {
+			return new ResponseEntity<>(createErrorString(errors), HttpStatus.BAD_REQUEST);
+		}
 
-    private String createErrorString(Errors errors) {
-        return errors.getAllErrors().stream().map(ObjectError::toString).collect(Collectors.joining(","));
-    }
+		User registered = userService.createAccount(userDTO, auth);
 
+		try {
+			String appUrl = request.getContextPath();
+			eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
+		} catch (Exception e) {
+			return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
+		}
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
-    }
+		return new ResponseEntity<>("Created: " + registered.getRole(), HttpStatus.CREATED);
+	}
 
-    @RequestMapping(value = "/regitrationConfirm", method = RequestMethod.GET)
-    public ResponseEntity<String> confirmRegistration(WebRequest request, @RequestParam("token") String token) {
+	private String createErrorString(Errors errors) {
+		return errors.getAllErrors().stream().map(ObjectError::toString).collect(Collectors.joining(","));
+	}
 
-     //   Locale locale = request.getLocale();
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+		Map<String, String> errors = new HashMap<>();
+		ex.getBindingResult().getAllErrors().forEach((error) -> {
+			String fieldName = ((FieldError) error).getField();
+			String errorMessage = error.getDefaultMessage();
+			errors.put(fieldName, errorMessage);
+		});
+		return errors;
+	}
 
-        IVerificationToken verificationToken = verificationTokenRepository.findByToken(token);
-        if (verificationToken == null) {
-            return new ResponseEntity<>("Verification Token is null", HttpStatus.BAD_REQUEST);
-        }
+	@RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
+	public ResponseEntity<String> confirmRegistration(WebRequest request, @RequestParam("token") String token) {
 
-        User user = verificationToken.getUser();
-        Calendar cal = Calendar.getInstance();
-        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-            return new ResponseEntity<>("Token is already expired", HttpStatus.BAD_REQUEST);
-        }
+		// Locale locale = request.getLocale();
 
-        user.setEnabled(true);
-        userService.update(user);
-        return new ResponseEntity<>("User is confirmed", HttpStatus.ACCEPTED);
-    }
+		IVerificationToken verificationToken = verificationTokenRepository.findByToken(token);
+		if (verificationToken == null) {
+			return new ResponseEntity<>("Verification Token is null", HttpStatus.BAD_REQUEST);
+		}
+
+		User user = verificationToken.getUser();
+		Calendar cal = Calendar.getInstance();
+		if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+			verificationToken.reset();
+			return new ResponseEntity<>("Token is already expired", HttpStatus.BAD_REQUEST);
+		}
+
+		user.setEnabled(true);
+		userService.update(user);
+		return new ResponseEntity<>("User is confirmed", HttpStatus.ACCEPTED);
+	}
+
+	
+	
 }
