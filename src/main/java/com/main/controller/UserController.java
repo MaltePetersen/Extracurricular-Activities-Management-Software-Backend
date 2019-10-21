@@ -13,14 +13,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import com.main.dto.UserDTO;
@@ -91,5 +84,10 @@ public class UserController {
         user.setEnabled(true);
         userService.update(user);
         return new ResponseEntity<>("User is confirmed", HttpStatus.ACCEPTED);
+    }
+    @CrossOrigin
+    @GetMapping("/login")
+    public ResponseEntity<Boolean>login(){
+       return new ResponseEntity<>(true,HttpStatus.ACCEPTED);
     }
 }
