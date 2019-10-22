@@ -1,7 +1,6 @@
 package com.main.controller;
 
 import com.main.model.AfterSchoolCare;
-import com.main.model.CareService;
 import com.main.service.AfterSchoolCareService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +38,7 @@ public class AfterSchoolCareController {
 
     // Update AfterSchoolCare entry
     @PatchMapping("/api/after_school_cares/{id}")
-    AfterSchoolCare patch(@RequestBody CareService newCareService, @PathVariable Long id) {
+    AfterSchoolCare patch(@RequestBody AfterSchoolCare newCareService, @PathVariable Long id) {
         AfterSchoolCare afterSchoolCare = service.findOne(id);
 
         // TODO: attributes to be implemented

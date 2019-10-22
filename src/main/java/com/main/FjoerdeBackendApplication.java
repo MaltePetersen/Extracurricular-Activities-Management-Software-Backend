@@ -33,7 +33,6 @@ public class FjoerdeBackendApplication {
 					userRepo.save(user);
 				}
 
-
                 // adds a school for simpler testing
                 School school = new School("Holstenschule", "Altonaer Str. 40, 24534 Neumünster");
                 schoolRepo.save(school);
