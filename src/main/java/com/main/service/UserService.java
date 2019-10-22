@@ -8,5 +8,6 @@ import org.springframework.security.core.Authentication;
 public interface UserService {
     public ResponseEntity<String> save(IUserDTO userDTO, Authentication auth);
     public void update(User user);
+    public User findOne(Long id);
 }
 

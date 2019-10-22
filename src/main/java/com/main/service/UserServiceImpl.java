@@ -91,4 +91,9 @@ public class UserServiceImpl implements UserService {
     public void update(User user){
         userRepository.save(user);
     }
+
+    @Override
+    public User findOne(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("user id not found: " + id));
+    }
 }
