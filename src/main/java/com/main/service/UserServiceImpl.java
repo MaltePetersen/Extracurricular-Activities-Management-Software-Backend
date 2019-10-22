@@ -95,7 +95,6 @@ public class UserServiceImpl implements UserService {
 		ResponseEntity<String> response = save(userDTO, auth);
 		if (response.getStatusCode().equals(HttpStatus.CREATED)) {
 			return findByEmail(userDTO.getEmail());
-
 		}
 		return null;
 	}
@@ -114,5 +113,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean emailExist(String email) {
 		return findByEmail(email) != null;
+	}
+	
+	@Override
+	public void deleteUser(User user) {
+		userRepository.delete(user);
 	}
 }

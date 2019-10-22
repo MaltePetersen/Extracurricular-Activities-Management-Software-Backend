@@ -49,7 +49,7 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 	private String subject;
 	private String iban;
 	private String schoolClass;
-
+	
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "employee_school", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "school_id"))
 	private List<School> employeesSchools = new ArrayList<>();
@@ -64,8 +64,15 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 
 	private boolean isSchoolCoordinator;
 
-	@Column(name = "enabled")
-	private boolean enabled;
+	@Column(name = "verified")
+	private boolean verified;
+	
+	
+	@ElementCollection(targetClass = UserAuthority.class, fetch = FetchType.EAGER)
+	@JoinTable(name = "authoritiesUser", joinColumns = @JoinColumn(name = "userId"))
+	@Enumerated(EnumType.STRING)
+	private List<UserAuthority> authorities = new ArrayList<>();
+	
 	
 	// Constructur normal User
 	User(String username, String password, String fullname) {
@@ -97,7 +104,7 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 		this.subject = subject;
 		role = "TEACHER";
 		this.isSchoolCoordinator = isSchoolCoordinator;
-		enabled = false;
+		verified = false;
 	}
 
 	// Constructor Employee and SchoolCoordinator
@@ -122,15 +129,19 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 		username = null;
 		password = null;
 		fullname = null;
-		enabled = false;
+		verified = false;
 	}
+	
+	@Override
+	public void setRole(String role) {
+		this.role = role;
+	}
+	
 
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		if (isSchoolCoordinator)
-			return Arrays.asList(new SimpleGrantedAuthority("ROLE_" + role),
-					new SimpleGrantedAuthority("ROLE_SCHOOLCOORDINATOR"));
-		return Arrays.asList(new SimpleGrantedAuthority("ROLE_" + role));
+		return authorities;
 	}
 
 	@Override
@@ -150,7 +161,7 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 
 	@Override
 	public boolean isEnabled() {
-		return enabled;
+		return verified;
 	}
 
 	/**
@@ -227,11 +238,12 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 
 		public UserBuilder<T> isSchoolCoordinator(boolean isSchoolCoordinator) {
 			user.setSchoolCoordinator(isSchoolCoordinator);
+			user.addAuthority(UserAuthority.ROLE_SCHOOLCOORDINATOR);
 			return this;
 		}
 
-		public UserBuilder<T> isEnabled(boolean isEnabled) {
-			user.setEnabled(isEnabled);
+		public UserBuilder<T> isVerified(boolean isEnabled) {
+			user.setVerified(isEnabled);
 			return this;
 		}
 
@@ -279,6 +291,12 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 			return new UserBuilder<>();
 		}
 
+	}
+
+	
+	@Override
+	public void addAuthority(UserAuthority authority) {
+		this.authorities.add(authority);
 	}
 
 }

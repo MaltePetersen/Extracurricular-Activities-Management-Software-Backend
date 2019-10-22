@@ -2,6 +2,9 @@ package com.main;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+//import static io.restassured.RestAssured.*;
+//import static io.restassured.matcher.RestAssuredMatchers.*;
+//import static org.hamcrest.Matchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +22,7 @@ import com.main.model.userTypes.User;
 import com.main.repository.VerificationTokenRepository;
 import com.main.service.UserService;
 
+import io.restassured.response.Response;
 import lombok.extern.java.Log;
 
 /**
@@ -61,12 +65,12 @@ public class UserControllerTest extends AbstractMvcTest {
 		String content = mvcResult.getResponse().getContentAsString();
 		assertEquals("Created: TEACHER", content);
 	}
-	
+
 	/**
 	 * Testet das Registrieren und das Bestätigen per Email-Bestätigung
 	 * 
 	 * @category Testing
-	 * @since  17.10.2019
+	 * @since 17.10.2019
 	 * @author Markus
 	 * @throws Exception
 	 */
@@ -76,28 +80,31 @@ public class UserControllerTest extends AbstractMvcTest {
 	public void createParentAndEmailConfirmationTest() throws Exception {
 		String registerUri = "/register";
 		String confirmationUri = "/registrationConfirm?token=";
+		String resendUri = "/resendToken";
+
 		IUserDTO parent = TestUserData.TEST_PARENT.getUserDTO();
 
 		String inputJson = super.mapToJson(parent);
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(registerUri)
 				.contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson)).andReturn();
-		
+
 		int status = mvcResult.getResponse().getStatus();
 		assertEquals(201, status);
 		assertEquals("Created: PARENT", mvcResult.getResponse().getContentAsString());
-		
+
+//		Response response = given().auth().basic(parent.getUsername(), parent.getPassword()).when().get(resendUri).andReturn();
+//		status = response.getStatusCode();
 		
 		User user = userService.findByEmail(parent.getEmail());
 		assertNotEquals(null, user);
 		assertEquals(false, user.isEnabled());
 
-		IVerificationToken token = verificationTokenRepo.findByUser_Username(user.getUsername());
+		IVerificationToken token = verificationTokenRepo.findByUser_Email(user.getEmail());
 		mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(confirmationUri + token.getToken())).andReturn();
-		assertEquals(202, mvcResult.getResponse().getStatus() );
+		assertEquals(202, mvcResult.getResponse().getStatus());
 
 		user = userService.findByEmail(parent.getEmail());
 		assertEquals(true, user.isEnabled());
-		
 	}
 
 	@Test
@@ -113,6 +120,22 @@ public class UserControllerTest extends AbstractMvcTest {
 		int status = mvcResult.getResponse().getStatus();
 		assertEquals(201, status);
 		assertEquals("Created: CHILD", mvcResult.getResponse().getContentAsString());
+	}
+
+	@Test
+	@WithMockUser(authorities = "ROLE_PARENT")
+	public void resetTokenWithWrongAuthorityTest() throws Exception {
+		String resendUri = "/resendToken";
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(resendUri)).andReturn();
+		assertEquals(403, mvcResult.getResponse().getStatus());
+	}
+
+	@Test
+	@WithMockUser(authorities = "RESET_TOKEN")
+	public void resetTokenWithRightAuthorityTest() throws Exception {
+		String resendUri = "/resendToken";
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(resendUri)).andReturn();
+		assertEquals(202, mvcResult.getResponse().getStatus());
 	}
 
 }

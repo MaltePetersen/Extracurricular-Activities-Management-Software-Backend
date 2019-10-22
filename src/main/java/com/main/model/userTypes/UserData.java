@@ -35,11 +35,11 @@ public class UserData {
 				"Malte Petersen", "malte.petersen@web.de", "123-123-1234", "Sport", true);
 		User user = new User("User_Test", encoder.encode("password"), "Malte Petersen");
 		User child = new User("Child_Test", encoder.encode("password"), "Malte Petersen", "7a");
-        parent.setEnabled(true);
-        employee.setEnabled(true);
-        employeeSchoolCoordinator.setEnabled(true);
-        teacher.setEnabled(true);
-        teacherSchoolCoordinator.setEnabled(true);
+        parent.setVerified(true);
+        employee.setVerified(true);
+        employeeSchoolCoordinator.setVerified(true);
+        teacher.setVerified(true);
+        teacherSchoolCoordinator.setVerified(true);
 		return Arrays.asList(parent, employee, employeeSchoolCoordinator, management, teacher, teacherSchoolCoordinator, user, child);
 
 	}

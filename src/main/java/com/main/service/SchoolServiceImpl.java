@@ -14,22 +14,21 @@ public class SchoolServiceImpl implements SchoolService {
 
 	private SchoolRepository repository;
 
-    SchoolServiceImpl(SchoolRepository repository) {
-        this.repository = repository;
-    }
+	SchoolServiceImpl(SchoolRepository repository) {
+		this.repository = repository;
+	}
 
-    @Override
+	@Override
 	public List<School> getAll() {
 		return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
 	}
 
-    @Override
-    public School findOne(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("school id not found: " + id));
-    }
+	@Override
+	public School findOne(Long id) {
+		return repository.findById(id).orElseThrow(() -> new RuntimeException("school id not found: " + id));
+	}
 
-    @Override
+	@Override
 	public ISchool save(School newSchool) {
 		repository.save(newSchool);
 
@@ -39,5 +38,10 @@ public class SchoolServiceImpl implements SchoolService {
 	@Override
 	public void deleteById(Long id) {
 		repository.deleteById(id);
+	}
+
+	@Override
+	public List<School> findAll() {
+		return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
 	}
 }

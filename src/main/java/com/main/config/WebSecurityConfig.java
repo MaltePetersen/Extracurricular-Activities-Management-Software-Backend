@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.main.model.userTypes.UserAuthority;
+
 @Configuration
 public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
 
@@ -28,6 +30,8 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                     .authorizeRequests()
                     .antMatchers(HttpMethod.GET, "/api/**").hasAnyRole("CHILD","PARENT","EMPLOYEE","MANAGEMENT","SCHOOLCOORDINATOR","TEACHER","USER")
                     .antMatchers(HttpMethod.POST, "/register").permitAll()
+                    .antMatchers(HttpMethod.GET, "/registrationConfirm").permitAll()
+                    .antMatchers(HttpMethod.GET, "/resendToken").hasAnyAuthority(UserAuthority.RESET_TOKEN.toString())
                     .and()
                     .csrf().disable()
                     .formLogin().disable();

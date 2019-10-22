@@ -14,5 +14,6 @@ public interface UserService {
 	public VerificationToken createVerificationToken(User user, String token);
 	public User findByEmail(String email);
 	public boolean emailExist(String email);
+	public void deleteUser(User user);
 }
 
