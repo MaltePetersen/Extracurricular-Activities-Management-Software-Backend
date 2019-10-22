@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
-public class FjoerdeBackendApplication extends SpringBootServletInitializer {
+public class FjoerdeBackendApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(FjoerdeBackendApplication.class, args);
