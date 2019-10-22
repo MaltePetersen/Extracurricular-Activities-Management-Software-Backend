@@ -33,12 +33,18 @@ public class FjoerdeBackendApplication {
 					userRepo.save(user);
 				}
 
-                // adds a school for simpler testing
-                School school = new School("Holstenschule", "Altonaer Str. 40, 24534 Neumünster");
-                schoolRepo.save(school);
+                // adds schools for simpler testing
+                School school1 = new School("Holstenschule", "Altonaer Str. 40, 24534 Neumünster");
+                schoolRepo.save(school1);
+
+                School school2 = new School("Klaus-Groth-Schule", "Winterbeker Weg 45, 24114 Kiel");
+                schoolRepo.save(school2);
+
+                School school3 = new School("Wilhelm-Tanck-Schule", "Färberstraße 25, 24534 Neumünster");
+                schoolRepo.save(school3);
 
                 AfterSchoolCare afterSchoolCare = new AfterSchoolCare();
-                afterSchoolCare.setParticipatingSchool(school);
+                afterSchoolCare.setParticipatingSchool(school1);
                 afterSchoolCareService.save(afterSchoolCare);
             }
         };
