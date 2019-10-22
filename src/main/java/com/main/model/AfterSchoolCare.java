@@ -5,6 +5,14 @@ import com.main.model.userTypes.User;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * Die Klasse für die Nachmittagsbetreuung. Pro Schule und Termin (Tag) gibt es ein Objekt für die Nachmittagsbetreuung.
+ *
+ * @author Bendix Tonn
+ * @since 22.10.2019
+ * @version 1.0
+ */
+
 @Entity
 public class AfterSchoolCare {
     @Id
@@ -21,6 +29,8 @@ public class AfterSchoolCare {
 
     // TODO: employee to be correctly implemented
     private User employee;
+
+    // TODO: list of attendances to be implemented
 
     public AfterSchoolCare() {
     }
