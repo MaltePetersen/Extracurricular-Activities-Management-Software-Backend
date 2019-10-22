@@ -1,7 +1,6 @@
 package com.main.model;
 
 import com.main.model.userTypes.User;
-import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +9,6 @@ import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 
 @Entity
-@Data
 public class School {
     @Id
     @GeneratedValue
@@ -45,10 +43,6 @@ public class School {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
