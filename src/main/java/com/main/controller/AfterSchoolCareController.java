@@ -50,7 +50,7 @@ public class AfterSchoolCareController {
 
     // Delete
     @DeleteMapping("/api/after_school_cares/{id}")
-    void deleteSchool(@PathVariable Long id) {
+    void deleteAfterSchoolCare(@PathVariable Long id) {
         service.deleteById(id);
     }
 }
