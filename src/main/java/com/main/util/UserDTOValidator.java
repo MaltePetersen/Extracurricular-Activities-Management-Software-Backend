@@ -29,6 +29,8 @@ public class UserDTOValidator {
     private void validateUsername(String username, Errors errors) {
         if (stringIsEmptyOrNull(username))
             errors.reject("No username");
+        if(userService.findByUsername(username) != null)
+        	errors.reject("Username already in use");
     }
 
     private void validatePassword(String password, Errors errors) {

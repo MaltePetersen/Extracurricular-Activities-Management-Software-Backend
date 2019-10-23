@@ -7,6 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+/**
+ * Veraltet, da auf Konstruktoren verzichtet werden sollte
+ * 
+ * @author Markus
+ *
+ */
+
 @Component
 @Deprecated
 public class UserData {
@@ -26,8 +33,6 @@ public class UserData {
 		
 		User employee = new User("Employee_Test", encoder.encode("password"), "Malte Petersen", "malte.petersen@web.de",
 				"123-123-1234", "Geschichte", "1374816241982437", "Schloßstraße 33", false);
-		employee.addAuthority(UserAuthority.ROLE_EMPLOYEE);
-		
 		User employeeSchoolCoordinator = new User("Employee_SchoolCoordinator_Test", encoder.encode("password"),
 				"Malte Petersen", "malte.petersen11@gmail.com", "123-123-1234", "Geschichte", "1374816241982437",
 				"Schloßstraße 33", true);

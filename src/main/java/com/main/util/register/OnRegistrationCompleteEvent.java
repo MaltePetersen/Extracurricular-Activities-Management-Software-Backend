@@ -3,11 +3,9 @@ package com.main.util.register;
 import java.util.Locale;
 
 import org.springframework.context.ApplicationEvent;
-import org.springframework.stereotype.Component;
 
 import com.main.model.userTypes.User;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

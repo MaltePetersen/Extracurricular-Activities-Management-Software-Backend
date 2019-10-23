@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
 import com.main.dto.UserDTO;
+import com.main.model.VerificationToken;
 import com.main.model.interfaces.IVerificationToken;
 import com.main.model.userTypes.User;
 import com.main.model.userTypes.UserAuthority;
+import com.main.model.userTypes.interfaces.IContactDetails;
+import com.main.model.userTypes.interfaces.IUser;
 import com.main.repository.VerificationTokenRepository;
 import com.main.service.UserService;
 import com.main.util.UserDTOValidator;
@@ -61,22 +63,22 @@ public class UserController {
 			return new ResponseEntity<>(createErrorString(errors), HttpStatus.BAD_REQUEST);
 		}
 
-		User registered = userService.createAccount(userDTO, auth);
-	
-		if(registered == null)
+		IUser registered = userService.createAccount(userDTO, auth);
+
+		if (registered == null)
 			return new ResponseEntity<>("Error creating the account", HttpStatus.BAD_REQUEST);
 		registered.addAuthority(UserAuthority.RESET_TOKEN);
-		userService.update(registered);
+		userService.update((User) registered);
 		try {
 			String appUrl = request.getContextPath();
-			eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
+			eventPublisher
+					.publishEvent(new OnRegistrationCompleteEvent((User) registered, request.getLocale(), appUrl));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>("Fehler beim Versenden", HttpStatus.BAD_REQUEST);
 		}
-		log.info("Created User has " + registered.getAuthorities() + 
-				" Name: " + registered.getUsername() +
-				" Passwort: " + userDTO.getPassword());
+		log.info("Created User has " + ((User) registered).getAuthorities() + " Name: " + registered.getUsername()
+				+ " Passwort: " + userDTO.getPassword());
 		return new ResponseEntity<>("Created: " + registered.getRole(), HttpStatus.CREATED);
 	}
 
@@ -111,29 +113,36 @@ public class UserController {
 		if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
 			return new ResponseEntity<>("Token is already expired", HttpStatus.BAD_REQUEST);
 		}
-		
-		user.addAuthority(UserAuthority.valueOf("ROLE_"+ user.getRole()));
-		if(user.isSchoolCoordinator())
+
+		user.addAuthority(UserAuthority.valueOf("ROLE_" + user.getRole()));
+		if (user.isSchoolCoordinator())
 			user.addAuthority(UserAuthority.ROLE_SCHOOLCOORDINATOR);
-		
+
 		user.setVerified(true);
 		userService.update(user);
 		return new ResponseEntity<>("User is confirmed", HttpStatus.ACCEPTED);
 	}
 
 	@RequestMapping(value = "/resendToken", method = RequestMethod.GET)
-	public ResponseEntity<String> resendToken(Authentication auth){
-		if(auth == null)
+	public ResponseEntity<String> resendToken(Authentication auth, WebRequest request) {
+		if (auth == null)
 			return new ResponseEntity<>("Not Authentificated", HttpStatus.BAD_REQUEST);
-		String name = auth.getName();
-		System.out.println(name);
+		IUser user = userService.findByUsername(auth.getName());
+
+		if(user == null)
+			return new ResponseEntity<>("Fehler beim Versenden", HttpStatus.BAD_REQUEST);
+		
+		try {
+			String appUrl = request.getContextPath();
+			IVerificationToken token = verificationTokenRepository
+					.findByUser_Email(((IContactDetails) user).getEmail());
+			verificationTokenRepository.delete((VerificationToken) token);
+			eventPublisher.publishEvent(new OnRegistrationCompleteEvent((User) user, request.getLocale(), appUrl));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return new ResponseEntity<>("The token was sent again", HttpStatus.ACCEPTED);
 	}
-	
-	@RequestMapping(value = "/auth", method = RequestMethod.GET)
-	public ResponseEntity<String> auth(Authentication auth){
-		
-		return new ResponseEntity<String>(auth.getAuthorities().toString(), HttpStatus.ACCEPTED);
-	}
-	
+
 }

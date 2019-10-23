@@ -11,4 +11,8 @@ public enum UserAuthority implements GrantedAuthority{
 		return toString();
 	}
 	
+	public static UserAuthority byRole(String role) {
+		return UserAuthority.valueOf("ROLE_" + role);
+	}
+	
 }

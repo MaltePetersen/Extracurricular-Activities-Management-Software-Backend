@@ -1,5 +1,8 @@
 package com.main.assured;
 
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +18,7 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AbstractAssuredTest {
+public abstract class AbstractAssuredTest {
 
 	@Autowired
 	WebApplicationContext context;
@@ -34,5 +37,6 @@ public class AbstractAssuredTest {
 	protected String mapToJson(Object obj) throws JsonProcessingException {
 		return objectMapper.writeValueAsString(obj);
 	}
+	
 
 }

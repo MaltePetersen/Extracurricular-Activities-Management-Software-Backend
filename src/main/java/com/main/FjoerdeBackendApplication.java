@@ -34,8 +34,9 @@ public class FjoerdeBackendApplication {
 
 				List<User> users = userData.getUserData();
 				for (User user : users) {
-					user.addAuthority(UserAuthority.ROLE_USER);
+					user.addAuthority(UserAuthority.byRole(user.getRole()));
 					userRepo.save(user);
+					System.out.println(user);
 				}
 
 				// adds a school for simpler testing

@@ -20,4 +20,7 @@ public interface IUser {
 	void setRole(String role);
 	
 	void addAuthority(UserAuthority authority);
+
+	void setVerified(boolean verified);
+	boolean isVerified();
 }

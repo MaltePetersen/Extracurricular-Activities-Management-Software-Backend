@@ -1,7 +1,9 @@
 package com.main.mockmvc;
 
+import static org.junit.Assert.assertEquals;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -51,4 +53,8 @@ public abstract class AbstractMvcTest {
 		return objectMapper.writeValueAsString(obj);
 	}
 
+	@Test
+	public void test() {
+		assertEquals(0, 0);
+	}
 }

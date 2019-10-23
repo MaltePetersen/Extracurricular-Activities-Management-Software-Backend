@@ -1,19 +1,14 @@
 package com.main.assured;
 
-import static org.junit.Assert.assertEquals;
-import static io.restassured.RestAssured.*;
-import static io.restassured.matcher.RestAssuredMatchers.*;
-import static org.hamcrest.Matchers.*;
+import static io.restassured.RestAssured.given;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.main.data.TestUserControllerPath;
 import com.main.data.TestUserData;
 import com.main.dto.interfaces.IUserDTO;
-import com.main.model.userTypes.interfaces.IParent;
 
-import io.restassured.response.ValidatableResponse;
 import lombok.extern.java.Log;
 
 @Log
@@ -26,22 +21,20 @@ public class AssuredUserController extends AbstractAssuredTest {
 	}
 
 	@Test
-	public void test() throws Exception {
-		String registerUri = "/register";
-		String resetToken = "/auth";
+	public void registerNewParentTest() throws Exception {
 
-		IUserDTO parent = TestUserData.TEST_PARENT.getUserDTO();
+
+		IUserDTO parent = TestUserData.TEST_PARENT_2.getUserDTO();
 
 		String value = mapToJson(parent);
 
-		ValidatableResponse response = given().contentType("application/json").body(value).when().post(registerUri)
+		given().contentType("application/json").body(value).when().post(TestUserControllerPath.REGISTER.getUri())
 				.then().assertThat().statusCode(201);
 		
-		log.info("Login: " + parent.getUsername() + " " + parent.getPassword());
-		
-		given().auth().preemptive().basic("Employee_Test", "passoword").when().get(resetToken).then()
-				.statusCode(202);
-
+		given().auth().preemptive().basic(parent.getUsername(), parent.getPassword()).log().headers().when()
+				.get(TestUserControllerPath.RESENDTOKEN.getUri()).then().statusCode(202);
 	}
+	
+	
 
 }

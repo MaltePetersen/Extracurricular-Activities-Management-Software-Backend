@@ -49,7 +49,7 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 	private String subject;
 	private String iban;
 	private String schoolClass;
-	
+
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "employee_school", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "school_id"))
 	private List<School> employeesSchools = new ArrayList<>();
@@ -66,14 +66,12 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 
 	@Column(name = "verified")
 	private boolean verified;
-	
-	
+
 	@ElementCollection(targetClass = UserAuthority.class, fetch = FetchType.EAGER)
 	@JoinTable(name = "authoritiesUser", joinColumns = @JoinColumn(name = "userId"))
 	@Enumerated(EnumType.STRING)
 	private List<UserAuthority> authorities = new ArrayList<>();
-	
-	
+
 	// Constructur normal User
 	User(String username, String password, String fullname) {
 		this.username = username;
@@ -104,7 +102,7 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 		this.subject = subject;
 		role = "TEACHER";
 		this.isSchoolCoordinator = isSchoolCoordinator;
-		verified = false;
+
 	}
 
 	// Constructor Employee and SchoolCoordinator
@@ -122,7 +120,7 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 		this(username, password, fullname, email, phoneNumber);
 		this.address = address;
 		role = "MANAGEMENT";
-	
+
 	}
 
 	User() {
@@ -131,14 +129,12 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 		fullname = null;
 		verified = false;
 	}
-	
+
 	@Override
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
 
-	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return authorities;
@@ -161,7 +157,7 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 
 	@Override
 	public boolean isEnabled() {
-		return verified;
+		return true;
 	}
 
 	/**
@@ -293,7 +289,6 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 
 	}
 
-	
 	@Override
 	public void addAuthority(UserAuthority authority) {
 		this.authorities.add(authority);
