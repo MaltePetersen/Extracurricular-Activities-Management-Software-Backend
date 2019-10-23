@@ -1,6 +1,7 @@
 package com.main;
 
-import lombok.extern.java.Log;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.security.test.context.support.WithAnonymousUser;
@@ -8,7 +9,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.junit.Assert.assertEquals;
+import com.main.mockmvc.AbstractMvcTest;
+
+import lombok.extern.java.Log;
 
 @Log
 public class AfterSchoolCareControllerTest extends AbstractMvcTest {
