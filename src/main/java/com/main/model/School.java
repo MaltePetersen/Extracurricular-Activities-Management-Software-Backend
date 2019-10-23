@@ -14,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.main.model.interfaces.ISchool;
 import com.main.model.userTypes.User;
+import com.main.model.userTypes.interfaces.IChild;
 import com.main.model.userTypes.interfaces.IContactDetails;
 import com.main.model.userTypes.interfaces.IEmployee;
 import com.main.model.userTypes.interfaces.ISchoolCoordinator;
@@ -38,7 +39,7 @@ public class School implements IContactDetails, ISchool {
 	private String phoneNumber;
 
 	@ManyToMany(mappedBy = "employeesSchools")
-	private List<User> employees = new ArrayList<User>();
+	private List<User> employees = new ArrayList<>();
 
 	@ManyToMany(mappedBy = "schoolCoordinatorsSchools")
 	private List<User> schoolCoordinators = new ArrayList<>();
@@ -82,6 +83,17 @@ public class School implements IContactDetails, ISchool {
 
 	public void addSchoolCoordinator(ISchoolCoordinator schoolCoordinator) {
 		schoolCoordinators.add((User) schoolCoordinator);
+	}
+	
+	public boolean removeChild(IChild child) {
+		int oldSize = children.size();
+		schoolCoordinators = schoolCoordinators.stream().filter(each -> each.getId() != child.getId())
+				.collect(Collectors.toList());
+		return oldSize > schoolCoordinators.size();
+	}
+	
+	public void addChild(IChild child) {
+		children.add((User) child);
 	}
 
 }

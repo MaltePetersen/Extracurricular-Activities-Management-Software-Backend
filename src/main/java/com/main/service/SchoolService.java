@@ -13,4 +13,6 @@ public interface SchoolService {
     ISchool save(School newSchool);
 
     void deleteById(Long id);
+
+	List<School> findAll();
 }
