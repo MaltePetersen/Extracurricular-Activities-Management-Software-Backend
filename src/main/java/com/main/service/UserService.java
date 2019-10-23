@@ -4,6 +4,9 @@ import com.main.dto.UserDTO;
 import com.main.dto.interfaces.IUserDTO;
 import com.main.model.VerificationToken;
 import com.main.model.userTypes.User;
+
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
@@ -15,5 +18,6 @@ public interface UserService {
 	public User findByEmail(String email);
 	public boolean emailExist(String email);
 	public void deleteUser(User user);
+	public List<User> findAll();
 }
 

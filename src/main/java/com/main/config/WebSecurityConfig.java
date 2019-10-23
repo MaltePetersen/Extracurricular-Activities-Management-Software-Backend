@@ -30,6 +30,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
                     .authorizeRequests()
                     .antMatchers(HttpMethod.GET, "/api/**").hasAnyRole("CHILD","PARENT","EMPLOYEE","MANAGEMENT","SCHOOLCOORDINATOR","TEACHER","USER")
                     .antMatchers(HttpMethod.POST, "/register").permitAll()
+                    .antMatchers(HttpMethod.GET, "/auth").permitAll(	)
                     .antMatchers(HttpMethod.GET, "/registrationConfirm").permitAll()
                     .antMatchers(HttpMethod.GET, "/resendToken").hasAnyAuthority(UserAuthority.RESET_TOKEN.toString())
                     .and()

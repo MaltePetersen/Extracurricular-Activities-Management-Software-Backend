@@ -22,8 +22,12 @@ public class UserData {
 	public List<User> getUserData() {
 		User parent = new User("Parent_Test", encoder.encode("password"), "Craig Walls", "craig@walls.com",
 				"123-123-1234");
+		parent.addAuthority(UserAuthority.RESET_TOKEN);
+		
 		User employee = new User("Employee_Test", encoder.encode("password"), "Malte Petersen", "malte.petersen@web.de",
 				"123-123-1234", "Geschichte", "1374816241982437", "Schloßstraße 33", false);
+		employee.addAuthority(UserAuthority.ROLE_EMPLOYEE);
+		
 		User employeeSchoolCoordinator = new User("Employee_SchoolCoordinator_Test", encoder.encode("password"),
 				"Malte Petersen", "malte.petersen11@gmail.com", "123-123-1234", "Geschichte", "1374816241982437",
 				"Schloßstraße 33", true);

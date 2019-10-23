@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.main.model.VerificationToken;
 import com.main.model.interfaces.IVerificationToken;
 import com.main.model.userTypes.User;
+import com.main.repository.UserRepository;
 import com.main.repository.VerificationTokenRepository;
 import com.main.service.UserService;
 
@@ -63,6 +64,9 @@ public class ScheduledTask {
 			}
 		}
 	}
+
+
+	
 	
 	private static boolean isExpired(Date date) {
 		return date.before(new Date());

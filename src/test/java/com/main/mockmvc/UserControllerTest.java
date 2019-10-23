@@ -1,10 +1,7 @@
-package com.main;
+package com.main.mockmvc;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-//import static io.restassured.RestAssured.*;
-//import static io.restassured.matcher.RestAssuredMatchers.*;
-//import static org.hamcrest.Matchers.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -80,7 +77,7 @@ public class UserControllerTest extends AbstractMvcTest {
 	public void createParentAndEmailConfirmationTest() throws Exception {
 		String registerUri = "/register";
 		String confirmationUri = "/registrationConfirm?token=";
-		String resendUri = "/resendToken";
+		String resendUri = "/resendToken/";
 
 		IUserDTO parent = TestUserData.TEST_PARENT.getUserDTO();
 
@@ -92,9 +89,7 @@ public class UserControllerTest extends AbstractMvcTest {
 		assertEquals(201, status);
 		assertEquals("Created: PARENT", mvcResult.getResponse().getContentAsString());
 
-//		Response response = given().auth().basic(parent.getUsername(), parent.getPassword()).when().get(resendUri).andReturn();
-//		status = response.getStatusCode();
-		
+	
 		User user = userService.findByEmail(parent.getEmail());
 		assertNotEquals(null, user);
 		assertEquals(false, user.isEnabled());

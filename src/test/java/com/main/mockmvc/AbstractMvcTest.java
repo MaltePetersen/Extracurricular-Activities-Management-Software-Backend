@@ -1,4 +1,4 @@
-package com.main;
+package com.main.mockmvc;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
@@ -13,14 +13,16 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.main.FjoerdeBackendApplication;
 import com.main.repository.VerificationTokenRepository;
 import com.main.service.UserService;
 import com.main.util.UserDTOValidator;
 
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
+
 /**
  * 
- * Bietet als abstrakte Klasse die Möglichkeit REST-Componenten
- * zu testen.
+ * Bietet als abstrakte Klasse die Möglichkeit REST-Componenten zu testen.
  * 
  * @author Markus
  * @since 16.10.2019
@@ -34,7 +36,7 @@ import com.main.util.UserDTOValidator;
 public abstract class AbstractMvcTest {
 
 	protected MockMvc mockMvc;
-	
+
 	protected ObjectMapper objectMapper;
 
 	@Autowired
@@ -44,10 +46,9 @@ public abstract class AbstractMvcTest {
 		mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 		objectMapper = new ObjectMapper();
 	}
-	
+
 	protected String mapToJson(Object obj) throws JsonProcessingException {
 		return objectMapper.writeValueAsString(obj);
 	}
 
-	
 }

@@ -74,7 +74,9 @@ public class UserController {
 			e.printStackTrace();
 			return new ResponseEntity<>("Fehler beim Versenden", HttpStatus.BAD_REQUEST);
 		}
-		log.info("Created User has " + registered.getAuthorities());
+		log.info("Created User has " + registered.getAuthorities() + 
+				" Name: " + registered.getUsername() +
+				" Passwort: " + userDTO.getPassword());
 		return new ResponseEntity<>("Created: " + registered.getRole(), HttpStatus.CREATED);
 	}
 
@@ -126,6 +128,12 @@ public class UserController {
 		String name = auth.getName();
 		System.out.println(name);
 		return new ResponseEntity<>("The token was sent again", HttpStatus.ACCEPTED);
+	}
+	
+	@RequestMapping(value = "/auth", method = RequestMethod.GET)
+	public ResponseEntity<String> auth(Authentication auth){
+		
+		return new ResponseEntity<String>(auth.getAuthorities().toString(), HttpStatus.ACCEPTED);
 	}
 	
 }
