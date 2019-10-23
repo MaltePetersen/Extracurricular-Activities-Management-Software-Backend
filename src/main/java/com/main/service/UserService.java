@@ -21,5 +21,6 @@ public interface UserService {
 	public void deleteUser(User user);
 	public List<User> findAll();
 	public IUser findByUsername(String username);
+    public User findOne(Long id);
 }
 

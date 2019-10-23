@@ -114,4 +114,9 @@ public class UserServiceImpl implements UserService {
 	public IUser findByUsername(String username) {
 		return userRepository.findByUsername(username);
 	}
+
+	@Override
+    public User findOne(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("user id not found: " + id));
+    }
 }
