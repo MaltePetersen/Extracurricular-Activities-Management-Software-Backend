@@ -4,9 +4,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import com.main.dto.interfaces.IUserDTO;
+import com.main.service.UserService;
 
 @Component
 public class UserDTOValidator {
+	
+	private UserService userService;
+	
+	public UserDTOValidator(UserService service) {
+		this.userService = service;
+	}
 
     private boolean stringIsEmptyOrNull(String element) {
         return element == null || element.isEmpty();
@@ -22,6 +29,8 @@ public class UserDTOValidator {
     private void validateUsername(String username, Errors errors) {
         if (stringIsEmptyOrNull(username))
             errors.reject("No username");
+        if(userService.findByUsername(username) != null)
+        	errors.reject("Username already in use");
     }
 
     private void validatePassword(String password, Errors errors) {
@@ -37,6 +46,8 @@ public class UserDTOValidator {
     private void validateEmail(String email, Errors errors) {
         if (stringIsEmptyOrNull(email))
             errors.reject("No email");
+        if(userService.findByEmail(email) != null)
+        	errors.reject("Email already used");
     }
 
     private void validatePhoneNumber(String phoneNumber, Errors errors) {

@@ -32,6 +32,7 @@ public class VerificationToken implements IVerificationToken {
         this.user = user;
         this.expiryDate = calculateExpiryDate(1440);
     }
+    
     public VerificationToken(){}
 
     public VerificationToken(String token) {
@@ -47,6 +48,11 @@ public class VerificationToken implements IVerificationToken {
 
     public static int getEXPIRATION() {
         return EXPIRATION;
+    }
+    
+    @Override
+    public void reset() {
+    	this.expiryDate = calculateExpiryDate(1440);
     }
 
 }
