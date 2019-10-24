@@ -1,10 +1,12 @@
 package com.main;
 
 import com.main.model.AfterSchoolCare;
+import com.main.model.Attendance;
 import com.main.model.School;
 import com.main.model.userTypes.User;
 import com.main.model.userTypes.UserAuthority;
 import com.main.model.userTypes.UserData;
+import com.main.repository.AttendanceRepository;
 import com.main.repository.SchoolRepository;
 import com.main.repository.UserRepository;
 import com.main.service.AfterSchoolCareService;
@@ -25,9 +27,9 @@ public class FjoerdeBackendApplication {
 		SpringApplication.run(FjoerdeBackendApplication.class, args);
 	}
 
+
 	@Bean
-	public CommandLineRunner dataLoader(UserRepository userRepo, PasswordEncoder encoder, SchoolRepository schoolRepo,
-			AfterSchoolCareService afterSchoolCareService, UserData userData) { // user repo for ease of testing with a built-in user
+	public CommandLineRunner dataLoader(UserRepository userRepo, PasswordEncoder encoder, SchoolRepository schoolRepo, UserData userData, AfterSchoolCareService afterSchoolCareService, AttendanceRepository attendanceRepository) { // user repo for ease of testing with a built-in user
 		return new CommandLineRunner() {
 			@Override
 			public void run(String... args) throws Exception {
@@ -47,7 +49,15 @@ public class FjoerdeBackendApplication {
 
 					AfterSchoolCare afterSchoolCare = new AfterSchoolCare();
 					afterSchoolCare.setParticipatingSchool(school1);
+
+
+					Attendance attendance = new Attendance();
+					attendance.setAdditionalInformation("Blaaaaaa");
+					attendanceRepository.save(attendance);
+
+					afterSchoolCare.addAttendance(attendance);
 					afterSchoolCareService.save(afterSchoolCare);
+
 				}
 			}
 		};

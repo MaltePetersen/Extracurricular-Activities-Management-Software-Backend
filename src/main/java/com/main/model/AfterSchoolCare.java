@@ -4,6 +4,8 @@ import com.main.model.userTypes.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Die Klasse für die Nachmittagsbetreuung. Pro Schule und Termin (Tag) gibt es ein Objekt für die Nachmittagsbetreuung.
@@ -30,7 +32,8 @@ public class AfterSchoolCare {
     // TODO: employee to be correctly implemented
     private User employee;
 
-    // TODO: list of attendances to be implemented
+    @OneToMany(mappedBy = "afterSchoolCare", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Attendance> attendances = new ArrayList<>();
 
     public AfterSchoolCare() {
     }
@@ -73,5 +76,13 @@ public class AfterSchoolCare {
 
     public void setEmployee(User employee) {
         this.employee = employee;
+    }
+
+    public List<Attendance> getAttendances() {
+        return attendances;
+    }
+
+    public void addAttendance(Attendance attendance) {
+        attendances.add(attendance);
     }
 }

@@ -3,6 +3,7 @@ package com.main.controller;
 import com.main.dto.AfterSchoolCareDTO;
 import com.main.dto.converters.AfterSchoolCareConverter;
 import com.main.model.AfterSchoolCare;
+import com.main.model.Attendance;
 import com.main.service.AfterSchoolCareService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +52,12 @@ public class AfterSchoolCareController {
         service.save(afterSchoolCare);
 
         return afterSchoolCareConverter.toDto(afterSchoolCare);
+    }
+
+    @PatchMapping("/api/after_school_cares/{id}/attendance")
+    AfterSchoolCare patch(@RequestBody Attendance attendance, @PathVariable Long id) {
+
+        return service.addAttendance(id ,attendance);
     }
 
     // Delete
