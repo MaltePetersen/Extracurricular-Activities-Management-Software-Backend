@@ -13,14 +13,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import com.main.dto.UserDTO;
@@ -129,9 +122,9 @@ public class UserController {
 			return new ResponseEntity<>("Not Authentificated", HttpStatus.BAD_REQUEST);
 		IUser user = userService.findByUsername(auth.getName());
 
-		if(user == null)
+		if (user == null)
 			return new ResponseEntity<>("Fehler beim Versenden", HttpStatus.BAD_REQUEST);
-		
+
 		try {
 			String appUrl = request.getContextPath();
 			IVerificationToken token = verificationTokenRepository
@@ -143,6 +136,12 @@ public class UserController {
 		}
 
 		return new ResponseEntity<>("The token was sent again", HttpStatus.ACCEPTED);
+	}
+
+	@CrossOrigin
+	@GetMapping("/login")
+	public ResponseEntity<Boolean> login() {
+		return new ResponseEntity<>(true, HttpStatus.ACCEPTED);
 	}
 
 }

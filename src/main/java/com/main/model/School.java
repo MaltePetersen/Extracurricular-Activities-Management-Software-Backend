@@ -3,6 +3,7 @@ package com.main.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.main.model.userTypes.User;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
