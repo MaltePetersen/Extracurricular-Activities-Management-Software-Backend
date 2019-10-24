@@ -33,6 +33,7 @@ import lombok.extern.java.Log;
 @RestController
 @Log
 public class UserController {
+
 	private UserService userService;
 	private VerificationTokenRepository verificationTokenRepository;
 	private UserDTOValidator userDTOValidator;
@@ -121,9 +122,9 @@ public class UserController {
 			return new ResponseEntity<>("Not Authentificated", HttpStatus.BAD_REQUEST);
 		IUser user = userService.findByUsername(auth.getName());
 
-		if(user == null)
+		if (user == null)
 			return new ResponseEntity<>("Fehler beim Versenden", HttpStatus.BAD_REQUEST);
-		
+
 		try {
 			String appUrl = request.getContextPath();
 			IVerificationToken token = verificationTokenRepository
@@ -136,4 +137,11 @@ public class UserController {
 
 		return new ResponseEntity<>("The token was sent again", HttpStatus.ACCEPTED);
 	}
+
+	@CrossOrigin
+	@GetMapping("/login")
+	public ResponseEntity<Boolean> login() {
+		return new ResponseEntity<>(true, HttpStatus.ACCEPTED);
+	}
+
 }
