@@ -1,5 +1,14 @@
 package com.main;
 
+import java.util.List;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.main.model.AfterSchoolCare;
 import com.main.model.Attendance;
 import com.main.model.School;
@@ -10,14 +19,6 @@ import com.main.repository.AttendanceRepository;
 import com.main.repository.SchoolRepository;
 import com.main.repository.UserRepository;
 import com.main.service.AfterSchoolCareService;
-import java.util.List;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 @EnableScheduling
