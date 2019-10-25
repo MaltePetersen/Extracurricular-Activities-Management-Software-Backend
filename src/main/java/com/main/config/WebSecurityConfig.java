@@ -38,15 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.POST, "/register").permitAll().antMatchers(HttpMethod.GET, "/auth").permitAll()
 				.antMatchers(HttpMethod.GET, "/registrationConfirm").permitAll()
 				.antMatchers(HttpMethod.GET, "/resendToken").hasAnyAuthority(UserAuthority.RESET_TOKEN.toString())
-				.antMatchers(HttpMethod.POST, "/login")	.hasAnyAuthority(
-				UserAuthority.ROLE_CHILD.toString(),
-				UserAuthority.ROLE_PARENT.toString(),
-				UserAuthority.ROLE_EMPLOYEE.toString(),
-				UserAuthority.ROLE_MANAGEMENT.toString(),
-				UserAuthority.ROLE_SCHOOLCOORDINATOR.toString(),
-				UserAuthority.ROLE_TEACHER.toString(),
-				UserAuthority.ROLE_USER.toString()
-		)
+				.antMatchers(HttpMethod.POST, "/login").authenticated()
 				.and()
 				.csrf().disable().formLogin().disable();
 	}

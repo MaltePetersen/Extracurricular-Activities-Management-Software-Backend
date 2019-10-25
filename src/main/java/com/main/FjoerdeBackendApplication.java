@@ -26,7 +26,7 @@ public class FjoerdeBackendApplication {
 	}
 
 	@Bean
-	public CommandLineRunner dataLoader(UserRepository userRepo, PasswordEncoder encoder, SchoolRepository schoolRepo,
+	public CommandLineRunner dataLoader(UserRepository userRepo, PasswordEncoder encoder, SchoolRepository schoolRepo, UserRepository userRepository,
 			AfterSchoolCareService afterSchoolCareService, UserData userData) { // user repo for ease of testing with a built-in user
 		return new CommandLineRunner() {
 			@Override
@@ -35,7 +35,7 @@ public class FjoerdeBackendApplication {
 				List<User> users = userData.getUserData();
 				for (User user : users) {
 					user.addAuthority(UserAuthority.byRole(user.getRole()));
-
+					userRepository.save(user);
 					System.out.println(user.toString());
 
 					// adds schools for simpler testing
