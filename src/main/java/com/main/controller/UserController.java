@@ -21,6 +21,7 @@ import com.main.model.VerificationToken;
 import com.main.model.interfaces.IVerificationToken;
 import com.main.model.userTypes.User;
 import com.main.model.userTypes.UserAuthority;
+import com.main.model.userTypes.UserAuthority;
 import com.main.model.userTypes.interfaces.IContactDetails;
 import com.main.model.userTypes.interfaces.IUser;
 import com.main.repository.VerificationTokenRepository;
@@ -60,7 +61,7 @@ public class UserController {
 
 		if (registered == null)
 			return new ResponseEntity<>("Error creating the account", HttpStatus.BAD_REQUEST);
-		registered.addAuthority(UserAuthority.RESET_TOKEN);
+		registered.addAuthority(UserAuthority.RESET_PASSWORD);
 		userService.update((User) registered);
 		try {
 			String appUrl = request.getContextPath();

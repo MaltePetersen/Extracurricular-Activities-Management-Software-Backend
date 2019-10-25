@@ -8,9 +8,11 @@ import com.main.model.userTypes.User;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 
 import com.main.model.interfaces.ISchool;
@@ -27,7 +29,7 @@ import lombok.Data;
 public class School implements IContactDetails, ISchool {
 
 	@Id
-	@GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@NotBlank(message = "school name is mandatory")
@@ -48,6 +50,9 @@ public class School implements IContactDetails, ISchool {
 	@OneToMany(mappedBy = "childSchool", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<User> children = new ArrayList<>();
 
+	@OneToOne(mappedBy = "participatingSchool")
+	private AfterSchoolCare afterSchoolCare;
+	
 	public School() {
 		name = null;
 		address = null;

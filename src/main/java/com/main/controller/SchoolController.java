@@ -1,5 +1,7 @@
 package com.main.controller;
 
+import com.main.dto.SchoolDTO;
+import com.main.dto.converters.SchoolConverter;
 import com.main.model.School;
 import com.main.model.interfaces.ISchool;
 import com.main.service.SchoolService;
@@ -8,11 +10,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class SchoolController {
 
 	private SchoolService service;
+	
 
     SchoolController(SchoolService service) {
         this.service = service;
@@ -20,8 +24,8 @@ public class SchoolController {
 
     // Index
 	@GetMapping("/api/schools")
-	public List<School> getSchools() {
-	    return service.getAll();
+	public List<SchoolDTO> getSchools() {
+	    return service.getAll().stream().map(SchoolConverter::toDto).collect(Collectors.toList());
 	}
 
 	// Save

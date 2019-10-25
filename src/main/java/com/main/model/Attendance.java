@@ -2,17 +2,21 @@ package com.main.model;
 
 import com.main.model.userTypes.User;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 /***
  * Eine Klasse für die Anwesenheit. Pro Kind und Nachmittagsobjekt gibt es eine Anwesenheit.
  */
 @Entity
+@Data
 public class Attendance {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,71 +39,4 @@ public class Attendance {
 
     private String additionalInformation;
 
-    public Attendance(){
-
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public AfterSchoolCare getAfterSchoolCare() {
-        return afterSchoolCare;
-    }
-
-    public void setAfterSchoolCare(AfterSchoolCare afterSchoolCare) {
-        this.afterSchoolCare = afterSchoolCare;
-    }
-
-    public User getChild() {
-        return child;
-    }
-
-    public void setChild(User child) {
-        this.child = child;
-    }
-
-    public LocalDateTime getArrivalTime() {
-        return arrivalTime;
-    }
-
-    public void setArrivalTime(LocalDateTime arrivalTime) {
-        this.arrivalTime = arrivalTime;
-    }
-
-    public LocalDateTime getLatestArrivalTime() {
-        return latestArrivalTime;
-    }
-
-    public void setLatestArrivalTime(LocalDateTime latestArrivalTime) {
-        this.latestArrivalTime = latestArrivalTime;
-    }
-
-    public LocalDateTime getLeaveTime() {
-        return leaveTime;
-    }
-
-    public void setLeaveTime(LocalDateTime leaveTime) {
-        this.leaveTime = leaveTime;
-    }
-
-    public LocalDateTime getPredefinedLeaveTime() {
-        return predefinedLeaveTime;
-    }
-
-    public void setPredefinedLeaveTime(LocalDateTime predefinedLeaveTime) {
-        this.predefinedLeaveTime = predefinedLeaveTime;
-    }
-
-    public String getAdditionalInformation() {
-        return additionalInformation;
-    }
-
-    public void setAdditionalInformation(String additionalInformation) {
-        this.additionalInformation = additionalInformation;
-    }
 }

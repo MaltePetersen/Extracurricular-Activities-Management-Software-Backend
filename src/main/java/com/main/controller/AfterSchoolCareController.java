@@ -15,54 +15,53 @@ import java.util.stream.Collectors;
 @RestController
 public class AfterSchoolCareController {
 
-    private AfterSchoolCareService service;
-    private AfterSchoolCareConverter afterSchoolCareConverter;
+	private AfterSchoolCareService service;
 
-    public AfterSchoolCareController(AfterSchoolCareService service, AfterSchoolCareConverter afterSchoolCareConverter) {
-        this.service = service;
-        this.afterSchoolCareConverter = afterSchoolCareConverter;
-    }
+	public AfterSchoolCareController(AfterSchoolCareService service) {
+		this.service = service;
 
-    // Index
-    @GetMapping("/api/after_school_cares")
-    public List<AfterSchoolCareDTO> getAfterSchoolCares() {
-        return service.getAll().stream().map(afterSchoolCare -> afterSchoolCareConverter.toDto(afterSchoolCare)).collect(Collectors.toList());
-    }
+	}
 
-    // Save AfterSchoolCare
-    @PostMapping("/api/after_school_cares")
-    @ResponseStatus(HttpStatus.CREATED)
-    AfterSchoolCareDTO newAfterSchoolCare(@RequestBody AfterSchoolCare newAfterSchoolCare) {
-        return afterSchoolCareConverter.toDto(service.save(newAfterSchoolCare));
-    }
+	// Index
+	@GetMapping("/api/after_school_cares")
+	public List<AfterSchoolCareDTO> getAfterSchoolCares() {
+		return service.getAll().stream().map(AfterSchoolCareConverter::toDto)
+				.collect(Collectors.toList());
+	}
 
-    // Find
-    @GetMapping("/api/after_school_cares/{id}")
-    AfterSchoolCareDTO findOne(@PathVariable @Min(1) Long id) {
-        return afterSchoolCareConverter.toDto(service.findOne(id));
-    }
+	// Save AfterSchoolCare
+	@PostMapping("/api/after_school_cares")
+	@ResponseStatus(HttpStatus.CREATED)
+	AfterSchoolCareDTO newAfterSchoolCare(@RequestBody AfterSchoolCare newAfterSchoolCare) {
+		return AfterSchoolCareConverter.toDto(service.save(newAfterSchoolCare));
+	}
 
-    // Update AfterSchoolCare entry
-    @PatchMapping("/api/after_school_cares/{id}")
-    AfterSchoolCareDTO patch(@RequestBody AfterSchoolCare newCareService, @PathVariable Long id) {
-        AfterSchoolCare afterSchoolCare = service.findOne(id);
+	// Find
+	@GetMapping("/api/after_school_cares/{id}")
+	AfterSchoolCareDTO findOne(@PathVariable @Min(1) Long id) {
+		return AfterSchoolCareConverter.toDto(service.findOne(id));
+	}
 
-        // TODO: attributes to be implemented
+	// Update AfterSchoolCare entry
+	@PatchMapping("/api/after_school_cares/{id}")
+	AfterSchoolCareDTO patch(@RequestBody AfterSchoolCare newCareService, @PathVariable Long id) {
+		AfterSchoolCare afterSchoolCare = service.findOne(id);
 
-        service.save(afterSchoolCare);
+		// TODO: attributes to be implemented
 
-        return afterSchoolCareConverter.toDto(afterSchoolCare);
-    }
+		service.save(afterSchoolCare);
 
-    @PatchMapping("/api/after_school_cares/{id}/attendance")
-    AfterSchoolCare patch(@RequestBody Attendance attendance, @PathVariable Long id) {
+		return AfterSchoolCareConverter.toDto(afterSchoolCare);
+	}
 
-        return service.addAttendance(id ,attendance);
-    }
+	@PatchMapping("/api/after_school_cares/{id}/attendance")
+	AfterSchoolCare patch(@RequestBody Attendance attendance, @PathVariable Long id) {
+		return service.addAttendance(id, attendance);
+	}
 
-    // Delete
-    @DeleteMapping("/api/after_school_cares/{id}")
-    void deleteAfterSchoolCare(@PathVariable Long id) {
-        service.deleteById(id);
-    }
+	// Delete
+	@DeleteMapping("/api/after_school_cares/{id}")
+	void deleteAfterSchoolCare(@PathVariable Long id) {
+		service.deleteById(id);
+	}
 }
