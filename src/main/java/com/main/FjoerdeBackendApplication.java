@@ -35,6 +35,9 @@ public class FjoerdeBackendApplication {
 				List<User> users = userData.getUserData();
 				for (User user : users) {
 					user.addAuthority(UserAuthority.byRole(user.getRole()));
+
+					System.out.println(user.toString());
+
 					// adds schools for simpler testing
 					School school1 = new School("Holstenschule", "Altonaer Str. 40, 24534 Neumünster");
 					schoolRepo.save(school1);
