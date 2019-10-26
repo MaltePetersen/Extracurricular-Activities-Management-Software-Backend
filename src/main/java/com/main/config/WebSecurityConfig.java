@@ -17,42 +17,43 @@ import com.main.model.userTypes.UserAuthority;
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Qualifier("userDetailsServiceImpl")
-	@Autowired
-	private UserDetailsService userDetailsService;
+    @Qualifier("userDetailsServiceImpl")
+    @Autowired
+    private UserDetailsService userDetailsService;
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http
-				// HTTP Basic authentication
-				.httpBasic().and().authorizeRequests().antMatchers(HttpMethod.GET, "/api/**")
-				.hasAnyAuthority(
-						UserAuthority.ROLE_CHILD.toString(), 
-						UserAuthority.ROLE_PARENT.toString(),
-						UserAuthority.ROLE_EMPLOYEE.toString(),
-						UserAuthority.ROLE_MANAGEMENT.toString(),
-						UserAuthority.ROLE_SCHOOLCOORDINATOR.toString(), 
-						UserAuthority.ROLE_TEACHER.toString(),
-						UserAuthority.ROLE_USER.toString()
-						)
-				.antMatchers(HttpMethod.POST, "/register").permitAll().antMatchers(HttpMethod.GET, "/auth").permitAll()
-				.antMatchers(HttpMethod.GET, "/registrationConfirm").permitAll()
-				.antMatchers(HttpMethod.GET, "/resendToken").hasAnyAuthority(UserAuthority.RESET_TOKEN.toString())
-				.antMatchers(HttpMethod.POST, "/login").authenticated()
-				.and()
-				.csrf().disable().formLogin().disable();
-	}
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                // HTTP Basic authentication
+                .httpBasic().and().authorizeRequests().antMatchers("/api/**")
+                .hasAnyAuthority(
+                        UserAuthority.ROLE_CHILD.toString(),
+                        UserAuthority.ROLE_PARENT.toString(),
+                        UserAuthority.ROLE_EMPLOYEE.toString(),
+                        UserAuthority.ROLE_MANAGEMENT.toString(),
+                        UserAuthority.ROLE_SCHOOLCOORDINATOR.toString(),
+                        UserAuthority.ROLE_TEACHER.toString(),
+                        UserAuthority.ROLE_USER.toString()
+                )
+                .antMatchers("/api/admin/**").hasAnyAuthority(UserAuthority.ROLE_MANAGEMENT.toString())
+                .antMatchers(HttpMethod.POST, "/register").permitAll().antMatchers(HttpMethod.GET, "/auth").permitAll()
+                .antMatchers(HttpMethod.GET, "/registrationConfirm").permitAll()
+                .antMatchers(HttpMethod.GET, "/resendToken").hasAnyAuthority(UserAuthority.RESET_TOKEN.toString())
+                .antMatchers(HttpMethod.POST, "/login").authenticated()
+                .and()
+                .csrf().disable().formLogin().disable();
+    }
 
-	@Bean
-	public PasswordEncoder encoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-		auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
 
-	}
+    }
 
 }
