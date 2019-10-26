@@ -1,6 +1,9 @@
-package com.main.model.userTypes.interfaces;
+package com.main.model.interfaces;
 
-import com.main.model.userTypes.UserAuthority;
+import java.util.Collection;
+import java.util.List;
+
+import com.main.model.Role;
 
 public interface IUser {
 	
@@ -16,11 +19,9 @@ public interface IUser {
 	String getFullname();
 	void setFullname(String fullname);
 
-	String getRole();
-	void setRole(String role);
+	List<Role> getRoles();
+	void setRoles(List<Role> role);
 	
-	void addAuthority(UserAuthority authority);
-
 	void setVerified(boolean verified);
 	boolean isVerified();
 }

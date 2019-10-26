@@ -2,7 +2,7 @@ package com.main.model.interfaces;
 
 import java.util.Date;
 
-import com.main.model.userTypes.User;
+import com.main.model.User;
 
 public interface IVerificationToken {
 

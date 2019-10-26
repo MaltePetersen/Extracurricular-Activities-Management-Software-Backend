@@ -15,9 +15,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import com.main.data.TestUserControllerPath;
 import com.main.data.TestUserData;
 import com.main.dto.interfaces.IUserDTO;
+import com.main.model.interfaces.IContactDetails;
+import com.main.model.interfaces.IUser;
 import com.main.model.interfaces.IVerificationToken;
-import com.main.model.userTypes.interfaces.IContactDetails;
-import com.main.model.userTypes.interfaces.IUser;
 import com.main.repository.VerificationTokenRepository;
 import com.main.service.UserService;
 
@@ -60,8 +60,7 @@ public class UserControllerTest extends AbstractMvcTest {
 
 		int status = mvcResult.getResponse().getStatus();
 		assertEquals(201, status);
-		String content = mvcResult.getResponse().getContentAsString();
-		assertEquals("Created: TEACHER", content);
+
 	}
 
 	/**
@@ -86,8 +85,6 @@ public class UserControllerTest extends AbstractMvcTest {
 		int status = mvcResult.getResponse().getStatus();
 		log.info(mvcResult.getResponse().getContentAsString());
 		assertEquals(201, status);
-		assertEquals("Created: PARENT", mvcResult.getResponse().getContentAsString());
-
 		IUser user = userService.findByEmail(parent.getEmail());
 		assertNotEquals(null, user);
 		assertEquals(false, user.isVerified());
@@ -115,7 +112,6 @@ public class UserControllerTest extends AbstractMvcTest {
 		log.info(mvcResult.getResponse().getContentAsString());
 		int status = mvcResult.getResponse().getStatus();
 		assertEquals(201, status);
-		assertEquals("Created: CHILD", mvcResult.getResponse().getContentAsString());
 	}
 
 	@Test

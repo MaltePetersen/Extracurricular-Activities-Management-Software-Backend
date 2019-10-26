@@ -25,9 +25,9 @@ public class AfterSchoolCareConverter {
         if (afterSchoolCareDTO.getParticipatingSchool() != null) {
             afterSchoolCare.setParticipatingSchool(schoolConverter.fromDTO(afterSchoolCareDTO.getParticipatingSchool()));
         }
-        if (afterSchoolCareDTO.getEmployee() != null) {
-            afterSchoolCare.setEmployee(userService.findOne(afterSchoolCareDTO.getEmployee()));
-        }
+//        if (afterSchoolCareDTO.getEmployee() != null) {
+//            afterSchoolCare.setEmployee(userService.findOne(afterSchoolCareDTO.getEmployee()));
+//        }
 
         return afterSchoolCare;
     }
@@ -41,9 +41,9 @@ public class AfterSchoolCareConverter {
         if (afterSchoolCare.getParticipatingSchool() != null) {
             afterSchoolCareDTO.setParticipatingSchool(schoolConverter.toDto(afterSchoolCare.getParticipatingSchool()));
         }
-        if (afterSchoolCare.getEmployee() != null) {
-            afterSchoolCareDTO.setEmployee(afterSchoolCare.getEmployee().getId());
-        }
+//        if (afterSchoolCare.getEmployee() != null) {
+//            afterSchoolCareDTO.setEmployee(afterSchoolCare.getEmployee().getId());
+//        }
 
         return afterSchoolCareDTO;
     }

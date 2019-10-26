@@ -3,7 +3,6 @@ package com.main.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import com.main.model.userTypes.User;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,12 +12,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
+import com.main.model.interfaces.IChild;
+import com.main.model.interfaces.IContactDetails;
+import com.main.model.interfaces.IEmployee;
 import com.main.model.interfaces.ISchool;
-import com.main.model.userTypes.User;
-import com.main.model.userTypes.interfaces.IChild;
-import com.main.model.userTypes.interfaces.IContactDetails;
-import com.main.model.userTypes.interfaces.IEmployee;
-import com.main.model.userTypes.interfaces.ISchoolCoordinator;
+import com.main.model.interfaces.ISchoolCoordinator;
 
 import lombok.Data;
 

@@ -2,7 +2,7 @@ package com.main.model.interfaces;
 
 import java.util.List;
 
-import com.main.model.userTypes.User;
+import com.main.model.User;
 
 public interface ISchool {
 

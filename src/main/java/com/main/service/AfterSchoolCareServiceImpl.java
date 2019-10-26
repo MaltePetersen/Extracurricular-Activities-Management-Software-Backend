@@ -31,7 +31,6 @@ public class AfterSchoolCareServiceImpl implements AfterSchoolCareService {
     @Override
 	public AfterSchoolCare save(AfterSchoolCare newAfterSchoolCare) {
     	repository.save(newAfterSchoolCare);
-
 		return newAfterSchoolCare;
 	}
 

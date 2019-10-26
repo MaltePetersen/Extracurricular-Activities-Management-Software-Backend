@@ -1,8 +1,9 @@
 package com.main.repository;
 
-import com.main.model.userTypes.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+
+import com.main.model.User;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {

@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import org.springframework.context.ApplicationEvent;
 
-import com.main.model.userTypes.User;
+import com.main.model.User;
 
 import lombok.Getter;
 import lombok.Setter;

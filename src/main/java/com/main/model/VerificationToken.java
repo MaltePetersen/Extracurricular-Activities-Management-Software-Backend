@@ -1,7 +1,6 @@
 package com.main.model;
 
 import com.main.model.interfaces.IVerificationToken;
-import com.main.model.userTypes.User;
 
 import lombok.Data;
 

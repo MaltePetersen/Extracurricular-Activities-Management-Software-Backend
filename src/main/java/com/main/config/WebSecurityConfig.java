@@ -12,7 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.main.model.userTypes.UserAuthority;
+import com.main.model.user.UserPrivilege;
+import com.main.model.user.UserRole;
 
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -27,17 +28,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// HTTP Basic authentication
 				.httpBasic().and().authorizeRequests().antMatchers(HttpMethod.GET, "/api/**")
 				.hasAnyAuthority(
-						UserAuthority.ROLE_CHILD.toString(), 
-						UserAuthority.ROLE_PARENT.toString(),
-						UserAuthority.ROLE_EMPLOYEE.toString(),
-						UserAuthority.ROLE_MANAGEMENT.toString(),
-						UserAuthority.ROLE_SCHOOLCOORDINATOR.toString(), 
-						UserAuthority.ROLE_TEACHER.toString(),
-						UserAuthority.ROLE_USER.toString()
+						UserRole.ROLE_CHILD.toString(), 
+						UserRole.ROLE_PARENT.toString(),
+						UserRole.ROLE_EMPLOYEE.toString(),
+						UserRole.ROLE_MANAGEMENT.toString(),
+						UserRole.ROLE_SCHOOLCOORDINATOR.toString(), 
+						UserRole.ROLE_TEACHER.toString(),
+						UserRole.ROLE_USER.toString(),
+						"READ_PRIVILEGE"
 						)
 				.antMatchers(HttpMethod.POST, "/register").permitAll().antMatchers(HttpMethod.GET, "/auth").permitAll()
 				.antMatchers(HttpMethod.GET, "/registrationConfirm").permitAll()
-				.antMatchers(HttpMethod.GET, "/resendToken").hasAnyAuthority(UserAuthority.RESET_TOKEN.toString())
+				.antMatchers(HttpMethod.GET, "/resendToken").hasAnyAuthority("ROLE_NEW_USER")
 				.and()
 				.csrf().disable().formLogin().disable();
 	}

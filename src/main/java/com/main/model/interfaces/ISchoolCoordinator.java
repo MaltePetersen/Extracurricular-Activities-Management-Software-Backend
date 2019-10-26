@@ -1,4 +1,4 @@
-package com.main.model.userTypes.interfaces;
+package com.main.model.interfaces;
 
 import java.util.List;
 

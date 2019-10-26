@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import com.main.dto.UserDTO;
+import com.main.model.User;
 import com.main.model.VerificationToken;
+import com.main.model.interfaces.IContactDetails;
+import com.main.model.interfaces.IUser;
 import com.main.model.interfaces.IVerificationToken;
-import com.main.model.userTypes.User;
-import com.main.model.userTypes.UserAuthority;
-import com.main.model.userTypes.interfaces.IContactDetails;
-import com.main.model.userTypes.interfaces.IUser;
+import com.main.model.user.UserRole;
 import com.main.repository.VerificationTokenRepository;
 import com.main.service.UserService;
 import com.main.util.UserDTOValidator;
@@ -57,8 +57,8 @@ public class UserController {
 
         if (registered == null)
             return new ResponseEntity<>("Error creating the account", HttpStatus.BAD_REQUEST);
-        registered.addAuthority(UserAuthority.RESET_TOKEN);
-        userService.update((User) registered);
+        
+   
         try {
             String appUrl = request.getContextPath();
             eventPublisher
@@ -67,9 +67,10 @@ public class UserController {
             e.printStackTrace();
             return new ResponseEntity<>("Fehler beim Versenden", HttpStatus.BAD_REQUEST);
         }
-        log.info("Created User has " + ((User) registered).getAuthorities() + " Name: " + registered.getUsername()
-                + " Passwort: " + userDTO.getPassword());
-        return new ResponseEntity<>("Created: " + registered.getRole(), HttpStatus.CREATED);
+        
+        
+        
+        return new ResponseEntity<>("Created: " + registered.getRoles(), HttpStatus.CREATED);
     }
 
     private String createErrorString(Errors errors) {
@@ -103,11 +104,7 @@ public class UserController {
         if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
             return new ResponseEntity<>("Token is already expired", HttpStatus.BAD_REQUEST);
         }
-
-        user.addAuthority(UserAuthority.valueOf("ROLE_" + user.getRole()));
-        if (user.isSchoolCoordinator())
-            user.addAuthority(UserAuthority.ROLE_SCHOOLCOORDINATOR);
-
+        
         user.setVerified(true);
         userService.update(user);
         return new ResponseEntity<>("User is confirmed", HttpStatus.ACCEPTED);
