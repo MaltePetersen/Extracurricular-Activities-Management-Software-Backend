@@ -137,7 +137,6 @@ public class UserController {
 
     @GetMapping("/login")
     public Object[] login(Authentication auth) {
-        List<String> list = new ArrayList<>();
         return auth.getAuthorities().toArray();
     }
 }
