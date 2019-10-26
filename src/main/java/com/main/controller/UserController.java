@@ -27,7 +27,7 @@ import com.main.util.UserDTOValidator;
 import com.main.util.register.OnRegistrationCompleteEvent;
 
 import lombok.extern.java.Log;
-
+@CrossOrigin
 @RestController
 @Log
 public class UserController {
@@ -135,7 +135,6 @@ public class UserController {
         return new ResponseEntity<>("The token was sent again", HttpStatus.ACCEPTED);
     }
 
-    @CrossOrigin
     @GetMapping("/login")
     public Object[] login(Authentication auth) {
         List<String> list = new ArrayList<>();

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
 import java.util.List;
-
+@CrossOrigin
 @RestController
 public class SchoolController {
 
