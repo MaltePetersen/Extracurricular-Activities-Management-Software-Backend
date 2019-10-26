@@ -100,6 +100,7 @@ public class UserControllerTest extends AbstractMvcTest {
 
 		user = userService.findByEmail(parent.getEmail());
 		assertEquals(true, user.isVerified());
+		
 	}
 
 	@Test
