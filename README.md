@@ -1,20 +1,4 @@
-## Example Body User Creation with Rest Endpoint /register
 
-```
-{
-"userType":"TEACHER",
-"username": "REST_Teacher",
-"password": "password",
-"email": "malte.petersen11@gmail.com",
-"fullname": "Rest_Test",
-"phoneNumber":"13141",
-"subject":"Geschichte",
-"iban":"23465732456",
-"address":"Hans-Detlev-Prien Str. 8", 
-"schoolClass":"7a",
-"isSchoolCoordinator" : false
-}
-```
 Header should include Content-Type application/json 
 
 You will need to verify the use before using it(if it isnt a CHILD or a USER.
@@ -43,7 +27,7 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them
 
 ```
-Give examples
+Maven 
 ```
 
 ### Installing
@@ -53,21 +37,34 @@ A step by step series of examples that tell you how to get a development env run
 Say what the step will be
 
 ```
-Give the example
+mvn spring-boot:run
 ```
 
-And repeat
-
+The system can be opened in localhost:8080
 ```
-until finished
+localhost:8080
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
-
 ## Running the tests
 
 Explain how to run the automated tests for this system
 
+## Example Body User Creation with Rest Endpoint /register
+
+```
+{
+"userType":"TEACHER",
+"username": "REST_Teacher",
+"password": "password",
+"email": "malte.petersen11@gmail.com",
+"fullname": "Rest_Test",
+"phoneNumber":"13141",
+"subject":"Geschichte",
+"iban":"23465732456",
+"address":"Hans-Detlev-Prien Str. 8", 
+"schoolClass":"7a",
+"isSchoolCoordinator" : false
+}
+```
 ### Break down into end to end tests
 
 Explain what these tests test and why
@@ -86,8 +83,10 @@ Give an example
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
-
+Deployment with maven: 
+```
+mvn clean install
+```
 ## Built With
 
 * [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
