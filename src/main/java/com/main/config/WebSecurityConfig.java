@@ -25,7 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 // HTTP Basic authentication
-                .httpBasic().and().authorizeRequests().antMatchers("/api/**")
+                .httpBasic().and().authorizeRequests().antMatchers(HttpMethod.GET,"/api/**")
                 .hasAnyAuthority(
                         UserAuthority.ROLE_CHILD.toString(),
                         UserAuthority.ROLE_PARENT.toString(),
@@ -35,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         UserAuthority.ROLE_TEACHER.toString(),
                         UserAuthority.ROLE_USER.toString()
                 )
-                .antMatchers("/api/admin/**").hasAnyAuthority(UserAuthority.ROLE_MANAGEMENT.toString())
+                .antMatchers(HttpMethod.GET,"/api/management/**").hasAnyAuthority(UserAuthority.ROLE_MANAGEMENT.toString())
                 .antMatchers(HttpMethod.POST, "/register").permitAll().antMatchers(HttpMethod.GET, "/auth").permitAll()
                 .antMatchers(HttpMethod.GET, "/registrationConfirm").permitAll()
                 .antMatchers(HttpMethod.GET, "/resendToken").hasAnyAuthority(UserAuthority.RESET_TOKEN.toString())

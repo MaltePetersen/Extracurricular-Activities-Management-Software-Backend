@@ -20,7 +20,7 @@ public class SchoolController {
 
     // Index
 	@GetMapping("/api/schools")
-	public List<School> getSchools() {
+    public List<School> getSchools() {
 	    return service.getAll();
 	}
 
