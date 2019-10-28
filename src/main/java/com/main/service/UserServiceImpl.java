@@ -22,6 +22,7 @@ import com.main.model.userTypes.User;
 import com.main.model.userTypes.interfaces.IUser;
 import com.main.repository.UserRepository;
 import com.main.repository.VerificationTokenRepository;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Service
 public class UserServiceImpl implements UserService {
