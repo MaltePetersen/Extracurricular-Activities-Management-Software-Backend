@@ -1,6 +1,7 @@
 package com.main.controller;
 
 import com.main.dto.UserDTO;
+import com.main.model.userTypes.User;
 import com.main.service.UserService;
 import com.main.util.UserDTOValidator;
 import org.springframework.http.HttpStatus;
@@ -28,13 +29,13 @@ public class ManagementController {
     }
 
     @GetMapping("/api/management/not_enabled_users")
-    public List<UserDTO> allNotEnabledUser() {
-        return new ArrayList<>();
+    public List<User> allNotEnabledUser() {
+        return userService.findAllByVerified(false);
     }
 
     @GetMapping("/api/management/users")
-    public List<UserDTO> getAllUsers() {
-        return new ArrayList<>();
+    public List<User> getAllUsers() {
+        return userService.findAll();
     }
 
     @GetMapping("/api/management/attendanceLists")
