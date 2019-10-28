@@ -7,6 +7,7 @@ import java.util.stream.StreamSupport;
 
 import javax.validation.Valid;
 
+import com.main.model.userTypes.UserAuthority;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -60,7 +61,10 @@ public class UserServiceImpl implements UserService {
 			return new ResponseEntity<>("Username already exists", HttpStatus.BAD_REQUEST);
 
 		if (roles.contains("ROLE_MANAGEMENT")) {
-			return saveUser(User.UserBuilder.<User>next().withDto(userDTO).withRole(userDTO.getUserType()).build());
+            User user = User.UserBuilder.<User>next().withDto(userDTO).withRole(userDTO.getUserType()).build();
+            user.addAuthority(UserAuthority.byRole(user.getRole()));
+            user.setVerified(true);
+			return saveUser(user);
 		} else if (roles.contains("ROLE_PARENT") && userDTO.getUserType().equals("CHILD")) {
 			return saveUser(User.UserBuilder.<User>next().withDto(userDTO).withRole(userDTO.getUserType()).build());
 		} else if (roles.contains("ROLE_SCHOOLCOORDINATOR")
