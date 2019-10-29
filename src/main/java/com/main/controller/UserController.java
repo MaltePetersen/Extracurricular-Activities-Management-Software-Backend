@@ -1,6 +1,10 @@
 package com.main.controller;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -11,7 +15,16 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
 import com.main.dto.UserDTO;
@@ -20,13 +33,6 @@ import com.main.model.VerificationToken;
 import com.main.model.interfaces.IContactDetails;
 import com.main.model.interfaces.IUser;
 import com.main.model.interfaces.IVerificationToken;
-import com.main.model.userTypes.User;
-import com.main.model.userTypes.UserAuthority;
-import com.main.model.userTypes.UserAuthority;
-import com.main.model.userTypes.interfaces.IContactDetails;
-import com.main.model.userTypes.interfaces.IUser;
-import com.main.model.user.UserRole;
-
 import com.main.repository.VerificationTokenRepository;
 import com.main.service.UserService;
 import com.main.util.UserDTOValidator;

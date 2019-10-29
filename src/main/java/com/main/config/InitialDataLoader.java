@@ -38,27 +38,34 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 	boolean alreadySetup = false;
 
-	@Autowired
 	private UserRepository userRepository;
 
-	@Autowired
 	private RoleRepository roleRepository;
 
-	@Autowired
 	private PrivilegeRepository privilegeRepository;
 
-	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@Autowired
 	private SchoolRepository schoolRepo;
 
-	@Autowired
 	private AfterSchoolCareRepository afterSchoolCareService;
 
-	@Autowired
 	private UserData userData;
 
+	@Autowired
+	public InitialDataLoader(UserRepository userRepository, RoleRepository roleRepository,
+			PrivilegeRepository privilegeRepository, PasswordEncoder passwordEncoder, SchoolRepository schoolRepo,
+			AfterSchoolCareRepository afterSchoolCareService, UserData userData) {
+		super();
+		this.userRepository = userRepository;
+		this.roleRepository = roleRepository;
+		this.privilegeRepository = privilegeRepository;
+		this.passwordEncoder = passwordEncoder;
+		this.schoolRepo = schoolRepo;
+		this.afterSchoolCareService = afterSchoolCareService;
+		this.userData = userData;
+	}
+	
 	@Override
 	@Transactional
 	public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -141,5 +148,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 			userRepository.save(user);
 		}
 	}
+
+
 
 }

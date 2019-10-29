@@ -35,7 +35,7 @@ public class AfterSchoolCare {
 	private School participatingSchool;
 
 	// TODO: employee to be correctly implemented
-	private User employee;
+//	private User employee;
 
 	@OneToMany(mappedBy = "afterSchoolCare", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Attendance> attendances = new ArrayList<>();

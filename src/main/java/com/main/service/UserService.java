@@ -23,5 +23,6 @@ public interface UserService {
 	public IUser findByUsername(String username);
     public User findOne(Long id);
 	public String changePassword(IUser user);
+	public List<User> findAllByVerified(boolean b);
 }
 

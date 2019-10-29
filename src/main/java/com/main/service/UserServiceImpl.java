@@ -1,7 +1,6 @@
 package com.main.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -9,7 +8,6 @@ import java.util.stream.StreamSupport;
 
 import javax.validation.Valid;
 
-import com.main.model.userTypes.UserAuthority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +26,6 @@ import com.main.model.user.UserRole;
 import com.main.repository.RoleRepository;
 import com.main.repository.UserRepository;
 import com.main.repository.VerificationTokenRepository;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -73,10 +70,7 @@ public class UserServiceImpl implements UserService {
 		role = roleRepository.findByName(UserRole.byRole(userDTO.getUserType().toString()).toString());
 
 		if (roles.contains("ROLE_MANAGEMENT")) {
-            User user = User.UserBuilder.<User>next().withDto(userDTO).withRole(userDTO.getUserType()).build();
-            user.addAuthority(UserAuthority.byRole(user.getRole()));
-            user.setVerified(true);
-			return saveUser(user);
+			return saveUser(User.UserBuilder.<User>next().withDto(userDTO).withRole(role).build());
 		} else if (roles.contains("ROLE_PARENT") && userDTO.getUserType().equals("CHILD")) {
 			return saveUser(User.UserBuilder.<User>next().withDto(userDTO).withRole(role).build());
 		} else if (roles.contains("ROLE_SCHOOLCOORDINATOR")
@@ -97,8 +91,8 @@ public class UserServiceImpl implements UserService {
 		if (response.getStatusCode().equals(HttpStatus.CREATED)) {
 			Role role = roleRepository.findByName("ROLE_NEW_USER");
 			IUser iuser = findByEmail(userDTO.getEmail());
-			if(iuser != null) {
-				User user =  (User) iuser;
+			if (iuser != null) {
+				User user = (User) iuser;
 				user.addRole(role);
 				update(user);
 			}
@@ -139,14 +133,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Override
 	public List<User> findAllByVerified(boolean verified) {
 		return userRepository.findAllByVerified(verified);
 	}
+
 	public User findOne(Long id) {
 		return userRepository.findById(id).orElseThrow(() -> new RuntimeException("user id not found: " + id));
 	}
-	
+
 	@Override
 	public String changePassword(IUser user) {
 		String newPassword = UUID.randomUUID().toString();

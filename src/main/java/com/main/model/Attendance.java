@@ -1,12 +1,16 @@
 package com.main.model;
 
-import com.main.model.userTypes.User;
+import java.time.LocalDateTime;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.Data;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 /***
  * Eine Klasse für die Anwesenheit. Pro Kind und Nachmittagsobjekt gibt es eine Anwesenheit.
@@ -23,7 +27,7 @@ public class Attendance {
     @JoinColumn(name = "afterSchoolCare_id", referencedColumnName = "id")
     private AfterSchoolCare afterSchoolCare;
 
-    private User child;
+//    private User child;
 
     //Zeitpunkt, an dem das Kind sich beim Betreuer anmeldet
     private LocalDateTime arrivalTime;
