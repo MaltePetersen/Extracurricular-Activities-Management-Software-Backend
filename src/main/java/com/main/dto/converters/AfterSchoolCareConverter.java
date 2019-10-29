@@ -18,7 +18,7 @@ public class AfterSchoolCareConverter {
 		afterSchoolCareDTO.setStartTime(afterSchoolCare.getStartTime());
 		afterSchoolCareDTO.setEndTime(afterSchoolCare.getEndTime());
 		if (afterSchoolCare.getParticipatingSchool() != null) {
-			afterSchoolCareDTO.setParticipatingSchool(SchoolConverter.toDto(afterSchoolCare.getParticipatingSchool()));
+			afterSchoolCareDTO.setParticipatingSchool(afterSchoolCare.getParticipatingSchool().getId());
 		}
 		if (afterSchoolCare.getEmployee() != null) {
 			afterSchoolCareDTO.setEmployee(afterSchoolCare.getEmployee().getId());
