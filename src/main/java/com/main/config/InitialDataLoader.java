@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @Log
@@ -42,8 +43,9 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 	@Autowired
 	public InitialDataLoader(UserRepository userRepository, RoleRepository roleRepository,
-							 PrivilegeRepository privilegeRepository, PasswordEncoder passwordEncoder, SchoolRepository schoolRepo,
-							 AfterSchoolCareService afterSchoolCareService, AttendanceRepository attendanceRepository, UserData userData) {
+			PrivilegeRepository privilegeRepository, PasswordEncoder passwordEncoder, SchoolRepository schoolRepo,
+			AfterSchoolCareService afterSchoolCareService, AttendanceRepository attendanceRepository,
+			UserData userData) {
 		super();
 		this.userRepository = userRepository;
 		this.roleRepository = roleRepository;
@@ -54,7 +56,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		this.attendanceRepository = attendanceRepository;
 		this.userData = userData;
 	}
-	
+
 	@Override
 	@Transactional
 	public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -76,7 +78,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		createRoleIfNotFound(UserRole.ROLE_SCHOOLCOORDINATOR.toString(), Arrays.asList(readPrivilege, writePrivilege));
 		createRoleIfNotFound(UserRole.ROLE_TEACHER.toString(), Arrays.asList(writePrivilege, readPrivilege));
 		createRoleIfNotFound(UserRole.ROLE_USER.toString(), null);
-		createRoleIfNotFound(UserRole.ROLE_RESET_PASSWORD.toString(),  new ArrayList<>() );
+		createRoleIfNotFound(UserRole.ROLE_RESET_PASSWORD.toString(), new ArrayList<>());
 
 		createRoleIfNotFound("ROLE_NEW_USER", Arrays.asList(resetTokenPrivilege));
 
@@ -140,14 +142,12 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 	@Transactional
 	private void createUsers() {
-		Role adminRole = roleRepository.findByName("ROLE_ADMIN");
-		for (User user : userData.getUserData()) {
-			user.setRoles(Arrays.asList(adminRole));
+		Map<User, String> userRole = userData.getUserData();
+		userRole.forEach((user, role) -> {
+			user.setRoles(Arrays.asList(roleRepository.findByName(UserRole.byRole(role).toString())));
 			userRepository.save(user);
-		}
+		});
+
 	}
-
-
-
 
 }

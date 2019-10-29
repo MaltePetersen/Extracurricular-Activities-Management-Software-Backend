@@ -1,7 +1,9 @@
 package com.main.model;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +28,7 @@ public class UserData {
 	}
 	
 	@Deprecated
-	public List<User> getUserData() {
+	public Map<User, String> getUserData() {
 		User parent = new User("Parent_Test", encoder.encode("password"), "Craig Walls", "craig@walls.com",
 				"123-123-1234");
 		
@@ -48,7 +50,12 @@ public class UserData {
         employeeSchoolCoordinator.setVerified(true);
         teacher.setVerified(true);
         teacherSchoolCoordinator.setVerified(true);
-		return Arrays.asList(parent, employee, employeeSchoolCoordinator, management, teacher, teacherSchoolCoordinator, user, child);
-
+        
+        Map<User, String> users = new HashMap<>();
+        users.put(employee, "EMPLOYEE");
+        users.put(teacher, "TEACHER");
+        users.put(user, "USER");
+        
+        return users;
 	}
 }
