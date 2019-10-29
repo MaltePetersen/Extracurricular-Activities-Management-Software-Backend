@@ -4,10 +4,9 @@ import com.main.dto.SchoolDTO;
 import com.main.model.School;
 import org.springframework.stereotype.Component;
 
-@Component
 public class SchoolConverter {
 
-    public School fromDTO(SchoolDTO schoolDTO) {
+    public static School fromDTO(SchoolDTO schoolDTO) {
         School school = new School();
 
         school.setId(schoolDTO.getId());
@@ -19,7 +18,7 @@ public class SchoolConverter {
         return school;
     }
 
-    public SchoolDTO toDto(School school) {
+    public static SchoolDTO toDto(School school) {
         SchoolDTO schoolDTO = new SchoolDTO();
 
         schoolDTO.setId(school.getId());

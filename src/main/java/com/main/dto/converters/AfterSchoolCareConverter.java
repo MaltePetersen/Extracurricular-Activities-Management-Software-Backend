@@ -2,50 +2,33 @@ package com.main.dto.converters;
 
 import com.main.dto.AfterSchoolCareDTO;
 import com.main.model.AfterSchoolCare;
-import com.main.service.SchoolService;
+import com.main.model.Attendance;
 import com.main.service.UserService;
+
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
 
-@Component
 public class AfterSchoolCareConverter {
 
-    private UserService userService;
-    private SchoolService schoolService;
+	public static AfterSchoolCareDTO toDto(AfterSchoolCare afterSchoolCare) {
+		AfterSchoolCareDTO afterSchoolCareDTO = new AfterSchoolCareDTO();
 
-    public AfterSchoolCareConverter(UserService userService, SchoolService schoolService) {
-        this.userService = userService;
-        this.schoolService = schoolService;
-    }
+		afterSchoolCareDTO.setId(afterSchoolCare.getId());
+		afterSchoolCareDTO.setStartTime(afterSchoolCare.getStartTime());
+		afterSchoolCareDTO.setEndTime(afterSchoolCare.getEndTime());
+		if (afterSchoolCare.getParticipatingSchool() != null) {
+			afterSchoolCareDTO.setParticipatingSchool(SchoolConverter.toDto(afterSchoolCare.getParticipatingSchool()));
+		}
+		if (afterSchoolCare.getEmployee() != null) {
+			afterSchoolCareDTO.setEmployee(afterSchoolCare.getEmployee().getId());
+		}
 
-    public AfterSchoolCare fromDto(AfterSchoolCareDTO afterSchoolCareDTO) {
-        AfterSchoolCare afterSchoolCare = new AfterSchoolCare();
+		if (afterSchoolCare.getAttendances() != null) {
+			afterSchoolCareDTO.setAttendances(
+					afterSchoolCare.getAttendances().stream().map(Attendance::getId).collect(Collectors.toList()));
+		}
 
-        afterSchoolCare.setId(afterSchoolCareDTO.getId());
-        afterSchoolCare.setStartTime(afterSchoolCareDTO.getStartTime());
-        afterSchoolCare.setEndTime(afterSchoolCareDTO.getEndTime());
-        if (afterSchoolCareDTO.getParticipatingSchool() != null) {
-            afterSchoolCare.setParticipatingSchool(schoolService.findOne(afterSchoolCareDTO.getParticipatingSchool()));
-        }
-        if (afterSchoolCareDTO.getEmployee() != null) {
-            afterSchoolCare.setEmployee(userService.findOne(afterSchoolCareDTO.getEmployee()));
-        }
-
-        return afterSchoolCare;
-    }
-
-    public AfterSchoolCareDTO toDto(AfterSchoolCare afterSchoolCare) {
-        AfterSchoolCareDTO afterSchoolCareDTO = new AfterSchoolCareDTO();
-
-        afterSchoolCareDTO.setId(afterSchoolCare.getId());
-        afterSchoolCareDTO.setStartTime(afterSchoolCare.getStartTime());
-        afterSchoolCareDTO.setEndTime(afterSchoolCare.getEndTime());
-        if (afterSchoolCare.getParticipatingSchool() != null) {
-            afterSchoolCareDTO.setParticipatingSchool(afterSchoolCare.getParticipatingSchool().getId());
-        }
-        if (afterSchoolCare.getEmployee() != null) {
-            afterSchoolCareDTO.setEmployee(afterSchoolCare.getEmployee().getId());
-        }
-
-        return afterSchoolCareDTO;
-    }
+		return afterSchoolCareDTO;
+	}
 }

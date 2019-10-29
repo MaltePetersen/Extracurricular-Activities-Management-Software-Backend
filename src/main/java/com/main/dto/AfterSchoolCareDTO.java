@@ -3,6 +3,9 @@ package com.main.dto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import com.main.model.Attendance;
 
 @Data
 public class AfterSchoolCareDTO {
@@ -15,5 +18,7 @@ public class AfterSchoolCareDTO {
 
 	private Long participatingSchool;
 
+	private List<Long> attendances;
+	
 	private Long employee;
 }

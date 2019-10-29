@@ -19,6 +19,7 @@ import com.main.model.VerificationToken;
 import com.main.model.interfaces.IVerificationToken;
 import com.main.model.userTypes.User;
 import com.main.model.userTypes.UserAuthority;
+import com.main.model.userTypes.UserAuthority;
 import com.main.model.userTypes.interfaces.IContactDetails;
 import com.main.model.userTypes.interfaces.IUser;
 import com.main.repository.VerificationTokenRepository;
@@ -31,9 +32,9 @@ import lombok.extern.java.Log;
 @RestController
 @Log
 public class UserController {
-    private UserService userService;
-    private VerificationTokenRepository verificationTokenRepository;
-    private UserDTOValidator userDTOValidator;
+	private UserService userService;
+	private VerificationTokenRepository verificationTokenRepository;
+	private UserDTOValidator userDTOValidator;
 
     private ApplicationEventPublisher eventPublisher;
 
