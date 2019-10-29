@@ -57,7 +57,7 @@ public class UserData {
         users.put(teacher, "TEACHER");
         users.put(user, "USER");
         users.put(child, "CHILD");
-        users.put(parent,"PAARENT");
+        users.put(parent,"PARENT");
 		users.put(management, "MANAGEMENT");
 		return users;
 	}
