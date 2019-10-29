@@ -1,36 +1,22 @@
 package com.main.config;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import javax.transaction.Transactional;
-
+import com.main.model.*;
+import com.main.model.user.UserPrivilege;
+import com.main.model.user.UserRole;
+import com.main.repository.*;
+import com.main.service.AfterSchoolCareService;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
-import com.main.model.AfterSchoolCare;
-import com.main.model.IRole;
-import com.main.model.Privilege;
-import com.main.model.Role;
-import com.main.model.School;
-import com.main.model.User;
-import com.main.model.UserData;
-import com.main.model.interfaces.IPrivilege;
-import com.main.model.user.UserPrivilege;
-import com.main.model.user.UserRole;
-import com.main.repository.AfterSchoolCareRepository;
-import com.main.repository.PrivilegeRepository;
-import com.main.repository.RoleRepository;
-import com.main.repository.SchoolRepository;
-import com.main.repository.UserRepository;
-
-import lombok.extern.java.Log;
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 @Log
@@ -48,14 +34,16 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 	private SchoolRepository schoolRepo;
 
-	private AfterSchoolCareRepository afterSchoolCareService;
+	private AfterSchoolCareService afterSchoolCareService;
+
+	private AttendanceRepository attendanceRepository;
 
 	private UserData userData;
 
 	@Autowired
 	public InitialDataLoader(UserRepository userRepository, RoleRepository roleRepository,
-			PrivilegeRepository privilegeRepository, PasswordEncoder passwordEncoder, SchoolRepository schoolRepo,
-			AfterSchoolCareRepository afterSchoolCareService, UserData userData) {
+							 PrivilegeRepository privilegeRepository, PasswordEncoder passwordEncoder, SchoolRepository schoolRepo,
+							 AfterSchoolCareService afterSchoolCareService, AttendanceRepository attendanceRepository, UserData userData) {
 		super();
 		this.userRepository = userRepository;
 		this.roleRepository = roleRepository;
@@ -63,6 +51,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		this.passwordEncoder = passwordEncoder;
 		this.schoolRepo = schoolRepo;
 		this.afterSchoolCareService = afterSchoolCareService;
+		this.attendanceRepository = attendanceRepository;
 		this.userData = userData;
 	}
 	
@@ -134,10 +123,19 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 		School school3 = new School("Wilhelm-Tanck-Schule", "Färberstraße 25, 24534 Neumünster");
 		schoolRepo.save(school3);
-
 		AfterSchoolCare afterSchoolCare = new AfterSchoolCare();
 		afterSchoolCare.setParticipatingSchool(school1);
 		afterSchoolCareService.save(afterSchoolCare);
+
+		Attendance attendance = new Attendance();
+		attendance.setAdditionalInformation("Informations");
+		attendance.setArrivalTime(LocalDateTime.now());
+		attendance.setAfterSchoolCare(afterSchoolCare);
+		attendanceRepository.save(attendance);
+
+		afterSchoolCare.addAttendance(attendance);
+		afterSchoolCareService.save(afterSchoolCare);
+
 	}
 
 	@Transactional
@@ -148,6 +146,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 			userRepository.save(user);
 		}
 	}
+
 
 
 
