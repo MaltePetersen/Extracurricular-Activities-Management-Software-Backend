@@ -55,8 +55,8 @@ public class AfterSchoolCareController {
 	}
 
 	@PatchMapping("/api/after_school_cares/{id}/attendance")
-	AfterSchoolCare patch(@RequestBody Attendance attendance, @PathVariable Long id) {
-		return service.addAttendance(id, attendance);
+	AfterSchoolCareDTO patch(@RequestBody Attendance attendance, @PathVariable Long id) {
+		return AfterSchoolCareConverter.toDto(service.addAttendance(id, attendance));
 	}
 
 	// Delete

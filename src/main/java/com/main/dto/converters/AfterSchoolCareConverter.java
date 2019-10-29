@@ -3,11 +3,8 @@ package com.main.dto.converters;
 import com.main.dto.AfterSchoolCareDTO;
 import com.main.model.AfterSchoolCare;
 import com.main.model.Attendance;
-import com.main.service.UserService;
 
 import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
 
 public class AfterSchoolCareConverter {
 

@@ -44,16 +44,21 @@ public class AfterSchoolCareServiceImpl implements AfterSchoolCareService {
 	 *
 	 * Fügt einem nachmittagsbetreuungs-Objekt eine Anwesenheit hinzu und speichert es.
 	 *
-	 * @param id
-	 * @param attendance
+	 * @param id Long
+	 * @param attendance Attendance
 	 * @return gespeichertes Nachmittagsbetreuungs-Objekt
 	 */
 	@Override
 	public AfterSchoolCare addAttendance(Long id, Attendance attendance) {
 
 		AfterSchoolCare afterSchoolCare = this.findOne(id);
+
+		attendance.setAfterSchoolCare(afterSchoolCare);
+
 		attendanceRepository.save(attendance);
+
 		afterSchoolCare.addAttendance(attendance);
+
 		return this.save(afterSchoolCare);
 	}
 
