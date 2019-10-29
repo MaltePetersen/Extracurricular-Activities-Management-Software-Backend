@@ -15,4 +15,3 @@ public class FjoerdeBackendApplication {
         SpringApplication.run(FjoerdeBackendApplication.class, args);
     }
 }
-
