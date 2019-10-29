@@ -2,36 +2,75 @@ package com.main.mockmvc;
 
 import static org.junit.Assert.assertEquals;
 
+import com.main.data.TestAfterSchoolCareControllerPath;
+import com.main.dto.AfterSchoolCareDTO;
+import com.main.model.AfterSchoolCare;
+import com.main.model.School;
+import com.main.service.AfterSchoolCareService;
+import com.main.service.SchoolService;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import lombok.extern.java.Log;
+
+@Log
 public class AfterSchoolCareControllerTest extends AbstractMvcTest {
-	@Override
-	@Before
-	public void setUp() {
-		super.setUp();
-	}
+	private School testSchool;
 
-	@Test
-	@WithMockUser(authorities = "ROLE_EMPLOYEE")
-	public void basicTest() throws Exception {
-		String allafterSchools = "/api/after_school_cares";
-		String allSchools = "/api/schools";
+	@Autowired
+	private SchoolService schoolService;
 
-		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(allafterSchools)).andReturn();
-		int status = result.getResponse().getStatus();
-		String content = result.getResponse().getContentAsString();
-		System.out.println(content);
-		assertEquals(200, status);
+	@Autowired
+	private AfterSchoolCareService afterSchoolCareService;
 
-		result = mockMvc.perform(MockMvcRequestBuilders.get(allSchools)).andReturn();
-		status = result.getResponse().getStatus();
-		content = result.getResponse().getContentAsString();
-		System.out.println(content);
-		assertEquals(200, status);
+    @Override
+    @Before
+    public void setUp() {
+        super.setUp();
 
-	}
+        testSchool = new School("Test-Schule", "Musterstraße 123, 1111 Musterstadt");
+
+		schoolService.save(testSchool);
+    }
+
+    @Test
+    @WithMockUser(authorities = "ROLE_USER")
+    public void testGetAfterSchoolCaresWithUserAuthority() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(TestAfterSchoolCareControllerPath.AFTER_SCHOOL_CARES.getUri())).andReturn();
+        assertEquals(200, mvcResult.getResponse().getStatus());
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void testGetAfterSchoolCaresWithoutAuthorities() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(TestAfterSchoolCareControllerPath.AFTER_SCHOOL_CARES.getUri())).andReturn();
+        assertEquals(401, mvcResult.getResponse().getStatus());
+    }
+
+    @Test
+    @WithMockUser(authorities = "ROLE_USER")
+    public void testPostAfterSchoolCareWithUserAuthority() throws Exception {
+		AfterSchoolCare afterSchoolCare = new AfterSchoolCare();
+		afterSchoolCare.setParticipatingSchool(testSchool);
+
+		String inputJson = super.mapToJson(afterSchoolCare);
+
+    	MvcResult mvcResult =
+				mockMvc.perform(MockMvcRequestBuilders.post(TestAfterSchoolCareControllerPath.AFTER_SCHOOL_CARES.getUri()).contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson))
+                .andReturn();
+
+		int status = mvcResult.getResponse().getStatus();
+        assertEquals(201, status);
+
+		String content = mvcResult.getResponse().getContentAsString();
+		AfterSchoolCareDTO resultAfterSchoolCare = objectMapper.readValue(content, AfterSchoolCareDTO.class);
+
+		assertEquals(afterSchoolCare.getParticipatingSchool().getId(), resultAfterSchoolCare.getParticipatingSchool());
+    }
 }
