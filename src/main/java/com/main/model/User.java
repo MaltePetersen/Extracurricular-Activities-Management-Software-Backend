@@ -1,31 +1,38 @@
-package com.main.model.userTypes;
-
-import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import com.main.dto.UserDTO;
-import com.main.dto.interfaces.IUserDTO;
-import com.main.model.School;
-import com.main.model.userTypes.interfaces.IChild;
-import com.main.model.userTypes.interfaces.IEmployee;
-import com.main.model.userTypes.interfaces.IManagement;
-import com.main.model.userTypes.interfaces.IParent;
-import com.main.model.userTypes.interfaces.ITeacher;
-import com.main.model.userTypes.interfaces.IUser;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+package com.main.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
+
+import com.main.dto.UserDTO;
+import com.main.dto.interfaces.IUserDTO;
+import com.main.model.interfaces.IChild;
+import com.main.model.interfaces.IEmployee;
+import com.main.model.interfaces.IManagement;
+import com.main.model.interfaces.IParent;
+import com.main.model.interfaces.ITeacher;
+import com.main.model.interfaces.IUser;
+
+import lombok.Data;
+
 @Entity
 @Data
-public class User implements UserDetails, IChild, IEmployee, IManagement, IParent, IUser, ITeacher {
+public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITeacher {
 	private static final long serialVersionUID = 1337L;
 
 	@Id
@@ -41,8 +48,10 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 	@NotBlank(message = "Fullname is mandatory")
 	private String fullname;
 
-	@NotBlank(message = "Role is mandatory")
-	private String role;
+	@ManyToMany
+	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+	private List<Role> roles = new ArrayList<>();
+
 	private String email;
 	private String phoneNumber;
 	private String address;
@@ -62,29 +71,32 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 	@JoinColumn(name = "school_id")
 	private School childSchool;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	private User parent;
+	
+	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<User> children = new ArrayList<>();
+	
 	private boolean isSchoolCoordinator;
 
 	@Column(name = "verified")
 	private boolean verified;
 
-	@ElementCollection(targetClass = UserAuthority.class, fetch = FetchType.EAGER)
-	@JoinTable(name = "authoritiesUser", joinColumns = @JoinColumn(name = "userId"))
-	@Enumerated(EnumType.STRING)
-	private List<UserAuthority> authorities = new ArrayList<>();
+	public void addRole(Role role) {
+		this.roles.add(role);
+	}
 
 	// Constructur normal User
 	User(String username, String password, String fullname) {
 		this.username = username;
 		this.password = password;
 		this.fullname = fullname;
-		role = "USER";
 	}
 
 	// Constructor Child
 	User(String username, String password, String fullname, String schoolClass) {
 		this(username, password, fullname);
 		this.schoolClass = schoolClass;
-		role = "CHILD";
 	}
 
 	// Constructer Parent
@@ -92,7 +104,6 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 		this(username, password, fullname);
 		this.email = email;
 		this.phoneNumber = phoneNumber;
-		role = "PARENT";
 	}
 
 	// Constructor Teacher and SchoolCoordinator
@@ -100,7 +111,6 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 			boolean isSchoolCoordinator) {
 		this(username, password, fullname, email, phoneNumber);
 		this.subject = subject;
-		role = "TEACHER";
 		this.isSchoolCoordinator = isSchoolCoordinator;
 
 	}
@@ -112,14 +122,12 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 		this.subject = subject;
 		this.iban = iban;
 		this.isSchoolCoordinator = isSchoolCoordinator;
-		role = "EMPLOYEE";
 	}
 
 	// Constructor Management
 	User(String username, String password, String fullname, String email, String phoneNumber, String address) {
 		this(username, password, fullname, email, phoneNumber);
 		this.address = address;
-		role = "MANAGEMENT";
 
 	}
 
@@ -128,36 +136,7 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 		password = null;
 		fullname = null;
 		verified = false;
-	}
 
-	@Override
-	public void setRole(String role) {
-		this.role = role;
-	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return authorities;
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return true;
 	}
 
 	/**
@@ -197,8 +176,9 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 			return this;
 		}
 
-		public UserBuilder<T> withRole(String role) {
-			user.setRole(role);
+		public UserBuilder<T> withRole(Role role) {
+			role.addUser(user);
+			user.addRole(role);
 			return this;
 		}
 
@@ -234,7 +214,6 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 
 		public UserBuilder<T> isSchoolCoordinator(boolean isSchoolCoordinator) {
 			user.setSchoolCoordinator(isSchoolCoordinator);
-			user.addAuthority(UserAuthority.ROLE_SCHOOLCOORDINATOR);
 			return this;
 		}
 
@@ -271,7 +250,14 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 			dto.setPhoneNumber(user.getPhoneNumber());
 			dto.setSchoolClass(user.getSchoolClass());
 			dto.setSubject(user.getSubject());
-			dto.setUserType(type);
+//			if (user.getRoles() != null) {
+//				if (user.getRoles().size() != 0) {
+//					dto.setUserType(user.getRoles().get(0).getName());
+//				}
+//			} else {
+				dto.setUserType(type);
+//			}
+
 			dto.setSchoolCoordinator(user.isSchoolCoordinator());
 			return dto;
 		}
@@ -290,8 +276,8 @@ public class User implements UserDetails, IChild, IEmployee, IManagement, IParen
 	}
 
 	@Override
-	public void addAuthority(UserAuthority authority) {
-		this.authorities.add(authority);
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", password=" + password + "]";
 	}
 
 }

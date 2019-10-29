@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import com.main.model.userTypes.User;
+import com.main.model.User;
 import com.main.service.EmailService;
 import com.main.service.UserService;
 
@@ -37,9 +37,8 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 		String confirmationUrl = event.getAppUrl() + "/regitrationConfirm.html?token=" + token;
 		String message = "Bitte bestätigen Sie ihre Identität indem Sie auf den folgenden Link klicken: \n";
 		message += confirmationUrl;
-
+		
 		emailService.sendSimpleMessage(email, subject, message);
-
 	}
 
 }

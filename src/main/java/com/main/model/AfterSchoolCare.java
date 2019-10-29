@@ -1,10 +1,11 @@
 package com.main.model;
 
-import com.main.model.userTypes.User;
+import lombok.Data;
 
 import lombok.Data;
 
 import javax.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
