@@ -73,7 +73,9 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 		createRoleIfNotFound(UserRole.ROLE_CHILD.toString(), Arrays.asList(readPrivilege));
 		createRoleIfNotFound(UserRole.ROLE_EMPLOYEE.toString(), Arrays.asList(readPrivilege, writePrivilege));
+
 		createRoleIfNotFound(UserRole.ROLE_MANAGEMENT.toString(), Arrays.asList(readPrivilege, writePrivilege));
+
 		createRoleIfNotFound(UserRole.ROLE_PARENT.toString(), Arrays.asList(readPrivilege, writePrivilege));
 		createRoleIfNotFound(UserRole.ROLE_SCHOOLCOORDINATOR.toString(), Arrays.asList(readPrivilege, writePrivilege));
 		createRoleIfNotFound(UserRole.ROLE_TEACHER.toString(), Arrays.asList(writePrivilege, readPrivilege));
@@ -85,7 +87,6 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		alreadySetup = true;
 		createUsers();
 		createSchools();
-
 		log.info("The data has been initialized.");
 	}
 

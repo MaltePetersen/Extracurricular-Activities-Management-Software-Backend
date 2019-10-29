@@ -37,13 +37,23 @@ public class ManagementController {
     }
 
     @GetMapping("/api/management/not_enabled_users")
-    public List<User> allNotEnabledUser() {
-        return userService.findAllByVerified(false);
+    public List<UserDTO> allNotEnabledUser() {
+        List<UserDTO> allUserDTOsNotVerified = new ArrayList<>();
+        for (User user : userService.findAllByVerified(false)) {
+            allUserDTOsNotVerified.add(UserDTO.builder().userType(user.getRoles().toString()).username(user.getUsername()).password(user.getPassword()).fullname(user.getFullname()).schoolClass(user.getSchoolClass()).phoneNumber(user.getPhoneNumber()).subject(user.getSubject()).
+                    iban(user.getIban()).address(user.getAddress()).build());
+        }
+        return allUserDTOsNotVerified;
     }
 
     @GetMapping("/api/management/users")
-    public List<User> getAllUsers() {
-        return userService.findAll();
+    public List<UserDTO> getAllUsers() {
+        List<UserDTO> allUserDTOs = new ArrayList<>();
+        for (User user : userService.findAll()) {
+            allUserDTOs.add(UserDTO.builder().userType(user.getRoles().toString()).username(user.getUsername()).password(user.getPassword()).fullname(user.getFullname()).schoolClass(user.getSchoolClass()).phoneNumber(user.getPhoneNumber()).subject(user.getSubject()).
+iban(user.getIban()).address(user.getAddress()).build());
+        }
+        return allUserDTOs;
     }
 
     @GetMapping("/api/management/attendanceLists")

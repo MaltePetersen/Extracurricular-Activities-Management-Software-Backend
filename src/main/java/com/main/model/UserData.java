@@ -50,12 +50,14 @@ public class UserData {
         employeeSchoolCoordinator.setVerified(true);
         teacher.setVerified(true);
         teacherSchoolCoordinator.setVerified(true);
-        
+        child.setVerified(true);
+        management.setVerified(true);
         Map<User, String> users = new HashMap<>();
         users.put(employee, "EMPLOYEE");
         users.put(teacher, "TEACHER");
         users.put(user, "USER");
-        
-        return users;
+        users.put(child, "CHILD");
+		users.put(management, "MANAGEMENT");
+		return users;
 	}
 }

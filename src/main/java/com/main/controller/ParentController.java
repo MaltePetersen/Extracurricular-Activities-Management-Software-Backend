@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.main.dto.UserDTO;
 
 @RestController
+@CrossOrigin
 public class ParentController {
 
 	@GetMapping("/api/parent")
