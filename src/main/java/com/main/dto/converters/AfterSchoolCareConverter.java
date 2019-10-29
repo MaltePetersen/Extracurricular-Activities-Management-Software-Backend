@@ -2,6 +2,7 @@ package com.main.dto.converters;
 
 import com.main.dto.AfterSchoolCareDTO;
 import com.main.model.AfterSchoolCare;
+import com.main.service.SchoolService;
 import com.main.service.UserService;
 import org.springframework.stereotype.Component;
 
@@ -9,11 +10,11 @@ import org.springframework.stereotype.Component;
 public class AfterSchoolCareConverter {
 
     private UserService userService;
-    private SchoolConverter schoolConverter;
+    private SchoolService schoolService;
 
-    public AfterSchoolCareConverter(UserService userService, SchoolConverter schoolConverter) {
+    public AfterSchoolCareConverter(UserService userService, SchoolService schoolService) {
         this.userService = userService;
-        this.schoolConverter = schoolConverter;
+        this.schoolService = schoolService;
     }
 
     public AfterSchoolCare fromDto(AfterSchoolCareDTO afterSchoolCareDTO) {
@@ -23,7 +24,7 @@ public class AfterSchoolCareConverter {
         afterSchoolCare.setStartTime(afterSchoolCareDTO.getStartTime());
         afterSchoolCare.setEndTime(afterSchoolCareDTO.getEndTime());
         if (afterSchoolCareDTO.getParticipatingSchool() != null) {
-            afterSchoolCare.setParticipatingSchool(schoolConverter.fromDTO(afterSchoolCareDTO.getParticipatingSchool()));
+            afterSchoolCare.setParticipatingSchool(schoolService.findOne(afterSchoolCareDTO.getParticipatingSchool()));
         }
         if (afterSchoolCareDTO.getEmployee() != null) {
             afterSchoolCare.setEmployee(userService.findOne(afterSchoolCareDTO.getEmployee()));
@@ -39,7 +40,7 @@ public class AfterSchoolCareConverter {
         afterSchoolCareDTO.setStartTime(afterSchoolCare.getStartTime());
         afterSchoolCareDTO.setEndTime(afterSchoolCare.getEndTime());
         if (afterSchoolCare.getParticipatingSchool() != null) {
-            afterSchoolCareDTO.setParticipatingSchool(schoolConverter.toDto(afterSchoolCare.getParticipatingSchool()));
+            afterSchoolCareDTO.setParticipatingSchool(afterSchoolCare.getParticipatingSchool().getId());
         }
         if (afterSchoolCare.getEmployee() != null) {
             afterSchoolCareDTO.setEmployee(afterSchoolCare.getEmployee().getId());

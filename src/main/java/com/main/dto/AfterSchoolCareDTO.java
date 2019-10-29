@@ -13,7 +13,7 @@ public class AfterSchoolCareDTO {
 
 	private LocalDateTime endTime;
 
-	private SchoolDTO participatingSchool;
+	private Long participatingSchool;
 
 	private Long employee;
 }
