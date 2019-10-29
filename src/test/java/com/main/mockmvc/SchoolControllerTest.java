@@ -2,6 +2,7 @@ package com.main.mockmvc;
 
 import static org.junit.Assert.assertEquals;
 
+import com.main.data.TestSchoolControllerPath;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.security.test.context.support.WithAnonymousUser;
@@ -19,18 +20,15 @@ public class SchoolControllerTest extends AbstractMvcTest {
 
 	@Test
 	@WithMockUser(authorities = "ROLE_PARENT")
-	public void testGestSchoolsIfAuthorityIsParent() throws Exception{
-		String uri = "/api/schools";
-		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(uri)).andReturn();
+	public void testGetSchoolsIfAuthorityIsParent() throws Exception{
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(TestSchoolControllerPath.SCHOOLS.getUri())).andReturn();
 		assertEquals(200, mvcResult.getResponse().getStatus());
 	}
 	
 	@Test
 	@WithAnonymousUser
-	public void testGestSchoolsIfAuthorityIsAnonymus() throws Exception{
-		String uri = "/api/schools";
-		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(uri)).andReturn();
+	public void testGetSchoolsIfAuthorityIsAnonymous() throws Exception{
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(TestSchoolControllerPath.SCHOOLS.getUri())).andReturn();
 		assertEquals(401, mvcResult.getResponse().getStatus());
 	}
-
 }
