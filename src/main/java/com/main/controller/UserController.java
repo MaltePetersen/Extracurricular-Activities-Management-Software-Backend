@@ -25,117 +25,137 @@ import com.main.repository.VerificationTokenRepository;
 import com.main.service.UserService;
 import com.main.util.UserDTOValidator;
 import com.main.util.register.OnRegistrationCompleteEvent;
+import com.main.util.register.OnResetPasswordEvent;
 
 import lombok.extern.java.Log;
 
 @RestController
 @Log
 public class UserController {
-    private UserService userService;
-    private VerificationTokenRepository verificationTokenRepository;
-    private UserDTOValidator userDTOValidator;
+	private UserService userService;
+	private VerificationTokenRepository verificationTokenRepository;
+	private UserDTOValidator userDTOValidator;
 
-    private ApplicationEventPublisher eventPublisher;
+	private ApplicationEventPublisher eventPublisher;
 
-    public UserController(UserService userService, VerificationTokenRepository verificationTokenRepository,
-                          UserDTOValidator userDTOValidator, ApplicationEventPublisher eventPublisher) {
-        this.userService = userService;
-        this.verificationTokenRepository = verificationTokenRepository;
-        this.userDTOValidator = userDTOValidator;
-        this.eventPublisher = eventPublisher;
-    }
+	public UserController(UserService userService, VerificationTokenRepository verificationTokenRepository,
+			UserDTOValidator userDTOValidator, ApplicationEventPublisher eventPublisher) {
+		this.userService = userService;
+		this.verificationTokenRepository = verificationTokenRepository;
+		this.userDTOValidator = userDTOValidator;
+		this.eventPublisher = eventPublisher;
+	}
 
-    @PostMapping("/register")
-    public ResponseEntity<String> registration(@RequestBody UserDTO userDTO, Authentication auth, Errors errors,
-                                               WebRequest request) {
-        userDTOValidator.validate(userDTO, errors);
-        if (errors.hasErrors()) {
-            return new ResponseEntity<>(createErrorString(errors), HttpStatus.BAD_REQUEST);
-        }
+	@PostMapping("/register")
+	public ResponseEntity<String> registration(@RequestBody UserDTO userDTO, Authentication auth, Errors errors,
+			WebRequest request) {
+		userDTOValidator.validate(userDTO, errors);
+		if (errors.hasErrors()) {
+			return new ResponseEntity<>(createErrorString(errors), HttpStatus.BAD_REQUEST);
+		}
 
-        IUser registered = userService.createAccount(userDTO, auth);
+		IUser registered = userService.createAccount(userDTO, auth);
 
-        if (registered == null)
-            return new ResponseEntity<>("Error creating the account", HttpStatus.BAD_REQUEST);
-        
-   
-        try {
-            String appUrl = request.getContextPath();
-            eventPublisher
-                    .publishEvent(new OnRegistrationCompleteEvent((User) registered, request.getLocale(), appUrl));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("Fehler beim Versenden", HttpStatus.BAD_REQUEST);
-        }
-        
-        
-        
-        return new ResponseEntity<>("Created: " + registered.getRoles(), HttpStatus.CREATED);
-    }
+		if (registered == null)
+			return new ResponseEntity<>("Error creating the account", HttpStatus.BAD_REQUEST);
 
-    private String createErrorString(Errors errors) {
-        return errors.getAllErrors().stream().map(ObjectError::toString).collect(Collectors.joining(","));
-    }
+		try {
+			String appUrl = request.getContextPath();
+			eventPublisher
+					.publishEvent(new OnRegistrationCompleteEvent((User) registered, request.getLocale(), appUrl));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("Fehler beim Versenden", HttpStatus.BAD_REQUEST);
+		}
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
-    }
+		return new ResponseEntity<>("Created: " + registered.getRoles(), HttpStatus.CREATED);
+	}
 
-    @RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
-    public ResponseEntity<String> confirmRegistration(WebRequest request, @RequestParam("token") String token) {
+	private String createErrorString(Errors errors) {
+		return errors.getAllErrors().stream().map(ObjectError::toString).collect(Collectors.joining(","));
+	}
 
-        // Locale locale = request.getLocale();
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+		Map<String, String> errors = new HashMap<>();
+		ex.getBindingResult().getAllErrors().forEach((error) -> {
+			String fieldName = ((FieldError) error).getField();
+			String errorMessage = error.getDefaultMessage();
+			errors.put(fieldName, errorMessage);
+		});
+		return errors;
+	}
 
-        IVerificationToken verificationToken = verificationTokenRepository.findByToken(token);
-        if (verificationToken == null) {
-            return new ResponseEntity<>("Verification Token is null", HttpStatus.BAD_REQUEST);
-        }
+	@RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
+	public ResponseEntity<String> confirmRegistration(WebRequest request, @RequestParam("token") String token) {
 
-        User user = verificationToken.getUser();
-        Calendar cal = Calendar.getInstance();
-        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-            return new ResponseEntity<>("Token is already expired", HttpStatus.BAD_REQUEST);
-        }
-        
-        user.setVerified(true);
-        userService.update(user);
-        return new ResponseEntity<>("User is confirmed", HttpStatus.ACCEPTED);
-    }
+		// Locale locale = request.getLocale();
+		IVerificationToken verificationToken = verificationTokenRepository.findByToken(token);
+		if (verificationToken == null) {
+			return new ResponseEntity<>("Verification Token is null", HttpStatus.BAD_REQUEST);
+		}
 
-    @RequestMapping(value = "/resendToken", method = RequestMethod.GET)
-    public ResponseEntity<String> resendToken(Authentication auth, WebRequest request) {
-        if (auth == null)
-            return new ResponseEntity<>("Not Authentificated", HttpStatus.BAD_REQUEST);
-        IUser user = userService.findByUsername(auth.getName());
+		User user = verificationToken.getUser();
+		Calendar cal = Calendar.getInstance();
+		if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+			return new ResponseEntity<>("Token is already expired", HttpStatus.BAD_REQUEST);
+		}
 
-        if (user == null)
-            return new ResponseEntity<>("Fehler beim Versenden", HttpStatus.BAD_REQUEST);
+		user.setVerified(true);
+		userService.update(user);
+		return new ResponseEntity<>("User is confirmed", HttpStatus.ACCEPTED);
+	}
 
-        try {
-            String appUrl = request.getContextPath();
-            IVerificationToken token = verificationTokenRepository
-                    .findByUser_Email(((IContactDetails) user).getEmail());
-            verificationTokenRepository.delete((VerificationToken) token);
-            eventPublisher.publishEvent(new OnRegistrationCompleteEvent((User) user, request.getLocale(), appUrl));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	@RequestMapping(value = "/resendToken", method = RequestMethod.GET)
+	public ResponseEntity<String> resendToken(Authentication auth, WebRequest request) {
+		if (auth == null)
+			return new ResponseEntity<>("Not Authentificated", HttpStatus.BAD_REQUEST);
+		IUser user = userService.findByUsername(auth.getName());
 
-        return new ResponseEntity<>("The token was sent again", HttpStatus.ACCEPTED);
-    }
+		if (user == null)
+			return new ResponseEntity<>("Fehler beim Versenden", HttpStatus.BAD_REQUEST);
 
-    @CrossOrigin
-    @GetMapping("/login")
-    public Object[] login(Authentication auth) {
-        List<String> list = new ArrayList<>();
-        return auth.getAuthorities().toArray();
-    }
+		try {
+			String appUrl = request.getContextPath();
+			IVerificationToken token = verificationTokenRepository
+					.findByUser_Email(((IContactDetails) user).getEmail());
+			verificationTokenRepository.delete((VerificationToken) token);
+			eventPublisher.publishEvent(new OnRegistrationCompleteEvent((User) user, request.getLocale(), appUrl));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ResponseEntity<>("The token was sent again", HttpStatus.ACCEPTED);
+	}
+
+	@PostMapping("/resetPassword")
+	public ResponseEntity<String> resetPassword(@RequestBody(required = false) Map<String, Object> emailMap, WebRequest request) {
+
+		Object obj = emailMap.get("email");
+		if(obj == null)
+			return new ResponseEntity<>("Please enter a real email", HttpStatus.BAD_REQUEST);
+		String email = obj.toString();
+		
+		if (email.length() == 0)
+			return new ResponseEntity<>("Please enter a real email", HttpStatus.BAD_REQUEST);
+		
+		try {
+			String appUrl = request.getContextPath();
+			eventPublisher
+					.publishEvent(new OnResetPasswordEvent(email, request.getLocale(), appUrl));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("Fehler beim Versenden", HttpStatus.BAD_REQUEST);
+		}
+		
+		return new ResponseEntity<>("A new Password was sent to the email", HttpStatus.ACCEPTED);
+	}
+
+	@CrossOrigin
+	@GetMapping("/login")
+	public Object[] login(Authentication auth) {
+		List<String> list = new ArrayList<>();
+		return auth.getAuthorities().toArray();
+	}
 }

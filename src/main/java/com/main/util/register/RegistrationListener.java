@@ -37,9 +37,8 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 		String confirmationUrl = event.getAppUrl() + "/regitrationConfirm.html?token=" + token;
 		String message = "Bitte bestätigen Sie ihre Identität indem Sie auf den folgenden Link klicken: \n";
 		message += confirmationUrl;
-
+		
 		emailService.sendSimpleMessage(email, subject, message);
-
 	}
 
 }

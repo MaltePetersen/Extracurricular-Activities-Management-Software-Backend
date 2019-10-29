@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
 import com.main.dto.UserDTO;
@@ -46,7 +47,7 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 
 	@NotBlank(message = "Fullname is mandatory")
 	private String fullname;
-	
+
 	@ManyToMany
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private List<Role> roles = new ArrayList<>();
@@ -70,15 +71,20 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 	@JoinColumn(name = "school_id")
 	private School childSchool;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	private User parent;
+	
+	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<User> children = new ArrayList<>();
+	
 	private boolean isSchoolCoordinator;
 
 	@Column(name = "verified")
 	private boolean verified;
-	
+
 	public void addRole(Role role) {
 		this.roles.add(role);
 	}
-	
 
 	// Constructur normal User
 	User(String username, String password, String fullname) {
@@ -244,7 +250,14 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 			dto.setPhoneNumber(user.getPhoneNumber());
 			dto.setSchoolClass(user.getSchoolClass());
 			dto.setSubject(user.getSubject());
-			dto.setUserType(type);
+//			if (user.getRoles() != null) {
+//				if (user.getRoles().size() != 0) {
+//					dto.setUserType(user.getRoles().get(0).getName());
+//				}
+//			} else {
+				dto.setUserType(type);
+//			}
+
 			dto.setSchoolCoordinator(user.isSchoolCoordinator());
 			return dto;
 		}
@@ -266,6 +279,5 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + "]";
 	}
-
 
 }

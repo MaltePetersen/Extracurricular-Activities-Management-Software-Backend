@@ -1,9 +1,10 @@
 package com.main.dto.converters;
 
+import org.springframework.stereotype.Component;
+
 import com.main.dto.AfterSchoolCareDTO;
 import com.main.model.AfterSchoolCare;
 import com.main.service.UserService;
-import org.springframework.stereotype.Component;
 
 @Component
 public class AfterSchoolCareConverter {

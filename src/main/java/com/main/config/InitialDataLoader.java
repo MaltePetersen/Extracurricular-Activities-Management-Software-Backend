@@ -1,5 +1,6 @@
 package com.main.config;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -67,22 +68,21 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 		log.info("Start initializing the data.");
 
-		Privilege writePrivilege = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
-		IPrivilege resetTokenPrivilege = createPrivilegeIfNotFound(UserPrivilege.RESET_TOKEN.toString());
-		Privilege resetPassword = createPrivilegeIfNotFound(UserPrivilege.RESET_PASSWORD.toString());
+		Privilege resetTokenPrivilege = createPrivilegeIfNotFound(UserPrivilege.RESET_TOKEN.toString());
+		Privilege resetPasswordPrivilege = createPrivilegeIfNotFound(UserPrivilege.RESET_PASSWORD.toString());
+		Privilege readPrivilege = createPrivilegeIfNotFound(UserPrivilege.READ_PRIVILEGE.toString());
+		Privilege writePrivilege = createPrivilegeIfNotFound(UserPrivilege.WRITE_PRIVILEGE.toString());
 
-		List<Privilege> adminPrivileges = Arrays.asList(writePrivilege);
-		createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
-		createRoleIfNotFound("ROLE_USER", null);
-		createRoleIfNotFound(UserRole.ROLE_CHILD.toString(), Arrays.asList());
-		createRoleIfNotFound(UserRole.ROLE_EMPLOYEE.toString(), Arrays.asList());
-		createRoleIfNotFound(UserRole.ROLE_MANAGEMENT.toString(), Arrays.asList());
-		createRoleIfNotFound(UserRole.ROLE_PARENT.toString(), Arrays.asList());
-		createRoleIfNotFound(UserRole.ROLE_SCHOOLCOORDINATOR.toString(), Arrays.asList());
-		createRoleIfNotFound(UserRole.ROLE_TEACHER.toString(), Arrays.asList());
+		createRoleIfNotFound(UserRole.ROLE_CHILD.toString(), Arrays.asList(readPrivilege));
+		createRoleIfNotFound(UserRole.ROLE_EMPLOYEE.toString(), Arrays.asList(readPrivilege, writePrivilege));
+		createRoleIfNotFound(UserRole.ROLE_MANAGEMENT.toString(), Arrays.asList(readPrivilege, writePrivilege));
+		createRoleIfNotFound(UserRole.ROLE_PARENT.toString(), Arrays.asList(readPrivilege, writePrivilege));
+		createRoleIfNotFound(UserRole.ROLE_SCHOOLCOORDINATOR.toString(), Arrays.asList(readPrivilege, writePrivilege));
+		createRoleIfNotFound(UserRole.ROLE_TEACHER.toString(), Arrays.asList(writePrivilege, readPrivilege));
 		createRoleIfNotFound(UserRole.ROLE_USER.toString(), null);
+		createRoleIfNotFound(UserRole.ROLE_RESET_PASSWORD.toString(),  new ArrayList<>() );
 
-		createRoleIfNotFound("ROLE_NEW_USER", Arrays.asList(resetPassword));
+		createRoleIfNotFound("ROLE_NEW_USER", Arrays.asList(resetTokenPrivilege));
 
 		alreadySetup = true;
 		createUsers();
@@ -135,14 +135,11 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 	@Transactional
 	private void createUsers() {
-
 		Role adminRole = roleRepository.findByName("ROLE_ADMIN");
-
 		for (User user : userData.getUserData()) {
 			user.setRoles(Arrays.asList(adminRole));
 			userRepository.save(user);
 		}
-
 	}
 
 }

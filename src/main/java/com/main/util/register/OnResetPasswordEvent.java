@@ -11,28 +11,27 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OnRegistrationCompleteEvent extends ApplicationEvent {
+public class OnResetPasswordEvent extends ApplicationEvent {
 
 	/**
 	 * Version 1.0
 	 */
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 1337L;
+
 	private String appUrl;
 	private Locale locale;
-	private User user;
+	private String email;
 	
-	public OnRegistrationCompleteEvent(Object source) {
+	public OnResetPasswordEvent(Object source) {
 		super(source);
 	}
-
-	public OnRegistrationCompleteEvent(User user, Locale locale, String appUrl) {
-		super(user);
-		this.user = user;
+	
+	public OnResetPasswordEvent(String email, Locale locale, String appUrl) {
+		super(email);
+		this.email = email;
 		this.locale = locale;
 		this.appUrl = appUrl;
 	}
 
-	
 	
 }

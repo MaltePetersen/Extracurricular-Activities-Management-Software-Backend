@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import com.main.model.User;
 import com.main.model.VerificationToken;
 import com.main.model.interfaces.IVerificationToken;
-import com.main.repository.UserRepository;
 import com.main.repository.VerificationTokenRepository;
 import com.main.service.UserService;
 

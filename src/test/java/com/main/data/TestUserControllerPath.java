@@ -1,7 +1,7 @@
 package com.main.data;
 
 public enum TestUserControllerPath {
-	REGISTER("/register"), RESENDTOKEN("/resendToken"), EMAILCONFIRMATION("/registrationConfirm?token=");
+	REGISTER("/register"), RESENDTOKEN("/resendToken"), EMAILCONFIRMATION("/registrationConfirm?token="), RESETPASSWORD("/resetPassword");
 	
 	private String path;
 	

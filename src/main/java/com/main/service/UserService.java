@@ -22,5 +22,6 @@ public interface UserService {
 	public List<User> findAll();
 	public IUser findByUsername(String username);
     public User findOne(Long id);
+	public String changePassword(IUser user);
 }
 

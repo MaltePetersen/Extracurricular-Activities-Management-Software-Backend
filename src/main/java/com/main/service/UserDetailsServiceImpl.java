@@ -49,7 +49,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			for (IPrivilege privilege : privileges) {
 				authorities.add(new SimpleGrantedAuthority(privilege.getName()));
 			}
-			System.out.println(authorities);
+			
 			return new org.springframework.security.core.userdetails.User(" ", " ", true, true, true, true,
 					authorities );
 		}
@@ -71,7 +71,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		org.springframework.security.core.userdetails.User userdetail = new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
 				true, true, true, true, simpleGrantedAuthorities);
 		
-		System.out.println(userdetail);
 		return userdetail;
 	}
 

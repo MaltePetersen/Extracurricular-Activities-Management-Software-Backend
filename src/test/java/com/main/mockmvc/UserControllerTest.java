@@ -2,6 +2,12 @@ package com.main.mockmvc;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.print.attribute.HashAttributeSet;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -109,7 +115,6 @@ public class UserControllerTest extends AbstractMvcTest {
 		MvcResult mvcResult = mockMvc.perform(
 				MockMvcRequestBuilders.post(uri).contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson))
 				.andReturn();
-		log.info(mvcResult.getResponse().getContentAsString());
 		int status = mvcResult.getResponse().getStatus();
 		assertEquals(201, status);
 	}

@@ -1,6 +1,5 @@
 package com.main.model.interfaces;
 
-import java.util.Collection;
 import java.util.List;
 
 import com.main.model.Role;

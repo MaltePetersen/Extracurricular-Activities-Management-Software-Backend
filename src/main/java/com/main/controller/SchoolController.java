@@ -2,8 +2,10 @@ package com.main.controller;
 
 import com.main.model.School;
 import com.main.model.interfaces.ISchool;
+import com.main.model.user.UserRole;
 import com.main.service.SchoolService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
@@ -18,7 +20,8 @@ public class SchoolController {
         this.service = service;
     }
 
-    // Index
+//    // Index
+//    @PreAuthorize("hasAuthority('ROLE')")  
 	@GetMapping("/api/schools")
 	public List<School> getSchools() {
 	    return service.getAll();

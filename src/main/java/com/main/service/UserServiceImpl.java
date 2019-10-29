@@ -3,6 +3,7 @@ package com.main.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -136,4 +137,13 @@ public class UserServiceImpl implements UserService {
 	public User findOne(Long id) {
 		return userRepository.findById(id).orElseThrow(() -> new RuntimeException("user id not found: " + id));
 	}
+	
+	@Override
+	public String changePassword(IUser user) {
+		String newPassword = UUID.randomUUID().toString();
+		user.setPassword(passwordEncoder.encode(newPassword));
+		update((User) user);
+		return newPassword;
+	}
+
 }
