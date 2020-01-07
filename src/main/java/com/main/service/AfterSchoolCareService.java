@@ -1,6 +1,6 @@
 package com.main.service;
 
-import com.main.model.AfterSchoolCare;
+import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.Attendance;
 
 import java.util.List;

@@ -5,12 +5,13 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.main.model.Attendance;
-
 @Data
 public class AfterSchoolCareDTO {
-
 	private Long id;
+
+	private int type;
+
+	private String name;
 
 	private LocalDateTime startTime;
 

@@ -1,9 +1,7 @@
 package com.main.dto.converters;
 
-import org.springframework.stereotype.Component;
-
 import com.main.dto.AfterSchoolCareDTO;
-import com.main.model.AfterSchoolCare;
+import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.Attendance;
 
 import java.util.stream.Collectors;
@@ -14,6 +12,8 @@ public class AfterSchoolCareConverter {
 		AfterSchoolCareDTO afterSchoolCareDTO = new AfterSchoolCareDTO();
 
 		afterSchoolCareDTO.setId(afterSchoolCare.getId());
+		afterSchoolCareDTO.setType(afterSchoolCare.getType().getId());
+		afterSchoolCareDTO.setName(afterSchoolCare.getName());
 		afterSchoolCareDTO.setStartTime(afterSchoolCare.getStartTime());
 		afterSchoolCareDTO.setEndTime(afterSchoolCare.getEndTime());
 		if (afterSchoolCare.getParticipatingSchool() != null) {
