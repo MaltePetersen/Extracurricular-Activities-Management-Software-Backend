@@ -11,8 +11,7 @@ import java.util.List;
 @EnableScheduling
 public class FjoerdeBackendApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(FjoerdeBackendApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(FjoerdeBackendApplication.class, args);
+    }
 }
-

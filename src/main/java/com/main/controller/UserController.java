@@ -165,8 +165,9 @@ public class UserController {
 
 	@CrossOrigin
 	@GetMapping("/login")
-	public Object[] login(Authentication auth) {
+	public List<String> login(Authentication auth) {
 		List<String> list = new ArrayList<>();
-		return auth.getAuthorities().toArray();
+		auth.getAuthorities().forEach((a) -> list.add( a.getAuthority()));
+		return list;
 	}
 }
