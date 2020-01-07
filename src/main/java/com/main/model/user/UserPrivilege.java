@@ -1,11 +1,12 @@
 package com.main.model.user;
 
+import com.main.model.Privilege;
 import org.springframework.security.core.GrantedAuthority;
 
 public enum UserPrivilege implements GrantedAuthority {
-	RESET_PASSWORD, RESET_TOKEN, READ_PRIVILEGE, WRITE_PRIVILEGE;
+	RESET_PASSWORD, RESET_TOKEN, READ_PRIVILEGE, WRITE_PRIVILEGE, RESET_CHILD_PASSWORD ;
 
-	@Override
+    @Override
 	public String getAuthority() {
 		return toString();
 	}
