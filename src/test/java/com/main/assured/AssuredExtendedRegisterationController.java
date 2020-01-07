@@ -40,16 +40,6 @@ public class AssuredExtendedRegisterationController extends AbstractAssuredTest 
 				.get(TestUserControllerPath.EMAILCONFIRMATION.getUri() + token).then().assertThat().statusCode(202);
 	}
 
-//	@Test
-//	public void createChildTest() throws Exception {
-//		IUserDTO child = TestUserData.TEST_CHILD_2.getUserDTO();
-//
-//		String value = mapToJson(child);
-//		given().contentType("application/json").with().auth().preemptive()
-//				.basic(parent.getUsername(), parent.getPassword()).body(value).log().headers().when()
-//				.post(TestUserControllerPath.REGISTER.getUri()).then().assertThat().statusCode(201);
-//	}
-
 	@Test
 	public void passwordResetTest() throws Exception {
 		Map<String, Object> map = new HashMap<>();

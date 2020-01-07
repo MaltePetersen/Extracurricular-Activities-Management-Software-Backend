@@ -51,7 +51,7 @@ public class ManagementController {
         List<UserDTO> allUserDTOs = new ArrayList<>();
         for (User user : userService.findAll()) {
             allUserDTOs.add(UserDTO.builder().userType(user.getRoles().toString()).username(user.getUsername()).password(user.getPassword()).fullname(user.getFullname()).schoolClass(user.getSchoolClass()).phoneNumber(user.getPhoneNumber()).subject(user.getSubject()).
-iban(user.getIban()).address(user.getAddress()).build());
+                    iban(user.getIban()).address(user.getAddress()).build());
         }
         return allUserDTOs;
     }

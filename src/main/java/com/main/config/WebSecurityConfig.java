@@ -22,9 +22,13 @@ import com.main.model.user.UserRole;
 		  securedEnabled = true, 
 		  jsr250Enabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	@Qualifier("userDetailsServiceImpl")
-	@Autowired
+	
 	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	WebSecurityConfig(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService){
+		this.userDetailsService = userDetailsService;
+	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {

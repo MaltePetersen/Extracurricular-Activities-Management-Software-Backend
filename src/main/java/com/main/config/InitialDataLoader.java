@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+
 @Component
 @Log
 public class InitialDataLoader implements ApplicationListener<ContextRefreshedEvent> {
