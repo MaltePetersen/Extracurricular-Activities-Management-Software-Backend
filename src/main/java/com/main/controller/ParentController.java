@@ -25,7 +25,17 @@ import com.main.model.AfterSchoolCare;
 @RequestMapping("/api/parent")
 @CrossOrigin
 public class ParentController { 
-	//For what do we need this controller?	--> IsParent hält nicht REST Paradigmen ein
+    List<UserDTO> childs;
+    ParentController(){
+        generateChildren(); 
+    }
+    private void generateChildren(){
+        childs = new ArrayList<>();
+        for (int i = 1; i < 10; i++) {
+            UserDTO child = UserDTO.builder().address("Adresse" + i).fullname("Kind "+ i).userType("ROLE_CHILD").schoolClass(i + "b").username("Kind " + i).build();
+            childs.add(child);
+        }
+    }
 	@GetMapping("/authority")
 	public ResponseEntity<Void> isParent(Authentication auth) {
 		if (auth != null) {
@@ -71,30 +81,30 @@ public class ParentController {
 	}
 	
 	@GetMapping("/childs")
-    public String getChilds() {
-        return "Not yet implemented";
+    public List<UserDTO> getChilds() {
+        return childs;
     }
 
     @PostMapping("/child")
     @ResponseStatus(HttpStatus.CREATED)
-    String createChild(@RequestBody AfterSchoolCare AfterSchoolCare) {
-        return "Not yet implemented";
+    void createChild(@RequestBody UserDTO child) {
+        childs.add(child);
     }
 
     @GetMapping("/child/{id}")
-    String getChild(@PathVariable @Min(1) Long id) {
-        return "Not yet implemented";
+    UserDTO getChild(@PathVariable @Min(1) int id) {
+        return childs.get(id-1);
     }
 
     @PatchMapping("/child/{id}")
-    String changeChild(@RequestBody AfterSchoolCare AfterSchoolCare, @PathVariable Long id) {
-        return "Not yet implemented";
+    void changeChild(@RequestBody UserDTO child, @PathVariable int id) {
+        childs.set(id -1, child);
 
     }
 
     @DeleteMapping("/child/{id}")
-    String deleteChild(@PathVariable Long id) {
-        return "Not yet implemented";
+    void deleteChild(@PathVariable int id) {
+        childs.remove(id -1);
     }
 		
 }
