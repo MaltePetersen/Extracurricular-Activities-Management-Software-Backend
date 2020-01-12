@@ -33,7 +33,7 @@ public class ParentControllerTest extends AbstractMvcTest {
 	@Test
 	@WithMockUser(authorities = "ROLE_PARENT")
 	public void testGetParentWithAuthorityParent() throws Exception {
-		String uri = "/api/parent";
+		String uri = "/api/parent/authority";
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(uri)).andReturn();
 		assertEquals(202, mvcResult.getResponse().getStatus());
 	}
@@ -41,7 +41,7 @@ public class ParentControllerTest extends AbstractMvcTest {
 	@Test
 	@WithAnonymousUser
 	public void testGetParentWithoutAuthorities() throws Exception {
-		String uri = "/api/parent";
+		String uri = "/api/parent/authority";
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(uri)).andReturn();
 		assertEquals(401, mvcResult.getResponse().getStatus());
 	}
