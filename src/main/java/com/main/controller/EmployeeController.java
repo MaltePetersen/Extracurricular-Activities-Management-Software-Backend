@@ -1,6 +1,7 @@
 package com.main.controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,7 @@ public class EmployeeController {
     }
 
     private void generateInvoices() {
+        invoiceDTOs = new ArrayList<>();
         for (int i = 1; i < 9; i++) {
             InvoiceDTO invoiceDTO = new InvoiceDTO();
             invoiceDTO.setId(new Long(i));
