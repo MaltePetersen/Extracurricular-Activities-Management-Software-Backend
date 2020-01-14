@@ -44,21 +44,21 @@ public class ParentController {
             childs.add(child);
         }
     }
-	@GetMapping("/authority")
-	public ResponseEntity<Void> isParent(Authentication auth) {
-		if (auth != null) {
-			List<String> roles = new ArrayList<>();
-			if (auth != null)
-				auth.getAuthorities().forEach((a) -> {
-					roles.add(a.getAuthority());
-				});
-			if(roles.contains("ROLE_PARENT")) {
-				return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
-			}
 
-		}
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	}
+    @GetMapping("/authority")
+    public ResponseEntity<Void> isParent(Authentication auth) {
+        if (auth != null) {
+            List<String> roles = new ArrayList<>();
+            auth.getAuthorities().forEach((a) -> {
+                roles.add(a.getAuthority());
+            });
+            if(roles.contains("ROLE_PARENT")) {
+                return new ResponseEntity<>(HttpStatus.ACCEPTED);
+            }
+
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 
     @GetMapping("/booked_after_school_cares")
     public List<AfterSchoolCareDTO> getBookedAfterSchoolCares() {
@@ -67,7 +67,7 @@ public class ParentController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping("/bookedafterschoolcare")
+    @PostMapping("/booked_after_school_cares")
     @ResponseStatus(HttpStatus.CREATED)
     String createBookedAfterSchoolCare(@RequestBody AfterSchoolCare AfterSchoolCare) {
         return "Not yet implemented";

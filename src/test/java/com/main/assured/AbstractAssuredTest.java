@@ -1,5 +1,6 @@
 package com.main.assured;
 
+import com.main.service.UserService;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,8 +21,12 @@ public abstract class AbstractAssuredTest {
 	@Autowired
 	WebApplicationContext context;
 
+	@Autowired
+	protected UserService userService;
+
 	@LocalServerPort
 	private int port;
+
 
 	protected ObjectMapper objectMapper;
 
