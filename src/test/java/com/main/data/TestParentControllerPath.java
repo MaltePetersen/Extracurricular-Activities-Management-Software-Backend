@@ -1,7 +1,7 @@
 package com.main.data;
 
 public enum TestParentControllerPath {
-	ADDCHILD("/addChild");
+	ADDCHILD("/addChild"), AFTER_SCHOOL_CARES("/api/parent/after_school_cares");;
 	private String path;
 	
 	public String getUri() {
