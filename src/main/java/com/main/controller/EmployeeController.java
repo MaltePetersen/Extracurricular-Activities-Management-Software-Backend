@@ -10,7 +10,7 @@ import javax.validation.constraints.Min;
 import com.main.dto.InvoiceDTO;
 import com.main.dto.SchoolDTO;
 import com.main.dto.converters.SchoolConverter;
-import com.main.model.AfterSchoolCare;
+import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.School;
 import com.main.model.interfaces.ISchool;
 import com.main.service.SchoolService;

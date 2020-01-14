@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.main.dto.UserDTO;
-import com.main.model.AfterSchoolCare;
+import com.main.model.afterSchoolCare.AfterSchoolCare;
 
 @RestController
 @RequestMapping("/api/parent")
