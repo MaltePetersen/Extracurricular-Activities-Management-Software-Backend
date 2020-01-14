@@ -21,6 +21,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.main.dto.UserDTO;
 import com.main.dto.interfaces.IUserDTO;
+import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.interfaces.IChild;
 import com.main.model.interfaces.IEmployee;
 import com.main.model.interfaces.IManagement;
@@ -69,6 +70,9 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 
 	@OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Attendance> attendances = new ArrayList<>();
+
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<AfterSchoolCare> afterSchoolCares = new ArrayList<>();
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "school_id")
