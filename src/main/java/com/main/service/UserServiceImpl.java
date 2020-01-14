@@ -8,6 +8,7 @@ import java.util.stream.StreamSupport;
 
 import javax.validation.Valid;
 
+import com.main.model.interfaces.IContactDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -135,6 +136,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> findAllByVerified(boolean verified) {
 		return userRepository.findAllByVerified(verified);
+	}
+
+	@Override
+	public UserDTO toDto(IUser user) {
+		return UserDTO.builder().username(user.getUsername()).email(((IContactDetails)user).getEmail()).build();
 	}
 
 	public User findOne(Long id) {

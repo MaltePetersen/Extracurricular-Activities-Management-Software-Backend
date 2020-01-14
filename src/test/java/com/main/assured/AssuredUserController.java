@@ -3,6 +3,7 @@ package com.main.assured;
 import static io.restassured.RestAssured.given;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.main.model.interfaces.IUser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

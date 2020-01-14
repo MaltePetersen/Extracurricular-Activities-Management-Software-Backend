@@ -11,54 +11,50 @@ import org.springframework.stereotype.Component;
 
 /**
  * Veraltet, da auf Konstruktoren verzichtet werden sollte
- * 
- * @author Markus
  *
+ * @author Markus
  */
 
 @Component
-@Deprecated
 public class UserData {
 
-	PasswordEncoder encoder;
-	
-	@Autowired
-	public UserData(PasswordEncoder encoder) {
-		this.encoder = encoder;
-	}
-	
-	@Deprecated
-	public Map<User, String> getUserData() {
-		User parent = new User("Parent_Test", encoder.encode("password"), "Craig Walls", "craig@walls.com",
-				"123-123-1234");
-		
-		User employee = new User("Employee_Test", encoder.encode("password"), "Malte Petersen", "malte.petersen@web.de",
-				"123-123-1234", "Geschichte", "1374816241982437", "Schloßstraße 33", false);
-		User employeeSchoolCoordinator = new User("Employee_SchoolCoordinator_Test", encoder.encode("password"),
-				"Malte Petersen", "malte.petersen11@gmail.com", "123-123-1234", "Geschichte", "1374816241982437",
-				"Schloßstraße 33", true);
-		User management = new User("Management_Test", encoder.encode("password"), "Malte Petersen",
-				"malte.petersen@web.de", "123-123-1234", "Street 7");
-		User teacher = new User("Teacher_Test", encoder.encode("password"), "Malte Petersen", "malte.petersen@web.de",
-				"123-123-1234", "Geschichte", false);
-		User teacherSchoolCoordinator = new User("Teacher_SchoolCoordinator_Test", encoder.encode("password"),
-				"Malte Petersen", "malte.petersen@web.de", "123-123-1234", "Sport", true);
-		User user = new User("User_Test", encoder.encode("password"), "Malte Petersen");
-		User child = new User("Child_Test", encoder.encode("password"), "Malte Petersen", "7a");
+    PasswordEncoder encoder;
+
+    @Autowired
+    public UserData(PasswordEncoder encoder) {
+        this.encoder = encoder;
+    }
+
+    public Map<User, String> getUserData() {
+        User.UserBuilder<User> builder = User.UserBuilder.next();
+
+
+        User parent = builder.withName("Parent_Test").withPassword(encoder.encode("password")).withFullname("Craig Walls").withEmail("craig@walls.com").withPhoneNumber("112").build();
+        builder = User.UserBuilder.next();
+        User management = builder.withName("Management_Test").withPassword(encoder.encode("password")).withFullname("Malte Petersen")
+                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").build();
+        builder = User.UserBuilder.next();
+        User employee = builder.withName("Employee_Test").withPassword(encoder.encode("password")).withFullname("Malte Petersen")
+                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").build();
+        builder = User.UserBuilder.next();
+        User teacher = builder.withName("Teacher_Test").withPassword(encoder.encode("password")).withFullname("Malte Petersen")
+                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").build();
+        builder = User.UserBuilder.next();
+        User child = builder.withName("Child_Test").withPassword(encoder.encode("password")).withFullname("Malte Petersen")
+                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").build();
+
+
         parent.setVerified(true);
         employee.setVerified(true);
-        employeeSchoolCoordinator.setVerified(true);
         teacher.setVerified(true);
-        teacherSchoolCoordinator.setVerified(true);
         child.setVerified(true);
         management.setVerified(true);
         Map<User, String> users = new HashMap<>();
         users.put(employee, "EMPLOYEE");
         users.put(teacher, "TEACHER");
-        users.put(user, "USER");
         users.put(child, "CHILD");
-        users.put(parent,"PARENT");
-		users.put(management, "MANAGEMENT");
-		return users;
-	}
+        users.put(parent, "PARENT");
+        users.put(management, "MANAGEMENT");
+        return users;
+    }
 }

@@ -16,10 +16,7 @@ import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Component
@@ -73,18 +70,18 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		Privilege resetPasswordPrivilege = createPrivilegeIfNotFound(UserPrivilege.RESET_PASSWORD.toString());
 		Privilege resetChildPassword = createPrivilegeIfNotFound(UserPrivilege.RESET_CHILD_PASSWORD.toString());
 
-		createRoleIfNotFound(UserRole.ROLE_CHILD.toString(), Arrays.asList());
-		createRoleIfNotFound(UserRole.ROLE_EMPLOYEE.toString(), Arrays.asList());
+		createRoleIfNotFound(UserRole.ROLE_CHILD.toString(), Collections.emptyList());
+		createRoleIfNotFound(UserRole.ROLE_EMPLOYEE.toString(), Collections.emptyList());
 
-		createRoleIfNotFound(UserRole.ROLE_MANAGEMENT.toString(), Arrays.asList());
+		createRoleIfNotFound(UserRole.ROLE_MANAGEMENT.toString(), Collections.emptyList());
 
-		createRoleIfNotFound(UserRole.ROLE_PARENT.toString(), Arrays.asList(resetChildPassword));
+		createRoleIfNotFound(UserRole.ROLE_PARENT.toString(), Collections.singletonList(resetChildPassword));
 
 
-		createRoleIfNotFound(UserRole.ROLE_SCHOOLCOORDINATOR.toString(), Arrays.asList());
-		createRoleIfNotFound(UserRole.ROLE_TEACHER.toString(), Arrays.asList());
-		createRoleIfNotFound(UserRole.ROLE_USER.toString(), Arrays.asList(resetPasswordPrivilege));
-		createRoleIfNotFound("ROLE_NEW_USER", Arrays.asList(resetTokenPrivilege));
+		createRoleIfNotFound(UserRole.ROLE_SCHOOLCOORDINATOR.toString(), Collections.emptyList());
+		createRoleIfNotFound(UserRole.ROLE_TEACHER.toString(), Collections.emptyList());
+		createRoleIfNotFound(UserRole.ROLE_USER.toString(), Collections.singletonList(resetPasswordPrivilege));
+		createRoleIfNotFound("ROLE_NEW_USER", Collections.singletonList(resetTokenPrivilege));
 
 		alreadySetup = true;
 		createUsers();

@@ -56,7 +56,7 @@ public class UserControllerTest extends AbstractMvcTest {
 	@Test
 	@WithMockUser(authorities = "ROLE_MANAGEMENT")
 	public void createTeacherTest() throws Exception {
-		String uri = "/register";
+		String uri = TestUserControllerPath.REGISTER.getUri();
 		IUserDTO teacher = TestUserData.TEST_TEACHER.getUserDTO();
 
 		String inputJson = super.mapToJson(teacher);
@@ -109,7 +109,7 @@ public class UserControllerTest extends AbstractMvcTest {
 	@Test
 	@WithMockUser(authorities = "ROLE_PARENT")
 	public void createChildTest() throws Exception {
-		String uri = "/register";
+		String uri = TestUserControllerPath.REGISTER.getUri();
 		IUserDTO child = TestUserData.TEST_CHILD.getUserDTO();
 
 		String inputJson = super.mapToJson(child);
@@ -118,14 +118,6 @@ public class UserControllerTest extends AbstractMvcTest {
 				.andReturn();
 		int status = mvcResult.getResponse().getStatus();
 		assertEquals(201, status);
-	}
-
-	@Test
-	@WithMockUser(authorities = "ROLE_PARENT")
-	public void resetTokenWithWrongAuthorityTest() throws Exception {
-		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(TestUserControllerPath.RESENDTOKEN.getUri()))
-				.andReturn();
-		assertEquals(403, mvcResult.getResponse().getStatus());
 	}
 
 }
