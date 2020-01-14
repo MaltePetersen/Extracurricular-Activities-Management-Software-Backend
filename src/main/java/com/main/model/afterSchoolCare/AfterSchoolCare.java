@@ -71,7 +71,7 @@ public abstract class AfterSchoolCare {
 
 	private LocalDateTime endTime;
 
-	@OneToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "school_id", referencedColumnName = "id")
 	private School participatingSchool;
 
