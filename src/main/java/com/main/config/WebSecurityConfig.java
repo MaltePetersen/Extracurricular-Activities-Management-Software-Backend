@@ -35,16 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 				// HTTP Basic authentication
-				.httpBasic().and().authorizeRequests().antMatchers(HttpMethod.GET, "/api/**")
-				.hasAnyAuthority(
-						UserRole.ROLE_CHILD.toString(), 
-						UserRole.ROLE_PARENT.toString(),
-						UserRole.ROLE_EMPLOYEE.toString(),
-						UserRole.ROLE_MANAGEMENT.toString(),
-						UserRole.ROLE_SCHOOLCOORDINATOR.toString(), 
-						UserRole.ROLE_TEACHER.toString(),
-						UserRole.ROLE_USER.toString()
-						)
+				.httpBasic().and().authorizeRequests()
 				.antMatchers("/api/parent/**").hasAnyAuthority(UserRole.ROLE_PARENT.toString())
 				.antMatchers("/api/employee/**").hasAnyAuthority(UserRole.ROLE_EMPLOYEE.toString())
 				.antMatchers("/api/management/**").hasAnyAuthority(UserRole.ROLE_MANAGEMENT.toString())
