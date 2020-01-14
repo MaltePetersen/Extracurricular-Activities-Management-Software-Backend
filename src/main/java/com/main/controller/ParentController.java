@@ -62,8 +62,10 @@ public class ParentController {
     }
 
     @GetMapping("/booked_after_school_cares")
-    public String getBookedAfterSchoolCares() {
-        return "Not yet implemented";
+    public List<AfterSchoolCareDTO> getBookedAfterSchoolCares() {
+        // TODO: filtern auf gebuchte AfterSchoolCares fehlt noch
+        return afterSchoolCareService.getAll().stream().map(AfterSchoolCareConverter::toDto)
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/booked_after_school_cares")
