@@ -61,34 +61,34 @@ public class ParentController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/bookedafterschoolcares")
+    @GetMapping("/booked_after_school_cares")
     public String getBookedAfterSchoolCares() {
         return "Not yet implemented";
     }
 
-    @PostMapping("/bookedafterschoolcare")
+    @PostMapping("/booked_after_school_cares")
     @ResponseStatus(HttpStatus.CREATED)
     String createBookedAfterSchoolCare(@RequestBody AfterSchoolCare AfterSchoolCare) {
         return "Not yet implemented";
     }
 
-    @PatchMapping("/bookedafterschoolcare/{id}")
+    @PatchMapping("/booked_after_school_cares/{id}")
     String changeBookedAfterSchoolCare(@RequestBody AfterSchoolCare AfterSchoolCare, @PathVariable Long id) {
         return "Not yet implemented";
     }
 
-    @DeleteMapping("/bookedafterschoolcare/{id}")
+    @DeleteMapping("/booked_after_school_cares/{id}")
     String deleteBookedAfterSchoolCare(@PathVariable Long id) {
         return "Not yet implemented";
     }
 
-    @GetMapping("/afterschoolcares")
+    @GetMapping("/after_school_cares")
     public List<AfterSchoolCareDTO> getAfterSchoolCares() {
         return afterSchoolCareService.getAll().stream().map(AfterSchoolCareConverter::toDto)
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/afterschoolcare/{id}")
+    @GetMapping("/after_school_cares/{id}")
     public AfterSchoolCareDTO getAfterSchoolCare(@PathVariable Long id) {
         return AfterSchoolCareConverter.toDto(afterSchoolCareService.findOne(id));
     }
