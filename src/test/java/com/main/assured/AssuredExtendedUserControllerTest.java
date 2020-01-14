@@ -35,15 +35,20 @@ public class AssuredExtendedUserControllerTest extends AbstractAssuredTest {
 
 		String value = mapToJson(parent);
 
-		given().contentType("application/json").body(value).when().post(TestUserControllerPath.REGISTER.getUri()).then()
-				.assertThat().statusCode(201);
+		IUser user = userService.findByUsername(parent.getUsername());
+		if(user == null){
+			given().contentType("application/json").body(value).when().post(TestUserControllerPath.REGISTER.getUri()).then()
+					.assertThat().statusCode(201);
 
-		String token = verificationTokenRepo.findByUser_Email(parent.getEmail()).getToken();
+			String token = verificationTokenRepo.findByUser_Email(parent.getEmail()).getToken();
 
-		given().with().auth().preemptive().basic(parent.getUsername(), parent.getPassword()).log().headers().when()
-				.get(TestUserControllerPath.EMAILCONFIRMATION.getUri() + token).then().assertThat().statusCode(202);
+			given().with().auth().preemptive().basic(parent.getUsername(), parent.getPassword()).log().headers().when()
+					.get(TestUserControllerPath.EMAILCONFIRMATION.getUri() + token).then().assertThat().statusCode(202);
+		}
+
+
 	}
-	
+
 	@Test
 	public void passwordResetTest() throws Exception {
 		Map<String, Object> map = new HashMap<>();
@@ -53,7 +58,7 @@ public class AssuredExtendedUserControllerTest extends AbstractAssuredTest {
 
 		// Login-Test
 		given().contentType(ContentType.JSON).with().auth().preemptive()
-				.basic(parent.getUsername(), parent.getPassword()).when().get("/login").then().assertThat()
+				.basic(parent.getUsername(), parent.getPassword()).when().log().all().get("/login").then().assertThat()
 				.statusCode(200);
 		// Reset-Password-Test
 		given().contentType(ContentType.JSON).with().auth().preemptive()
@@ -65,6 +70,8 @@ public class AssuredExtendedUserControllerTest extends AbstractAssuredTest {
 				.statusCode(401);
 		String newPassword = getPassword();
 		Assert.assertNotEquals(oldPassword, newPassword);
+
+
 
 	}
 
@@ -78,4 +85,5 @@ public class AssuredExtendedUserControllerTest extends AbstractAssuredTest {
 		IUser user = userRepository.findByUsername(parent.getUsername());
 		return user.getPassword();
 	}
+
 }
