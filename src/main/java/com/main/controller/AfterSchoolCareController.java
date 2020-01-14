@@ -2,7 +2,7 @@ package com.main.controller;
 
 import com.main.dto.AfterSchoolCareDTO;
 import com.main.dto.converters.AfterSchoolCareConverter;
-import com.main.model.AfterSchoolCare;
+import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.Attendance;
 import com.main.service.AfterSchoolCareService;
 import org.springframework.http.HttpStatus;

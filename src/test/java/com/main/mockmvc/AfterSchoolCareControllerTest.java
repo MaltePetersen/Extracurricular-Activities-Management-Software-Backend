@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import com.main.data.TestAfterSchoolCareControllerPath;
 import com.main.dto.AfterSchoolCareDTO;
-import com.main.model.AfterSchoolCare;
 import com.main.model.School;
+import com.main.model.afterSchoolCare.AfternoonCare;
 import com.main.service.AfterSchoolCareService;
 import com.main.service.SchoolService;
 import org.junit.Before;
@@ -56,10 +56,10 @@ public class AfterSchoolCareControllerTest extends AbstractMvcTest {
     @Test
     @WithMockUser(authorities = "ROLE_USER")
     public void testPostAfterSchoolCareWithUserAuthority() throws Exception {
-		AfterSchoolCare afterSchoolCare = new AfterSchoolCare();
-		afterSchoolCare.setParticipatingSchool(testSchool);
+		AfternoonCare afternoonCare = new AfternoonCare();
+		afternoonCare.setParticipatingSchool(testSchool);
 
-		String inputJson = super.mapToJson(afterSchoolCare);
+		String inputJson = super.mapToJson(afternoonCare);
 
     	MvcResult mvcResult =
 				mockMvc.perform(MockMvcRequestBuilders.post(TestAfterSchoolCareControllerPath.AFTER_SCHOOL_CARES.getUri()).contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson))
@@ -71,6 +71,6 @@ public class AfterSchoolCareControllerTest extends AbstractMvcTest {
 		String content = mvcResult.getResponse().getContentAsString();
 		AfterSchoolCareDTO resultAfterSchoolCare = objectMapper.readValue(content, AfterSchoolCareDTO.class);
 
-		assertEquals(afterSchoolCare.getParticipatingSchool().getId(), resultAfterSchoolCare.getParticipatingSchool());
+		assertEquals(afternoonCare.getParticipatingSchool().getId(), resultAfterSchoolCare.getParticipatingSchool());
     }
 }

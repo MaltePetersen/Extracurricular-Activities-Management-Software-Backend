@@ -1,6 +1,7 @@
 package com.main.config;
 
 import com.main.model.*;
+import com.main.model.afterSchoolCare.AfternoonCare;
 import com.main.model.user.UserPrivilege;
 import com.main.model.user.UserRole;
 import com.main.repository.*;
@@ -127,18 +128,18 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 		School school3 = new School("Wilhelm-Tanck-Schule", "Färberstraße 25, 24534 Neumünster");
 		schoolRepo.save(school3);
-		AfterSchoolCare afterSchoolCare = new AfterSchoolCare();
-		afterSchoolCare.setParticipatingSchool(school1);
-		afterSchoolCareService.save(afterSchoolCare);
+		AfternoonCare afternoonCare = new AfternoonCare();
+		afternoonCare.setParticipatingSchool(school1);
+		afterSchoolCareService.save(afternoonCare);
 
 		Attendance attendance = new Attendance();
 		attendance.setAdditionalInformation("Informations");
 		attendance.setArrivalTime(LocalDateTime.now());
-		attendance.setAfterSchoolCare(afterSchoolCare);
+		attendance.setAfterSchoolCare(afternoonCare);
 		attendanceRepository.save(attendance);
 
-		afterSchoolCare.addAttendance(attendance);
-		afterSchoolCareService.save(afterSchoolCare);
+		afternoonCare.addAttendance(attendance);
+		afterSchoolCareService.save(afternoonCare);
 
 	}
 

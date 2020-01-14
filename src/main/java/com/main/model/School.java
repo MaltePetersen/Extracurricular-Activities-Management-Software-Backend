@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 
+import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.interfaces.IChild;
 import com.main.model.interfaces.IContactDetails;
 import com.main.model.interfaces.IEmployee;
