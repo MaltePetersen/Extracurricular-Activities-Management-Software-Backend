@@ -1,5 +1,6 @@
 package com.main.config;
 
+import com.main.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -42,12 +43,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						UserRole.ROLE_MANAGEMENT.toString(),
 						UserRole.ROLE_SCHOOLCOORDINATOR.toString(), 
 						UserRole.ROLE_TEACHER.toString(),
-						UserRole.ROLE_USER.toString(),
-						"READ_PRIVILEGE"
+						UserRole.ROLE_USER.toString()
 						)
 				.antMatchers(HttpMethod.POST, "/register").permitAll().antMatchers(HttpMethod.GET, "/auth").permitAll()
 				.antMatchers(HttpMethod.GET, "/registrationConfirm").permitAll()
 				.antMatchers(HttpMethod.GET, "/resendToken").hasAnyAuthority("ROLE_NEW_USER")
+				.antMatchers(HttpMethod.GET, "/resetPassword").hasAnyAuthority( UserPrivilege.RESET_PASSWORD.toString(), UserPrivilege.RESET_CHILD_PASSWORD.toString())
 				.and()
 				.csrf().disable().formLogin().disable();
 	}

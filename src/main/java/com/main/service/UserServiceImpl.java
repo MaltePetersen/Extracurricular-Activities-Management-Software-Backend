@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
 
 	private ResponseEntity<String> saveUser(@Valid User user) {
 		User newUser = userRepository.save(user);
-		return new ResponseEntity<String>("Created", newUser == null ? HttpStatus.BAD_REQUEST : HttpStatus.CREATED);
+		return new ResponseEntity<String>("Created", HttpStatus.CREATED);
 	}
 
 	@Override

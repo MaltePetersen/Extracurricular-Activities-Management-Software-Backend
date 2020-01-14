@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,20 +71,19 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 		Privilege resetTokenPrivilege = createPrivilegeIfNotFound(UserPrivilege.RESET_TOKEN.toString());
 		Privilege resetPasswordPrivilege = createPrivilegeIfNotFound(UserPrivilege.RESET_PASSWORD.toString());
-		Privilege readPrivilege = createPrivilegeIfNotFound(UserPrivilege.READ_PRIVILEGE.toString());
-		Privilege writePrivilege = createPrivilegeIfNotFound(UserPrivilege.WRITE_PRIVILEGE.toString());
+		Privilege resetChildPassword = createPrivilegeIfNotFound(UserPrivilege.RESET_CHILD_PASSWORD.toString());
 
-		createRoleIfNotFound(UserRole.ROLE_CHILD.toString(), Arrays.asList(readPrivilege));
-		createRoleIfNotFound(UserRole.ROLE_EMPLOYEE.toString(), Arrays.asList(readPrivilege, writePrivilege));
+		createRoleIfNotFound(UserRole.ROLE_CHILD.toString(), Arrays.asList());
+		createRoleIfNotFound(UserRole.ROLE_EMPLOYEE.toString(), Arrays.asList());
 
-		createRoleIfNotFound(UserRole.ROLE_MANAGEMENT.toString(), Arrays.asList(readPrivilege, writePrivilege));
+		createRoleIfNotFound(UserRole.ROLE_MANAGEMENT.toString(), Arrays.asList());
 
-		createRoleIfNotFound(UserRole.ROLE_PARENT.toString(), Arrays.asList(readPrivilege, writePrivilege));
-		createRoleIfNotFound(UserRole.ROLE_SCHOOLCOORDINATOR.toString(), Arrays.asList(readPrivilege, writePrivilege));
-		createRoleIfNotFound(UserRole.ROLE_TEACHER.toString(), Arrays.asList(writePrivilege, readPrivilege));
-		createRoleIfNotFound(UserRole.ROLE_USER.toString(), null);
-		createRoleIfNotFound(UserRole.ROLE_RESET_PASSWORD.toString(), new ArrayList<>());
+		createRoleIfNotFound(UserRole.ROLE_PARENT.toString(), Arrays.asList(resetChildPassword));
 
+
+		createRoleIfNotFound(UserRole.ROLE_SCHOOLCOORDINATOR.toString(), Arrays.asList());
+		createRoleIfNotFound(UserRole.ROLE_TEACHER.toString(), Arrays.asList());
+		createRoleIfNotFound(UserRole.ROLE_USER.toString(), Arrays.asList(resetPasswordPrivilege));
 		createRoleIfNotFound("ROLE_NEW_USER", Arrays.asList(resetTokenPrivilege));
 
 		alreadySetup = true;
@@ -93,7 +93,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	}
 
 	@Transactional
-	private Privilege createPrivilegeIfNotFound(String name) {
+	Privilege createPrivilegeIfNotFound(String name) {
 
 		Privilege privilege = privilegeRepository.findByName(name);
 		if (privilege == null) {
@@ -104,7 +104,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	}
 
 	@Transactional
-	private IRole createRoleIfNotFound(String name, List<Privilege> privileges) {
+	IRole createRoleIfNotFound(String name, List<Privilege> privileges) {
 
 		Role role = roleRepository.findByName(name);
 		if (role == null) {
@@ -118,7 +118,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	}
 
 	@Transactional
-	private void createSchools() {
+	void createSchools() {
 		// adds schools for simpler testing
 		School school1 = new School("Holstenschule", "Altonaer Str. 40, 24534 Neumünster");
 		schoolRepo.save(school1);
@@ -144,7 +144,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	}
 
 	@Transactional
-	private void createUsers() {
+	void createUsers() {
 		Map<User, String> userRole = userData.getUserData();
 		userRole.forEach((user, role) -> {
 			user.setRoles(Arrays.asList(roleRepository.findByName(UserRole.byRole(role).toString())));

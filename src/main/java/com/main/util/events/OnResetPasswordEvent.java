@@ -1,10 +1,8 @@
-package com.main.util.register;
+package com.main.util.events;
 
 import java.util.Locale;
 
 import org.springframework.context.ApplicationEvent;
-
-import com.main.model.User;
 
 import lombok.Getter;
 import lombok.Setter;
