@@ -24,38 +24,7 @@ import com.main.model.afterSchoolCare.AfterSchoolCare;
 @RestController
 @RequestMapping("/api/parent")
 @CrossOrigin
-public class ParentController { 
-    List<UserDTO> childs;
-    ParentController(){
-        generateChildren(); 
-    }
-    private void generateChildren(){
-        childs = new ArrayList<>();
-        for (int i = 1; i < 10; i++) {
-            UserDTO child = UserDTO.builder().address("Adresse" + i).fullname("Kind "+ i).userType("ROLE_CHILD").schoolClass(i + "b").username("Kind " + i).build();
-            childs.add(child);
-        }
-    }
-	@GetMapping("/authority")
-	public ResponseEntity<Void> isParent(Authentication auth) {
-		if (auth != null) {
-			List<String> roles = new ArrayList<>();
-			if (auth != null)
-				auth.getAuthorities().forEach((a) -> {
-					roles.add(a.getAuthority());
-				});
-			if(roles.contains("ROLE_PARENT")) {
-				return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
-			}
-
-		}
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	}
-	
-@GetMapping("/bookedafterschoolcares")
-	public String getBookedAfterSchoolCares(){
-		return "Not yet implemented";
-	}
+public class ParentController {	
     @PostMapping("/bookedafterschoolcare")
     @ResponseStatus(HttpStatus.CREATED)
     String createBookedAfterSchoolCare(@RequestBody AfterSchoolCare AfterSchoolCare) {

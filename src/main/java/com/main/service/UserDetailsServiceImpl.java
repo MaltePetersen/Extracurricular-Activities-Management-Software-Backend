@@ -5,7 +5,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
+import lombok.extern.flogger.Flogger;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,38 +28,31 @@ import com.main.repository.RoleRepository;
 import com.main.repository.UserRepository;
 
 @Service
+@Log
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
+	public UserDetailsServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PrivilegeRepository privilegeRepository){
+		this.userRepository = userRepository;
+		this.roleRepository = roleRepository;
+		this.privilegeRepository = privilegeRepository;
+	}
+
 	private UserRepository userRepository;
 
-	@Autowired
 	private RoleRepository roleRepository;
 
-	@Autowired
 	private PrivilegeRepository privilegeRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		log.info(String.format("User with the username %s tries to login.", username));
 		User user = userRepository.findByUsername(username);
-
-		if (user == null) {
-			List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-			IRole role = roleRepository.findByName("ROLE_USER");
-			List<Privilege> privileges = privilegeRepository.findByRoles_Name(role.getName());
-
-			authorities.add(new SimpleGrantedAuthority(role.getName()));
-
-			for (IPrivilege privilege : privileges) {
-				authorities.add(new SimpleGrantedAuthority(privilege.getName()));
-			}
-			
-			return new org.springframework.security.core.userdetails.User(" ", " ", true, true, true, true,
-					authorities );
-		}
 
 		List<String> authorities = new ArrayList<>();
 		List<Role> roles = roleRepository.findByUsers_Username(username);
+
+		log.info("User " + username + " contains " + roles.toString() + " Roles");
 
 		for (IRole role : roles) {
 			List<Privilege> privileges = privilegeRepository.findByRoles_Name(role.getName());
@@ -67,11 +64,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 		List<SimpleGrantedAuthority> simpleGrantedAuthorities = authorities.stream().map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toList());
-		
-		org.springframework.security.core.userdetails.User userdetail = new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+
+		log.info("User " + username + " contains " + simpleGrantedAuthorities + " Authorities");
+
+		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
 				true, true, true, true, simpleGrantedAuthorities);
-		
-		return userdetail;
 	}
 
 }

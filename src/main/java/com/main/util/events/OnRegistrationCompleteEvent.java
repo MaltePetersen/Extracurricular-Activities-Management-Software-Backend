@@ -1,4 +1,4 @@
-package com.main.util.register;
+package com.main.util.events;
 
 import java.util.Locale;
 

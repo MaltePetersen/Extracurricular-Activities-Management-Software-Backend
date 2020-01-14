@@ -2,6 +2,8 @@ package com.main.assured;
 
 import static io.restassured.RestAssured.given;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,6 +12,10 @@ import com.main.data.TestUserData;
 import com.main.dto.interfaces.IUserDTO;
 
 import lombok.extern.java.Log;
+
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Log
 public class AssuredUserController extends AbstractAssuredTest {
@@ -34,6 +40,9 @@ public class AssuredUserController extends AbstractAssuredTest {
 		given().auth().preemptive().basic(parent.getUsername(), parent.getPassword()).log().headers().when()
 				.get(TestUserControllerPath.RESENDTOKEN.getUri()).then().statusCode(202);
 	}
+
+
+
 	
 	
 

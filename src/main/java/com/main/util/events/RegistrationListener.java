@@ -1,7 +1,8 @@
-package com.main.util.register;
+package com.main.util.events;
 
 import java.util.UUID;
 
+import lombok.extern.java.Log;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,7 @@ import com.main.service.EmailService;
 import com.main.service.UserService;
 
 @Component
+@Log
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
 
 	private EmailService emailService;
@@ -39,6 +41,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 		message += confirmationUrl;
 		
 		emailService.sendSimpleMessage(email, subject, message);
+		log.info("Sending an email to " + email + " in event: " + RegistrationListener.class.getName());
 	}
 
 }
