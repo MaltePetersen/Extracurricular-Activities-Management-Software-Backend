@@ -7,12 +7,15 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.Min;
 
+import com.main.dto.AfterSchoolCareDTO;
 import com.main.dto.InvoiceDTO;
 import com.main.dto.SchoolDTO;
+import com.main.dto.converters.AfterSchoolCareConverter;
 import com.main.dto.converters.SchoolConverter;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.School;
 import com.main.model.interfaces.ISchool;
+import com.main.service.AfterSchoolCareService;
 import com.main.service.SchoolService;
 
 import org.springframework.http.HttpStatus;
@@ -32,10 +35,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/employee")
 public class EmployeeController {
     SchoolService schoolService;
+    AfterSchoolCareService afterSchoolCareService;
     List<InvoiceDTO> invoiceDTOs;
 
-    EmployeeController(SchoolService schoolService) {
+    EmployeeController(SchoolService schoolService, AfterSchoolCareService afterSchoolCareService) {
         this.schoolService = schoolService;
+        this.afterSchoolCareService = afterSchoolCareService;
         generateInvoices();
     }
 
@@ -85,31 +90,37 @@ public class EmployeeController {
         schoolService.deleteById(id);
     }
 
-    @GetMapping("/afterschoolcares")
-    public String getAfterSchoolCares() {
-        return "Not yet implemented";
+    @GetMapping("/after_school_cares")
+    public List<AfterSchoolCareDTO> getAfterSchoolCares() {
+        return afterSchoolCareService.getAll().stream().map(AfterSchoolCareConverter::toDto)
+                .collect(Collectors.toList());
     }
 
-    @PostMapping("/afterschoolcare")
+    @PostMapping("/after_school_cares")
     @ResponseStatus(HttpStatus.CREATED)
-    String createAfterSchoolCare(@RequestBody AfterSchoolCare AfterSchoolCare) {
-        return "Not yet implemented";
+    AfterSchoolCareDTO createAfterSchoolCare(@RequestBody AfterSchoolCare newAfterSchoolCare) {
+        return AfterSchoolCareConverter.toDto(afterSchoolCareService.save(newAfterSchoolCare));
     }
 
-    @GetMapping("/afterschoolcare/{id}")
-    String getAfterSchoolCare(@PathVariable @Min(1) Long id) {
-        return "Not yet implemented";
+    @GetMapping("/after_school_cares/{id}")
+    AfterSchoolCareDTO getAfterSchoolCare(@PathVariable @Min(1) Long id) {
+        return AfterSchoolCareConverter.toDto(afterSchoolCareService.findOne(id));
     }
 
-    @PatchMapping("/afterschoolcare/{id}")
-    String changeAfterSchoolCare(@RequestBody AfterSchoolCare AfterSchoolCare, @PathVariable Long id) {
-        return "Not yet implemented";
+    @PatchMapping("/after_school_cares/{id}")
+    AfterSchoolCareDTO changeAfterSchoolCare(@RequestBody AfterSchoolCare AfterSchoolCare, @PathVariable Long id) {
+        AfterSchoolCare afterSchoolCare = afterSchoolCareService.findOne(id);
 
+        // TODO: attributes to be implemented
+
+        afterSchoolCareService.save(afterSchoolCare);
+
+        return AfterSchoolCareConverter.toDto(afterSchoolCare);
     }
 
-    @DeleteMapping("/afterschoolcare/{id}")
-    String deleteAfterSchoolCare(@PathVariable Long id) {
-        return "Not yet implemented";
+    @DeleteMapping("/after_school_cares/{id}")
+    void deleteAfterSchoolCare(@PathVariable Long id) {
+        afterSchoolCareService.deleteById(id);
     }
 
     @GetMapping("/invoices")
