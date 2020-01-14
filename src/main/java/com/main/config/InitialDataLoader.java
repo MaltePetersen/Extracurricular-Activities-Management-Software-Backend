@@ -130,7 +130,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		afterSchoolCareService.save(afternoonCare);
 
 		Attendance attendance = new Attendance();
-		attendance.setAdditionalInformation("Informations");
+		attendance.setNote("Informations");
 		attendance.setArrivalTime(LocalDateTime.now());
 		attendance.setAfterSchoolCare(afternoonCare);
 		attendanceRepository.save(attendance);

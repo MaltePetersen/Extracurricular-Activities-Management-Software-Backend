@@ -67,16 +67,19 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 	@JoinTable(name = "schoolCoordinator_school", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "school_id"))
 	private List<School> schoolCoordinatorsSchools = new ArrayList<>();
 
+	@OneToMany(mappedBy = "child", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Attendance> attendances = new ArrayList<>();
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "school_id")
 	private School childSchool;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User parent;
-	
+
 	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<User> children = new ArrayList<>();
-	
+
 	private boolean isSchoolCoordinator;
 
 	@Column(name = "verified")
@@ -140,13 +143,13 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 	}
 
 	/**
-	 * 
+	 *
 	 * Eine Builder-Klasse, welche genutzt wird <br>
 	 * um Objekte von einer Klasse, die das Interface {@link IUser} implementiert,
 	 * <br>
 	 * zu erzeugen. <br>
-	 * 
-	 * 
+	 *
+	 *
 	 * @author Markus
 	 * @since 18.10.2019
 	 * @version 1.2
@@ -222,6 +225,12 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 			return this;
 		}
 
+		public UserBuilder<T> withUser(User user){
+			this.user = user;
+			return this;
+		}
+
+
 		public UserBuilder<T> withDto(IUserDTO userDTO) {
 			withName(userDTO.getUsername());
 			withAddress(userDTO.getAddress());
@@ -264,7 +273,7 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 
 		/**
 		 * Gibt eine neue Instanz der Klasse {@link UserBuilder} zurück.
-		 * 
+		 *
 		 * @param <U extends IUser>
 		 * @return Neue Instanz
 		 */
