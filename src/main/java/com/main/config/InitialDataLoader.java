@@ -82,7 +82,6 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		createRoleIfNotFound(UserRole.ROLE_SCHOOLCOORDINATOR.toString(), Arrays.asList());
 		createRoleIfNotFound(UserRole.ROLE_TEACHER.toString(), Arrays.asList());
 		createRoleIfNotFound(UserRole.ROLE_USER.toString(), Arrays.asList(resetPasswordPrivilege));
-
 		createRoleIfNotFound("ROLE_NEW_USER", Arrays.asList(resetTokenPrivilege));
 
 		alreadySetup = true;

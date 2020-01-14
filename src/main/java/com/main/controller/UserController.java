@@ -33,10 +33,12 @@ import com.main.model.interfaces.IVerificationToken;
 import com.main.repository.VerificationTokenRepository;
 import com.main.service.UserService;
 import com.main.util.UserDTOValidator;
-import com.main.util.register.OnRegistrationCompleteEvent;
-import com.main.util.register.OnResetPasswordEvent;
+import com.main.util.events.OnRegistrationCompleteEvent;
+import com.main.util.events.OnResetPasswordEvent;
 
 import lombok.extern.java.Log;
+
+import javax.validation.constraints.Email;
 
 @CrossOrigin
 @RestController
@@ -145,11 +147,12 @@ public class UserController {
         List<String> authorities = new ArrayList<GrantedAuthority>(authentication.getAuthorities()).stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         boolean changeAllPasswords = authorities.contains("ROLE_MANAGEMENT");
 
-
         Object obj = emailMap.get("email");
 
         if (obj == null)
             return new ResponseEntity<>("Please enter a real email", HttpStatus.BAD_REQUEST);
+
+        @Email
         String email = obj.toString();
 
         if (email.length() == 0)
@@ -158,22 +161,24 @@ public class UserController {
         try {
             String appUrl = request.getContextPath();
             IUser user = userService.findByEmail(email);
+            if (user == null) {
+                return new ResponseEntity<>("Error while sending the message", HttpStatus.BAD_REQUEST);
+            }
+
             if (!changeAllPasswords && user.getUsername().equals(authentication.getName())) {
                 eventPublisher
                         .publishEvent(new OnResetPasswordEvent(email, request.getLocale(), appUrl));
             } else if (changeAllPasswords) {
-                if (user != null) {
-                    eventPublisher
-                            .publishEvent(new OnResetPasswordEvent(email, request.getLocale(), appUrl));
-                } else {
-                    return new ResponseEntity<>("Wrong Email", HttpStatus.BAD_REQUEST);
-                }
+                eventPublisher
+                        .publishEvent(new OnResetPasswordEvent(email, request.getLocale(), appUrl));
+
             } else {
                 return new ResponseEntity<>("Error while sending the message", HttpStatus.BAD_REQUEST);
             }
 
 
         } catch (Exception e) {
+            log.info(e.getMessage());
             e.printStackTrace();
             return new ResponseEntity<>("Error while sending the message", HttpStatus.BAD_REQUEST);
         }

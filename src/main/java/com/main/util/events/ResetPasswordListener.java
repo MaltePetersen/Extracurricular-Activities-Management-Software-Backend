@@ -1,15 +1,16 @@
-package com.main.util.register;
+package com.main.util.events;
 
+import lombok.extern.java.Log;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import com.main.model.User;
 import com.main.model.interfaces.IContactDetails;
 import com.main.model.interfaces.IUser;
 import com.main.service.EmailService;
 import com.main.service.UserService;
 
 @Component
+@Log
 public class ResetPasswordListener implements ApplicationListener<OnResetPasswordEvent> {
 
 	private EmailService emailService;
@@ -33,7 +34,9 @@ public class ResetPasswordListener implements ApplicationListener<OnResetPasswor
 		
 		String newPassword = userService.changePassword(user);
 		System.out.println("Neues Passwort lautet: " + newPassword);
+		String email = contactDetails.getEmail();
 		
-		emailService.sendSimpleMessage(contactDetails.getEmail(), "Passwort zurücksetzen" , newPassword);
+		emailService.sendSimpleMessage(email, "Passwort zurücksetzen" , newPassword);
+		log.info("Sending an email to " + email + " in event: " + ResetPasswordListener.class.getName());
 	}
 }

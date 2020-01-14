@@ -16,22 +16,6 @@ import com.main.dto.UserDTO;
 @RestController
 @CrossOrigin
 public class ParentController {
-
-	@GetMapping("/api/parent")
-	public ResponseEntity<Void> isParent(Authentication auth) {
-		if (auth != null) {
-			List<String> roles = new ArrayList<>();
-			if (auth != null)
-				auth.getAuthorities().forEach((a) -> {
-					roles.add(a.getAuthority());
-				});
-			if(roles.contains("ROLE_PARENT")) {
-				return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
-			}
-
-		}
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	}
 	
 	@PostMapping("/api/parent/addChild")
 	public ResponseEntity<String> addChild(@RequestBody UserDTO userDTO, Authentication auth){
