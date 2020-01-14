@@ -41,20 +41,21 @@ public class UserData {
                 .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").build();
         builder = User.UserBuilder.next();
         User child = builder.withName("Child_Test").withPassword(encoder.encode("password")).withFullname("Malte Petersen")
-                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").build();
-
-
+                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").withSchoolClass("7a").build();
+        builder = User.UserBuilder.next();
+        User child2 = builder.withName("Child_Test2").withPassword(encoder.encode("password")).withFullname("Malte Petersen 2")
+                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").withSchoolClass("7b").build();
         parent.setVerified(true);
         employee.setVerified(true);
         teacher.setVerified(true);
         child.setVerified(true);
-		child2.setVerified(true);
+        child2.setVerified(true);
         management.setVerified(true);
         Map<User, String> users = new HashMap<>();
         users.put(employee, "EMPLOYEE");
         users.put(teacher, "TEACHER");
         users.put(child, "CHILD");
-		users.put(child2, "CHILD");
+        users.put(child2, "CHILD");
         users.put(parent, "PARENT");
         users.put(management, "MANAGEMENT");
         return users;
