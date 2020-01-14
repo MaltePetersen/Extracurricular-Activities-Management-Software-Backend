@@ -18,10 +18,12 @@ public class AttendanceConverter {
         }
 
         //setChild
-        User.UserBuilder builder = User.UserBuilder.next();
-        builder.withUser((User) attendance.getChild());
-        IUserDTO userDTO = builder.toDto("CHILD");
-        attendanceDTO.setChild(userDTO);
+        if (attendance.getChild() != null) {
+            User.UserBuilder builder = User.UserBuilder.next();
+            builder.withUser(attendance.getChild());
+            IUserDTO userDTO = builder.toDto("CHILD");
+            attendanceDTO.setChild(userDTO);
+        }
 
         attendanceDTO.setArrivalTime(attendance.getArrivalTime());
 
@@ -32,6 +34,5 @@ public class AttendanceConverter {
         attendanceDTO.setStatus(attendance.determineStatus());
 
         return attendanceDTO;
-
     }
 }

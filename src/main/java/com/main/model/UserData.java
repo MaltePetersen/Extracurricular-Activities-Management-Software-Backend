@@ -48,11 +48,13 @@ public class UserData {
         employee.setVerified(true);
         teacher.setVerified(true);
         child.setVerified(true);
+		child2.setVerified(true);
         management.setVerified(true);
         Map<User, String> users = new HashMap<>();
         users.put(employee, "EMPLOYEE");
         users.put(teacher, "TEACHER");
         users.put(child, "CHILD");
+		users.put(child2, "CHILD");
         users.put(parent, "PARENT");
         users.put(management, "MANAGEMENT");
         return users;

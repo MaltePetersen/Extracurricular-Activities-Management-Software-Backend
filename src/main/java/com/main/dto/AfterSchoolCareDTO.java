@@ -1,5 +1,6 @@
 package com.main.dto;
 
+import com.main.dto.interfaces.IUserDTO;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -19,7 +20,7 @@ public class AfterSchoolCareDTO {
 
 	private Long participatingSchool;
 
-	private List<Long> attendances;
-	
-	private Long employee;
+	private IUserDTO employee;
+
+	private List<AttendanceDTO> attendances;
 }

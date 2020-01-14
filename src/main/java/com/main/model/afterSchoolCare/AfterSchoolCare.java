@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.*;
 import com.main.model.Attendance;
 import com.main.model.School;
+import com.main.model.User;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -70,13 +71,14 @@ public abstract class AfterSchoolCare {
 
 	private LocalDateTime endTime;
 
-	@OneToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "school_id", referencedColumnName = "id")
 	private School participatingSchool;
 
 	// Leiter
-	// TODO: employee to be correctly implemented
-//	private User employee;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	private User employee;
 
 	@OneToMany(mappedBy = "afterSchoolCare", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Attendance> attendances = new ArrayList<>();
