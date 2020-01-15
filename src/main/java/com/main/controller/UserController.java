@@ -43,6 +43,7 @@ import javax.validation.constraints.Email;
 @CrossOrigin
 @RestController
 @Log
+@RequestMapping("/user")
 public class UserController {
     private UserService userService;
     private VerificationTokenRepository verificationTokenRepository;
@@ -194,5 +195,17 @@ public class UserController {
         List<String> list = new ArrayList<>();
         auth.getAuthorities().forEach((a) -> list.add(a.getAuthority()));
         return list;
+    }
+
+
+    @CrossOrigin
+    @GetMapping("/profile")
+    public UserDTO getUserByAuth(Authentication auth) {
+        if (auth == null)
+            return null;
+        IUser user = userService.findByUsername(auth.getName());
+        if (user == null)
+            return null;
+        return userService.toDto(user);
     }
 }

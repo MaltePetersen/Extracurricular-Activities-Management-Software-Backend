@@ -12,17 +12,18 @@ import com.main.model.interfaces.IUser;
 import com.main.model.interfaces.IVerificationToken;
 
 public interface UserService {
-    public ResponseEntity<String> save(IUserDTO userDTO, Authentication auth);
-    public void update(User user);
-	public IUser createAccount(UserDTO userDTO, Authentication auth);
-	public IVerificationToken createVerificationToken(User user, String token);
-	public IUser findByEmail(String email);
-	public boolean emailExist(String email);
-	public void deleteUser(User user);
-	public List<User> findAll();
-	public IUser findByUsername(String username);
-    public User findOne(Long id);
-	public String changePassword(IUser user);
-	public List<User> findAllByVerified(boolean b);
+    ResponseEntity<String> save(IUserDTO userDTO, Authentication auth);
+    void update(User user);
+	IUser createAccount(UserDTO userDTO, Authentication auth);
+	IVerificationToken createVerificationToken(User user, String token);
+	IUser findByEmail(String email);
+	boolean emailExist(String email);
+	void deleteUser(User user);
+	List<User> findAll();
+	IUser findByUsername(String username);
+    User findOne(Long id);
+	String changePassword(IUser user);
+	List<User> findAllByVerified(boolean b);
+    UserDTO toDto(IUser user);
 }
 

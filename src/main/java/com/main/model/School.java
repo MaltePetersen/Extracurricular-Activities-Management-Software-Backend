@@ -49,8 +49,8 @@ public class School implements IContactDetails, ISchool {
 	@OneToMany(mappedBy = "childSchool", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<User> children = new ArrayList<>();
 
-	@OneToOne(mappedBy = "participatingSchool")
-	private AfterSchoolCare afterSchoolCare;
+	@OneToMany(mappedBy = "participatingSchool", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<AfterSchoolCare> afterSchoolCares;
 	
 	public School() {
 		name = null;

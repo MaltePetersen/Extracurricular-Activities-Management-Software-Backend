@@ -22,68 +22,77 @@ import io.restassured.http.ContentType;
 
 public class AssuredExtendedUserControllerTest extends AbstractAssuredTest {
 
-	@Autowired
-	private VerificationTokenRepository verificationTokenRepo;
+    @Autowired
+    private VerificationTokenRepository verificationTokenRepo;
 
-	protected IUserDTO parent;
+    protected IUserDTO parent;
 
-	@Override
-	@Before
-	public void setUp() throws Exception {
-		super.setUp();
-		parent = TestUserData.TEST_PARENT.getUserDTO();
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+        parent = TestUserData.TEST_PARENT.getUserDTO();
 
-		String value = mapToJson(parent);
+        String value = mapToJson(parent);
 
-		IUser user = userService.findByUsername(parent.getUsername());
-		if(user == null){
-			given().contentType("application/json").body(value).when().post(TestUserControllerPath.REGISTER.getUri()).then()
-					.assertThat().statusCode(201);
+        IUser user = userService.findByUsername(parent.getUsername());
+        if (user == null) {
+            given().contentType("application/json").body(value).when().post(TestUserControllerPath.REGISTER.getUri()).then()
+                    .assertThat().statusCode(201);
 
-			String token = verificationTokenRepo.findByUser_Email(parent.getEmail()).getToken();
+            String token = verificationTokenRepo.findByUser_Email(parent.getEmail()).getToken();
 
-			given().with().auth().preemptive().basic(parent.getUsername(), parent.getPassword()).log().headers().when()
-					.get(TestUserControllerPath.EMAILCONFIRMATION.getUri() + token).then().assertThat().statusCode(202);
-		}
-
-
-	}
-
-	@Test
-	public void passwordResetTest() throws Exception {
-		Map<String, Object> map = new HashMap<>();
-		map.put("email", parent.getEmail());
-		String json = mapToJson(map);
-		String oldPassword = getPassword();
-
-		// Login-Test
-		given().contentType(ContentType.JSON).with().auth().preemptive()
-				.basic(parent.getUsername(), parent.getPassword()).when().log().all().get("/login").then().assertThat()
-				.statusCode(200);
-		// Reset-Password-Test
-		given().contentType(ContentType.JSON).with().auth().preemptive()
-				.basic(parent.getUsername(), parent.getPassword()).body(json).log().headers().when()
-				.post(TestUserControllerPath.RESETPASSWORD.getUri()).then().assertThat().statusCode(202);
-		// Login-Test
-		given().contentType(ContentType.JSON).with().auth().preemptive()
-				.basic(parent.getUsername(), parent.getPassword()).when().get("/login").then().assertThat()
-				.statusCode(401);
-		String newPassword = getPassword();
-		Assert.assertNotEquals(oldPassword, newPassword);
+            given().with().auth().preemptive().basic(parent.getUsername(), parent.getPassword()).log().headers().when()
+                    .get(TestUserControllerPath.EMAILCONFIRMATION.getUri() + token).then().assertThat().statusCode(202);
+        }
 
 
+    }
 
-	}
+    @Test
+    public void passwordResetTest() throws Exception {
+        Map<String, Object> map = new HashMap<>();
+        map.put("email", parent.getEmail());
+        String json = mapToJson(map);
+        String oldPassword = getPassword();
 
-	@Test
-	public void passwordResetNegativeTest() throws Exception {
+        // Login-Test
+        given().contentType(ContentType.JSON).with().auth().preemptive()
+                .basic(parent.getUsername(), parent.getPassword()).when().log().all().get(TestUserControllerPath.LOGIN.getUri()).then().assertThat()
+                .statusCode(200);
+        // Reset-Password-Test
+        given().contentType(ContentType.JSON).with().auth().preemptive()
+                .basic(parent.getUsername(), parent.getPassword()).body(json).log().headers().when()
+                .post(TestUserControllerPath.RESETPASSWORD.getUri()).then().assertThat().statusCode(202);
+        // Login-Test
+        given().contentType(ContentType.JSON).with().auth().preemptive()
+                .basic(parent.getUsername(), parent.getPassword()).when().get(TestUserControllerPath.LOGIN.getUri()).then().assertThat()
+                .statusCode(401);
 
-	}
+        String newPassword = getPassword();
+        Assert.assertNotEquals(oldPassword, newPassword);
 
-	private String getPassword() {
-		UserRepository userRepository = context.getBean(UserRepository.class);
-		IUser user = userRepository.findByUsername(parent.getUsername());
-		return user.getPassword();
-	}
+
+    }
+
+ /*   @Test
+    public void authTest() throws Exception {
+    	given().with().auth().preemptive()
+				.basic(parent.getUsername(), parent.getPassword())
+				.when()
+				.get("/profile")
+				.then().assertThat().statusCode(200);
+    }
+*/
+    @Test
+    public void passwordResetNegativeTest() throws Exception {
+
+    }
+
+    private String getPassword() {
+        UserRepository userRepository = context.getBean(UserRepository.class);
+        IUser user = userRepository.findByUsername(parent.getUsername());
+        return user.getPassword();
+    }
 
 }

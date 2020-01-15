@@ -1,8 +1,10 @@
 package com.main.data;
 
+import com.main.model.Privilege;
+
 public enum TestUserControllerPath {
-	REGISTER("/register"), RESENDTOKEN("/resendToken"), EMAILCONFIRMATION("/registrationConfirm?token="), RESETPASSWORD("/resetPassword");
-	
+	REGISTER("/user/register"), RESENDTOKEN("/user/resendToken"), EMAILCONFIRMATION("/user/registrationConfirm?token="), RESETPASSWORD("/user/resetPassword"), LOGIN("/user/login");
+
 	private String path;
 	
 	public String getUri() {

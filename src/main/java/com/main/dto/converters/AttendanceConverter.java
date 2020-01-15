@@ -18,7 +18,7 @@ public class AttendanceConverter {
         }
 
         //setChild
-        if(attendance.getChild() != null) {
+        if (attendance.getChild() != null) {
             User.UserBuilder builder = User.UserBuilder.next();
             builder.withUser(attendance.getChild());
             IUserDTO userDTO = builder.toDto("CHILD");
@@ -34,6 +34,5 @@ public class AttendanceConverter {
         attendanceDTO.setStatus(attendance.determineStatus());
 
         return attendanceDTO;
-
     }
 }
