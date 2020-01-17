@@ -2,6 +2,7 @@ package com.main.config;
 
 import com.main.model.*;
 import com.main.model.afterSchoolCare.AfternoonCare;
+import com.main.model.afterSchoolCare.Remedial;
 import com.main.model.user.UserPrivilege;
 import com.main.model.user.UserRole;
 import com.main.repository.*;
@@ -14,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -85,7 +85,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 		alreadySetup = true;
 		createUsers();
-		createSchools();
+		createSchoolsAndAfterSchoolCares();
 		log.info("The data has been initialized.");
 	}
 
@@ -115,29 +115,57 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	}
 
 	@Transactional
-	void createSchools() {
+	void createSchoolsAndAfterSchoolCares() {
 		// adds schools for simpler testing
 		School school1 = new School("Holstenschule", "Altonaer Str. 40, 24534 Neumünster");
 		schoolRepo.save(school1);
 
-		School school2 = new School("Klaus-Groth-Schule", "Winterbeker Weg 45, 24114 Kiel");
+		School school2 = new School("Klaus-Groth-Schule", " Parkstraße 1, 24534 Neumünster");
 		schoolRepo.save(school2);
 
 		School school3 = new School("Wilhelm-Tanck-Schule", "Färberstraße 25, 24534 Neumünster");
 		schoolRepo.save(school3);
+
 		AfternoonCare afternoonCare = new AfternoonCare();
+		afternoonCare.setName("Test-Nachmittagsbetreuung");
+		afternoonCare.setStartTime(LocalDateTime.of(2020, 4, 3, 12, 0));
+		afternoonCare.setEndTime(LocalDateTime.of(2020, 4, 3, 14, 30));
 		afternoonCare.setParticipatingSchool(school1);
+		afternoonCare.setEmployee(userRepository.findByUsername("Employee_Test"));
 		afterSchoolCareService.save(afternoonCare);
 
 		Attendance attendance = new Attendance();
-		attendance.setNote("Informations");
-		attendance.setArrivalTime(LocalDateTime.now());
+		attendance.setNote("Darf früher gehen");
+		attendance.setArrivalTime(LocalDateTime.of(2020, 4, 3, 12, 2));
 		attendance.setAfterSchoolCare(afternoonCare);
+		attendance.setChild(userRepository.findByUsername("Child_Test"));
 		attendanceRepository.save(attendance);
+
+		Attendance attendance3 = new Attendance();
+		attendance3.setArrivalTime(LocalDateTime.of(2020, 4, 3, 12, 5));
+		attendance3.setAfterSchoolCare(afternoonCare);
+		attendance3.setChild(userRepository.findByUsername("Child_Test2"));
+		attendanceRepository.save(attendance3);
 
 		afternoonCare.addAttendance(attendance);
 		afterSchoolCareService.save(afternoonCare);
 
+		Remedial remedial = new Remedial();
+		remedial.setName("Mathe Nachhilfe");
+		remedial.setStartTime(LocalDateTime.of(2020, 4, 5, 11, 0));
+		remedial.setEndTime(LocalDateTime.of(2020, 4, 5, 12, 15));
+		remedial.setParticipatingSchool(school1);
+		remedial.setEmployee(userRepository.findByUsername("Employee_Test"));
+		afterSchoolCareService.save(remedial);
+
+		Attendance attendance2 = new Attendance();
+		attendance2.setArrivalTime(LocalDateTime.of(2020, 4, 5, 10, 58));
+		attendance2.setAfterSchoolCare(remedial);
+		attendance2.setChild(userRepository.findByUsername("Child_Test"));
+		attendanceRepository.save(attendance2);
+
+		remedial.addAttendance(attendance);
+		afterSchoolCareService.save(remedial);
 	}
 
 	@Transactional

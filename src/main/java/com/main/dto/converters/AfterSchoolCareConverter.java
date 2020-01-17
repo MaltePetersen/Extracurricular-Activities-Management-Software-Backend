@@ -1,8 +1,9 @@
 package com.main.dto.converters;
 
 import com.main.dto.AfterSchoolCareDTO;
+import com.main.dto.interfaces.IUserDTO;
+import com.main.model.User;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
-import com.main.model.Attendance;
 
 import java.util.stream.Collectors;
 
@@ -19,13 +20,17 @@ public class AfterSchoolCareConverter {
 		if (afterSchoolCare.getParticipatingSchool() != null) {
 			afterSchoolCareDTO.setParticipatingSchool(afterSchoolCare.getParticipatingSchool().getId());
 		}
-//		if (afterSchoolCare.getEmployee() != null) {
-//			afterSchoolCareDTO.setEmployee(afterSchoolCare.getEmployee().getId());
-//		}
+
+		if (afterSchoolCare.getEmployee() != null) {
+			User.UserBuilder builder = User.UserBuilder.next();
+			builder.withUser(afterSchoolCare.getEmployee());
+			IUserDTO userDTO = builder.toDto("EMPLOYEE");
+			afterSchoolCareDTO.setEmployee(userDTO);
+		}
 
 		if (afterSchoolCare.getAttendances() != null) {
 			afterSchoolCareDTO.setAttendances(
-					afterSchoolCare.getAttendances().stream().map(Attendance::getId).collect(Collectors.toList()));
+					afterSchoolCare.getAttendances().stream().map(AttendanceConverter::toDto).collect(Collectors.toList()));
 		}
 
 		return afterSchoolCareDTO;

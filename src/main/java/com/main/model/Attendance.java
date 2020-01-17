@@ -52,8 +52,8 @@ public class Attendance {
 
         if (arrivalTime == null && leaveTime == null) {
             if (afterSchoolCare.getStartTime().isBefore(LocalDateTime.now())) {
-                return AttendanceStatus.REGISTERED;
-            } else return AttendanceStatus.OVERDUE;
+                return AttendanceStatus.OVERDUE;
+            } else return AttendanceStatus.REGISTERED;
         } else if (leaveTime == null) return AttendanceStatus.PRESENT;
         else if (arrivalTime != null) return AttendanceStatus.GONE;
         else return AttendanceStatus.ERROR;
@@ -65,15 +65,15 @@ public class Attendance {
     //Array Schülerdaten zur Darstellung der anwesenden Kinder (Name, Klasse, Betreuungsende und Info)
 
     public static class AttendanceStatus {
-        static final int ERROR = 0;
+        public static final int ERROR = 0;
 
-        static final int REGISTERED = 1;
+        public static final int REGISTERED = 1;
 
-        static final int OVERDUE = 2;
+        public static final int OVERDUE = 2;
 
-        static final int PRESENT = 3;
+        public static final int PRESENT = 3;
 
-        static final int GONE = 4;
+        public static final int GONE = 4;
 
     }
 
