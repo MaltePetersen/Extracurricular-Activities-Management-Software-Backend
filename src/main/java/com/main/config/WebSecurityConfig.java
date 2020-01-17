@@ -42,11 +42,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/child/**").hasAnyAuthority(UserRole.ROLE_CHILD.toString())
 				.antMatchers("/api/teacher/**").hasAnyAuthority(UserRole.ROLE_TEACHER.toString())
 				.antMatchers("/api/child/**").hasAnyAuthority(UserRole.ROLE_CHILD.toString())
-				.antMatchers(HttpMethod.POST, "/register").permitAll()
-				.antMatchers(HttpMethod.GET, "/auth").permitAll()
-				.antMatchers(HttpMethod.GET, "/registrationConfirm").permitAll()
-				.antMatchers(HttpMethod.GET, "/resendToken").hasAnyAuthority("ROLE_NEW_USER")
-				.antMatchers(HttpMethod.GET, "/resetPassword").hasAnyAuthority( UserPrivilege.RESET_PASSWORD.toString(), UserPrivilege.RESET_CHILD_PASSWORD.toString())
+				.antMatchers(HttpMethod.POST, "/user/register").permitAll()
+				.antMatchers(HttpMethod.GET, "/user/auth").permitAll()
+				.antMatchers(HttpMethod.GET, "/user/registrationConfirm").permitAll()
+				.antMatchers(HttpMethod.GET, "/user/profile").permitAll()
+				.antMatchers(HttpMethod.GET, "/user/resendToken").hasAnyAuthority("ROLE_NEW_USER")
+				.antMatchers(HttpMethod.GET, "/user/resetPassword").hasAnyAuthority( UserPrivilege.RESET_PASSWORD.toString(), UserPrivilege.RESET_CHILD_PASSWORD.toString())
 				.and()
 				.csrf().disable().formLogin().disable();
 	}
