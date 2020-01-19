@@ -36,12 +36,31 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 				// HTTP Basic authentication
 				.httpBasic().and().authorizeRequests()
-				.antMatchers("/api/parent/**").hasAnyAuthority(UserRole.ROLE_PARENT.toString())
-				.antMatchers("/api/employee/**").hasAnyAuthority(UserRole.ROLE_EMPLOYEE.toString())
-				.antMatchers("/api/management/**").hasAnyAuthority(UserRole.ROLE_MANAGEMENT.toString())
-				.antMatchers("/api/child/**").hasAnyAuthority(UserRole.ROLE_CHILD.toString())
-				.antMatchers("/api/teacher/**").hasAnyAuthority(UserRole.ROLE_TEACHER.toString())
-				.antMatchers("/api/child/**").hasAnyAuthority(UserRole.ROLE_CHILD.toString())
+				.antMatchers(HttpMethod.GET,"/api/parent/**").hasAnyAuthority(UserRole.ROLE_PARENT.toString())
+				.antMatchers(HttpMethod.POST,"/api/parent/**").hasAnyAuthority(UserRole.ROLE_PARENT.toString())
+				.antMatchers(HttpMethod.PUT, "/api/parent/**").hasAnyAuthority(UserRole.ROLE_PARENT.toString())
+				.antMatchers(HttpMethod.DELETE,"/api/parent/**").hasAnyAuthority(UserRole.ROLE_PARENT.toString())
+
+				.antMatchers(HttpMethod.GET,"/api/employee/**").hasAnyAuthority(UserRole.ROLE_EMPLOYEE.toString())
+				.antMatchers(HttpMethod.POST,"/api/employee/**").hasAnyAuthority(UserRole.ROLE_EMPLOYEE.toString())
+				.antMatchers(HttpMethod.PUT,"/api/employee/**").hasAnyAuthority(UserRole.ROLE_EMPLOYEE.toString())
+				.antMatchers(HttpMethod.DELETE,"/api/employee/**").hasAnyAuthority(UserRole.ROLE_EMPLOYEE.toString())
+
+				.antMatchers(HttpMethod.GET,"/api/management/**").hasAnyAuthority(UserRole.ROLE_MANAGEMENT.toString())
+				.antMatchers(HttpMethod.POST,"/api/management/**").hasAnyAuthority(UserRole.ROLE_MANAGEMENT.toString())
+				.antMatchers(HttpMethod.PUT,"/api/management/**").hasAnyAuthority(UserRole.ROLE_MANAGEMENT.toString())
+				.antMatchers(HttpMethod.DELETE,"/api/management/**").hasAnyAuthority(UserRole.ROLE_MANAGEMENT.toString())
+
+				.antMatchers(HttpMethod.GET,"/api/child/**").hasAnyAuthority(UserRole.ROLE_CHILD.toString())
+				.antMatchers(HttpMethod.POST,"/api/child/**").hasAnyAuthority(UserRole.ROLE_CHILD.toString())
+				.antMatchers(HttpMethod.PUT,"/api/child/**").hasAnyAuthority(UserRole.ROLE_CHILD.toString())
+				.antMatchers(HttpMethod.DELETE,"/api/child/**").hasAnyAuthority(UserRole.ROLE_CHILD.toString())
+
+				.antMatchers(HttpMethod.GET,"/api/teacher/**").hasAnyAuthority(UserRole.ROLE_TEACHER.toString())
+				.antMatchers(HttpMethod.POST,"/api/teacher/**").hasAnyAuthority(UserRole.ROLE_TEACHER.toString())
+				.antMatchers(HttpMethod.PUT,"/api/teacher/**").hasAnyAuthority(UserRole.ROLE_TEACHER.toString())
+				.antMatchers(HttpMethod.DELETE,"/api/teacher/**").hasAnyAuthority(UserRole.ROLE_TEACHER.toString())
+
 				.antMatchers(HttpMethod.POST, "/user/register").permitAll()
 				.antMatchers(HttpMethod.GET, "/user/auth").permitAll()
 				.antMatchers(HttpMethod.GET, "/user/registrationConfirm").permitAll()
