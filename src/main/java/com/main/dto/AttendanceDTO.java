@@ -1,6 +1,7 @@
 package com.main.dto;
 
-import com.main.dto.interfaces.IUserDTO;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.main.dto.converters.StringToLocalDatetimeConverter;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -12,12 +13,14 @@ public class AttendanceDTO {
 
     private Long afterSchoolCare;
 
-    private IUserDTO child;
+    private UserDTO child;
 
+    @JsonDeserialize(converter = StringToLocalDatetimeConverter.class)
     private LocalDateTime arrivalTime;
 
     //private LocalDateTime latestArrivalTime;
 
+    @JsonDeserialize(converter = StringToLocalDatetimeConverter.class)
     private LocalDateTime leaveTime;
 
     //private LocalDateTime predefinedLeaveTime;

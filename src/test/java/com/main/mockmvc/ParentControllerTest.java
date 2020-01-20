@@ -2,8 +2,11 @@ package com.main.mockmvc;
 
 import com.main.data.TestParentControllerPath;
 import com.main.dto.AfterSchoolCareDTO;
+import com.main.model.Attendance;
 import com.main.model.afterSchoolCare.AfternoonCare;
+import com.main.repository.UserRepository;
 import com.main.service.AfterSchoolCareService;
+import com.main.service.AttendanceService;
 import lombok.extern.java.Log;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +15,8 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertEquals;
 
@@ -22,11 +27,28 @@ public class ParentControllerTest extends AbstractMvcTest {
 	@Autowired
 	private AfterSchoolCareService afterSchoolCareService;
 
+	@Autowired
+	private AttendanceService attendanceService;
+
+	@Autowired
+	private UserRepository userRepository;
+
 	@Override
 	@Before
 	public void setUp() {
 		testAfternoonCare = new AfternoonCare();
 		testAfternoonCare.setName("Test-Nachmittagsbetreuung");
+		afterSchoolCareService.save(testAfternoonCare);
+
+		Attendance attendance = new Attendance();
+		attendance.setNote("Darf früher gehen");
+		attendance.setArrivalTime(LocalDateTime.of(2020, 4, 3, 12, 2));
+		attendance.setLeaveTime(LocalDateTime.of(2020, 4, 3, 12, 2));
+		attendance.setAfterSchoolCare(testAfternoonCare);
+//		attendance.setChild(userRepository.findByUsername("Child_Test"));
+		attendanceService.save(attendance);
+
+		testAfternoonCare.addAttendance(attendance);
 		afterSchoolCareService.save(testAfternoonCare);
 
 		super.setUp();
@@ -74,7 +96,9 @@ public class ParentControllerTest extends AbstractMvcTest {
 		AfterSchoolCareDTO resultAfternoonCare = objectMapper.readValue(content, AfterSchoolCareDTO.class);
 
 		assertEquals(testAfternoonCare.getId(), resultAfternoonCare.getId());
-		assertEquals("Test-Nachmittagsbetreuung", resultAfternoonCare.getName());
+		assertEquals(testAfternoonCare.getName(), resultAfternoonCare.getName());
+		assertEquals(testAfternoonCare.getAttendances().get(0).getNote(), resultAfternoonCare.getAttendances().get(0).getNote());
+//		assertEquals(testAfternoonCare.getAttendances().get(0).getChild().getUsername(), resultAfternoonCare.getAttendances().get(0).getChild().getUsername());
 	}
 
 	@Test
