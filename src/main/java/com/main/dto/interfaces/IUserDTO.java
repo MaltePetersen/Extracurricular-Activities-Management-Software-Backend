@@ -26,6 +26,11 @@ public interface IUserDTO {
 
 	void setSchoolClass(String schoolClass);
 
+	Long getChildSchool();
+
+	//childSchoolID
+	void setChildSchool(Long childSchool);
+
 	String getPhoneNumber();
 
 	void setPhoneNumber(String phoneNumber);

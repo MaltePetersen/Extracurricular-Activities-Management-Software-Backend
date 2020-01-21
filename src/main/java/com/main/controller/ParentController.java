@@ -7,8 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.Min;
 
-import com.main.dto.AfterSchoolCareDTO;
-import com.main.dto.SchoolDTO;
+import com.main.dto.*;
 import com.main.dto.converters.AfterSchoolCareConverter;
 import com.main.dto.interfaces.IUserDTO;
 import com.main.model.User;
@@ -37,7 +36,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import com.main.dto.UserDTO;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
 import org.springframework.web.context.request.WebRequest;
 
@@ -137,17 +135,16 @@ public class ParentController {
 
     @PostMapping("/child")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<String> createChild(@RequestBody UserDTO userDTO, Authentication auth, Errors errors,
-                                               WebRequest request) {
+    public ResponseEntity<String> createChild(@RequestBody ChildDTO childDTO, Authentication auth, Errors errors,
+                                              WebRequest request) {
+        UUID username = UUID.randomUUID();
+        childDTO.setUsername(username.toString());
+        UserDTO userDTO = (UserDTO) childDTO.toUserDTO(username.toString(), encoder.encode("password"), "test@test.de");
         userDTOValidator.validate(userDTO, errors);
         if (errors.hasErrors()) {
             return new ResponseEntity<>(createErrorString(errors), HttpStatus.BAD_REQUEST);
         }
 
-        UUID username = UUID.randomUUID();
-        userDTO.setUsername(username.toString());
-        userDTO.setPassword(encoder.encode("password"));
-        userDTO.setEmail("test@test.de");
         User registered = (User) userService.createAccount(userDTO, auth);
 
         if (registered == null)

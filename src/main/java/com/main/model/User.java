@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
+import com.main.dto.ChildDTO;
 import com.main.dto.SimpleUserDTO;
 import com.main.dto.UserDTO;
 import com.main.dto.interfaces.IUserDTO;
@@ -268,6 +269,7 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 			dto.setPassword(user.getPassword());
 			dto.setPhoneNumber(user.getPhoneNumber());
 			dto.setSchoolClass(user.getSchoolClass());
+    			dto.setChildSchool(user.getChildSchool().getId());
 			dto.setSubject(user.getSubject());
 //			if (user.getRoles() != null) {
 //				if (user.getRoles().size() != 0) {
