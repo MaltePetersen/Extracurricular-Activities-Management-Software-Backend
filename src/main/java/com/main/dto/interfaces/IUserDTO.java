@@ -28,10 +28,10 @@ public interface IUserDTO {
 
 	void setSchoolClass(String schoolClass);
 
-	Long getChildSchool();
+	/*Long getChildSchool();
 
 	//childSchoolID
-	void setChildSchool(Long childSchool);
+	void setChildSchool(Long childSchool);*/
 
 	String getPhoneNumber();
 

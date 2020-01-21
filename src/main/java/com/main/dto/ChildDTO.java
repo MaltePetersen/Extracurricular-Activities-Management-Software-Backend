@@ -29,7 +29,7 @@ public class ChildDTO {
         dto.setEmail(email);
         dto.setFullname(fullname);
         dto.setSchoolClass(schoolClass);
-        dto.setChildSchool(childSchool);
+        dto.setSchool(childSchool);
         return dto;
     }
 }

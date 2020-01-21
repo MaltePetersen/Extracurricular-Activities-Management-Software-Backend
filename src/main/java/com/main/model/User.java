@@ -255,18 +255,18 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
             return (T) user;
         }
 
-		public IUserDTO toDto(String type) {
-			IUserDTO dto = UserDTO.builder().build();
-			dto.setAddress(user.getAddress());
-			dto.setEmail(user.getEmail());
-			dto.setFullname(user.getFullname());
-			dto.setUsername(user.getUsername());
-			dto.setIban(user.getIban());
-			dto.setPassword(user.getPassword());
-			dto.setPhoneNumber(user.getPhoneNumber());
-			dto.setSchoolClass(user.getSchoolClass());
-			dto.setChildSchool(user.getChildSchool().getId());
-			dto.setSubject(user.getSubject());
+
+        public IUserDTO toDto(String type) {
+            IUserDTO dto = UserDTO.builder().build();
+            dto.setAddress(user.getAddress());
+            dto.setEmail(user.getEmail());
+            dto.setFullname(user.getFullname());
+            dto.setUsername(user.getUsername());
+            dto.setIban(user.getIban());
+            dto.setPassword(user.getPassword());
+            dto.setPhoneNumber(user.getPhoneNumber());
+            dto.setSchoolClass(user.getSchoolClass());
+            dto.setSubject(user.getSubject());
             if (user.getChildSchool() != null) {
                 dto.setSchool(user.getChildSchool().getId());
             }
@@ -277,28 +277,26 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 //			} else {
             dto.setUserType(type);
 //			}
-
             dto.setSchoolCoordinator(user.isSchoolCoordinator());
             return dto;
         }
 
-		public SimpleUserDTO toSimpleDto(String type) {
-			SimpleUserDTO dto = new SimpleUserDTO();
-			dto.setEmail(user.getEmail());
-			dto.setFullname(user.getFullname());
-			dto.setUsername(user.getUsername());
-			dto.setSchoolClass(user.getSchoolClass());
+        public SimpleUserDTO toSimpleDto(String type) {
+            SimpleUserDTO dto = new SimpleUserDTO();
+            dto.setEmail(user.getEmail());
+            dto.setFullname(user.getFullname());
+            dto.setUsername(user.getUsername());
+            dto.setSchoolClass(user.getSchoolClass());
 //			if (user.getRoles() != null) {
 //				if (user.getRoles().size() != 0) {
 //					dto.setUserType(user.getRoles().get(0).getName());
 //				}
 //			} else {
-			dto.setUserType(type);
+            dto.setUserType(type);
 //			}
-            dto.setChildSchool(user.getChildSchool().getId());
 
-			return dto;
-		}
+            return dto;
+        }
 
 		/**
 		 * Gibt eine neue Instanz der Klasse {@link UserBuilder} zurück.

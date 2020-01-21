@@ -98,8 +98,8 @@ public class UserServiceImpl implements UserService {
 			if (iuser != null) {
 				User user = (User) iuser;
 				user.addRole(role);
-				if (userDTO.getChildSchool() != null) {
-					School childSchool = schoolService.findOne(userDTO.getChildSchool());
+				if (userDTO.getSchool() != null) {
+					School childSchool = schoolService.findOne(userDTO.getSchool());
 					if (childSchool != null)
 						user.setChildSchool(childSchool);
 				}
