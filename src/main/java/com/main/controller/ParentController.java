@@ -8,12 +8,15 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.Min;
 
 import com.main.dto.AfterSchoolCareDTO;
+import com.main.dto.SchoolDTO;
 import com.main.dto.converters.AfterSchoolCareConverter;
 import com.main.dto.interfaces.IUserDTO;
 import com.main.model.User;
 import com.main.model.interfaces.IChild;
 import com.main.model.interfaces.IUser;
+import com.main.dto.converters.SchoolConverter;
 import com.main.service.AfterSchoolCareService;
+import com.main.service.SchoolService;
 import com.main.service.UserService;
 import com.main.util.UserDTOValidator;
 import com.main.util.events.OnRegistrationCompleteEvent;
@@ -42,6 +45,7 @@ import org.springframework.web.context.request.WebRequest;
 @RequestMapping("/api/parent")
 @CrossOrigin
 public class ParentController {
+    SchoolService schoolService;
     AfterSchoolCareService afterSchoolCareService;
     List<User> childs;
     private UserDTOValidator userDTOValidator;
@@ -49,12 +53,13 @@ public class ParentController {
     private ApplicationEventPublisher eventPublisher;
     private PasswordEncoder encoder;
 
-    ParentController(AfterSchoolCareService afterSchoolCareService, UserService userService, UserDTOValidator userDTOValidator, ApplicationEventPublisher eventPublisher, PasswordEncoder encoder) {
+    ParentController(AfterSchoolCareService afterSchoolCareService, UserService userService, UserDTOValidator userDTOValidator, ApplicationEventPublisher eventPublisher, PasswordEncoder encoder, SchoolService schoolService) {
         this.afterSchoolCareService = afterSchoolCareService;
         this.userService = userService;
         this.userDTOValidator = userDTOValidator;
         this.eventPublisher = eventPublisher;
         this.encoder = encoder;
+        this.schoolService = schoolService;
         childs = new ArrayList<>();
         //generateChildren();
     }
@@ -80,6 +85,11 @@ public class ParentController {
 
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/schools")
+    public List<SchoolDTO> getSchools() {
+        return schoolService.getAll().stream().map(SchoolConverter::toDto).collect(Collectors.toList());
     }
 
     @GetMapping("/booked_after_school_cares")

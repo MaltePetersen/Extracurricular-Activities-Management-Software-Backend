@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
+import com.main.dto.SimpleUserDTO;
 import com.main.dto.UserDTO;
 import com.main.dto.interfaces.IUserDTO;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
@@ -277,6 +278,23 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 //			}
 
 			dto.setSchoolCoordinator(user.isSchoolCoordinator());
+			return dto;
+		}
+
+		public SimpleUserDTO toSimpleDto(String type) {
+			SimpleUserDTO dto = new SimpleUserDTO();
+			dto.setEmail(user.getEmail());
+			dto.setFullname(user.getFullname());
+			dto.setUsername(user.getUsername());
+			dto.setSchoolClass(user.getSchoolClass());
+//			if (user.getRoles() != null) {
+//				if (user.getRoles().size() != 0) {
+//					dto.setUserType(user.getRoles().get(0).getName());
+//				}
+//			} else {
+			dto.setUserType(type);
+//			}
+
 			return dto;
 		}
 

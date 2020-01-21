@@ -8,6 +8,8 @@ import java.util.List;
 public interface AfterSchoolCareService {
 	List<AfterSchoolCare> getAll();
 
+	List<AfterSchoolCare> getAllByUser(String username);
+
     AfterSchoolCare findOne(Long id);
 
     AfterSchoolCare save(AfterSchoolCare newAfterSchoolCare);

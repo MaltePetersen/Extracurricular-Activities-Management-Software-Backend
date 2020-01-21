@@ -120,7 +120,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		School school1 = new School("Holstenschule", "Altonaer Str. 40, 24534 Neumünster");
 		schoolRepo.save(school1);
 
-		School school2 = new School("Klaus-Groth-Schule", " Parkstraße 1, 24534 Neumünster");
+		School school2 = new School("Klaus-Groth-Schule", "Parkstraße 1, 24534 Neumünster");
 		schoolRepo.save(school2);
 
 		School school3 = new School("Wilhelm-Tanck-Schule", "Färberstraße 25, 24534 Neumünster");
@@ -155,7 +155,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		remedial.setStartTime(LocalDateTime.of(2020, 4, 5, 11, 0));
 		remedial.setEndTime(LocalDateTime.of(2020, 4, 5, 12, 15));
 		remedial.setParticipatingSchool(school1);
-		remedial.setEmployee(userRepository.findByUsername("Employee_Test"));
+		remedial.setEmployee(userRepository.findByUsername("Employee_Test2"));
 		afterSchoolCareService.save(remedial);
 
 		Attendance attendance2 = new Attendance();
