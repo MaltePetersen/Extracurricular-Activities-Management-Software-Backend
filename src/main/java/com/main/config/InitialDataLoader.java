@@ -131,7 +131,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		afternoonCare.setStartTime(LocalDateTime.of(2020, 4, 3, 12, 0));
 		afternoonCare.setEndTime(LocalDateTime.of(2020, 4, 3, 14, 30));
 		afternoonCare.setParticipatingSchool(school1);
-		afternoonCare.setEmployee(userRepository.findByUsername("Employee_Test"));
+		afternoonCare.setOwner(userRepository.findByUsername("Employee_Test"));
 		afterSchoolCareService.save(afternoonCare);
 
 		Attendance attendance = new Attendance();
@@ -155,7 +155,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		remedial.setStartTime(LocalDateTime.of(2020, 4, 5, 11, 0));
 		remedial.setEndTime(LocalDateTime.of(2020, 4, 5, 12, 15));
 		remedial.setParticipatingSchool(school1);
-		remedial.setEmployee(userRepository.findByUsername("Employee_Test"));
+		remedial.setOwner(userRepository.findByUsername("Employee_Test"));
 		afterSchoolCareService.save(remedial);
 
 		Attendance attendance2 = new Attendance();

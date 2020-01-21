@@ -20,7 +20,7 @@ public class AfterSchoolCareDTO {
 
 	private Long participatingSchool;
 
-	private IUserDTO employee;
+	private IUserDTO owner;
 
 	private List<AttendanceDTO> attendances;
 }

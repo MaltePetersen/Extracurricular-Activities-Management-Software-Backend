@@ -30,5 +30,5 @@ public class UserDTO implements IUserDTO {
     private String iban;
     private String address;
     private boolean isSchoolCoordinator;
-
+    private Long school;
 }

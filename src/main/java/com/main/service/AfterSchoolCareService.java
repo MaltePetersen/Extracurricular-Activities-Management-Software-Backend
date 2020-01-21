@@ -1,5 +1,6 @@
 package com.main.service;
 
+import com.main.dto.AfterSchoolCareDTO;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.Attendance;
 
@@ -15,4 +16,8 @@ public interface AfterSchoolCareService {
     AfterSchoolCare addAttendance(Long id, Attendance attendance);
 
     void deleteById(Long id);
+
+    List<AfterSchoolCareDTO> findAllByTypeWorkingGroup();
+
+    AfterSchoolCareDTO createNew(AfterSchoolCareDTO afterSchoolCareDTO);
 }

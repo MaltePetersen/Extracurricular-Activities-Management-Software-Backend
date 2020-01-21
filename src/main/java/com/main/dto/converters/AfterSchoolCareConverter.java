@@ -17,15 +17,17 @@ public class AfterSchoolCareConverter {
 		afterSchoolCareDTO.setName(afterSchoolCare.getName());
 		afterSchoolCareDTO.setStartTime(afterSchoolCare.getStartTime());
 		afterSchoolCareDTO.setEndTime(afterSchoolCare.getEndTime());
+
+
 		if (afterSchoolCare.getParticipatingSchool() != null) {
 			afterSchoolCareDTO.setParticipatingSchool(afterSchoolCare.getParticipatingSchool().getId());
 		}
 
-		if (afterSchoolCare.getEmployee() != null) {
+		if (afterSchoolCare.getOwner() != null) {
 			User.UserBuilder builder = User.UserBuilder.next();
-			builder.withUser(afterSchoolCare.getEmployee());
+			builder.withUser(afterSchoolCare.getOwner());
 			IUserDTO userDTO = builder.toDto("EMPLOYEE");
-			afterSchoolCareDTO.setEmployee(userDTO);
+			afterSchoolCareDTO.setOwner(userDTO);
 		}
 
 		if (afterSchoolCare.getAttendances() != null) {
