@@ -73,6 +73,20 @@ public class ParentControllerTest extends AbstractMvcTest {
 
 	@Test
 	@WithMockUser(authorities = "ROLE_PARENT")
+	public void testGetSchoolsWithParentAuthority() throws Exception {
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(TestParentControllerPath.SCHOOLS.getUri())).andReturn();
+		assertEquals(200, mvcResult.getResponse().getStatus());
+	}
+
+	@Test
+	@WithAnonymousUser
+	public void testGetSchoolsWithoutAuthorities() throws Exception {
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(TestParentControllerPath.SCHOOLS.getUri())).andReturn();
+		assertEquals(401, mvcResult.getResponse().getStatus());
+	}
+
+	@Test
+	@WithMockUser(authorities = "ROLE_PARENT")
 	public void testGetAfternoonCaresWithParentAuthority() throws Exception {
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(TestParentControllerPath.AFTER_SCHOOL_CARES.getUri())).andReturn();
 		assertEquals(200, mvcResult.getResponse().getStatus());
