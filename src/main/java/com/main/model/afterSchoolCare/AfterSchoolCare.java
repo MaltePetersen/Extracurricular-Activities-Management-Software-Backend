@@ -20,71 +20,73 @@ import java.util.List;
  * ein Objekt für die Nachmittagsbetreuung.
  *
  * @author Bendix Tonn, Markus
- * @since 22.10.2019, 24.10.2019
  * @version 1.0, 1.1
+ * @since 22.10.2019, 24.10.2019
  */
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = As.PROPERTY, property = "type")
 @JsonSubTypes({
-		@JsonSubTypes.Type(value = AfternoonCare.class, name = "1"),
-		@JsonSubTypes.Type(value = WorkingGroup.class, name = "2"),
-		@JsonSubTypes.Type(value = Remedial.class, name = "3"),
-		@JsonSubTypes.Type(value = Amplification.class, name = "4")
+        @JsonSubTypes.Type(value = AfternoonCare.class, name = "1"),
+        @JsonSubTypes.Type(value = WorkingGroup.class, name = "2"),
+        @JsonSubTypes.Type(value = Remedial.class, name = "3"),
+        @JsonSubTypes.Type(value = Amplification.class, name = "4")
 })
 @Entity
 @Data
 public abstract class AfterSchoolCare {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	@Enumerated(EnumType.STRING)
-	protected Type type;
+    @Enumerated(EnumType.STRING)
+    protected Type type;
 
-	public enum Type {
-		AFTERNOON_CARE(1), WORKING_GROUP(2), REMEDIAL(3), AMPLIFICATION(4);
+    public enum Type {
+        AFTERNOON_CARE(1), WORKING_GROUP(2), REMEDIAL(3), AMPLIFICATION(4);
 
-		private int id;
+        private int id;
 
-		Type(int id) {
-			this.id = id;
-		}
+        Type(int id) {
+            this.id = id;
+        }
 
-		public int getId() {
-			return id;
-		}
+        public int getId() {
+            return id;
+        }
 
-		public Type getById(int id) {
-			for (Type type : Type.values()) {
-				if (type.getId() == id) {
-					return type;
-				}
-			}
+        public Type getById(int id) {
+            for (Type type : Type.values()) {
+                if (type.getId() == id) {
+                    return type;
+                }
+            }
 
-			return null;
-		}
-	}
+            return null;
+        }
+    }
 
-	private String name;
+    private String name;
 
-	private LocalDateTime startTime;
+    private LocalDateTime startTime;
 
-	private LocalDateTime endTime;
+    private LocalDateTime endTime;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "school_id", referencedColumnName = "id")
-	private School participatingSchool;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "school_id", referencedColumnName = "id")
+    private School participatingSchool;
 
-	// Leiter
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
-	private User employee;
+    // Leiter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User owner;
 
-	@OneToMany(mappedBy = "afterSchoolCare", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Attendance> attendances = new ArrayList<>();
+    @OneToMany(mappedBy = "afterSchoolCare", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Attendance> attendances = new ArrayList<>();
 
-	public void addAttendance(Attendance attendance) {
-		this.attendances.add(attendance);
-	}
+
+
+    public void addAttendance(Attendance attendance) {
+        this.attendances.add(attendance);
+    }
 
 }

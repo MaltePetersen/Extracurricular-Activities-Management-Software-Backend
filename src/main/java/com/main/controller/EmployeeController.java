@@ -1,34 +1,28 @@
 package com.main.controller;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.validation.constraints.Min;
-
 import com.main.dto.AfterSchoolCareDTO;
 import com.main.dto.InvoiceDTO;
 import com.main.dto.SchoolDTO;
 import com.main.dto.converters.AfterSchoolCareConverter;
 import com.main.dto.converters.SchoolConverter;
-import com.main.model.afterSchoolCare.AfterSchoolCare;
+import com.main.dto.converters.StringToLocalDatetimeConverter;
+import com.main.model.Attendance;
 import com.main.model.School;
+import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.interfaces.ISchool;
 import com.main.service.AfterSchoolCareService;
+import com.main.service.AttendanceService;
 import com.main.service.SchoolService;
-
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.Min;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -36,11 +30,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmployeeController {
     SchoolService schoolService;
     AfterSchoolCareService afterSchoolCareService;
+    AttendanceService attendanceService;
     List<InvoiceDTO> invoiceDTOs;
 
-    EmployeeController(SchoolService schoolService, AfterSchoolCareService afterSchoolCareService) {
+    EmployeeController(SchoolService schoolService, AfterSchoolCareService afterSchoolCareService, AttendanceService attendanceService) {
         this.schoolService = schoolService;
         this.afterSchoolCareService = afterSchoolCareService;
+        this.attendanceService = attendanceService;
         generateInvoices();
     }
 
@@ -90,9 +86,15 @@ public class EmployeeController {
         schoolService.deleteById(id);
     }
 
+    /**
+     * Gibt alle AfterSchoolCares zurück, bei denen der Employee Emyployee ist
+     *
+     * @param auth
+     * @return Liste an AfterSchoolCareDTOs
+     */
     @GetMapping("/after_school_cares")
-    public List<AfterSchoolCareDTO> getAfterSchoolCares() {
-        return afterSchoolCareService.getAll().stream().map(AfterSchoolCareConverter::toDto)
+    public List<AfterSchoolCareDTO> getAfterSchoolCares(Authentication auth) {
+        return afterSchoolCareService.getAllByUser(auth.getName()).stream().map(AfterSchoolCareConverter::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -107,20 +109,53 @@ public class EmployeeController {
         return AfterSchoolCareConverter.toDto(afterSchoolCareService.findOne(id));
     }
 
-    @PatchMapping("/after_school_cares/{id}")
-    AfterSchoolCareDTO changeAfterSchoolCare(@RequestBody AfterSchoolCare AfterSchoolCare, @PathVariable Long id) {
-        AfterSchoolCare afterSchoolCare = afterSchoolCareService.findOne(id);
-
-        // TODO: attributes to be implemented
-
-        afterSchoolCareService.save(afterSchoolCare);
-
-        return AfterSchoolCareConverter.toDto(afterSchoolCare);
-    }
-
     @DeleteMapping("/after_school_cares/{id}")
     void deleteAfterSchoolCare(@PathVariable Long id) {
         afterSchoolCareService.deleteById(id);
+    }
+
+    /**
+     * Aktualisiert ArrivalTime und / oder LeaveTime einer Attendance, kann auch auf null gesetzt werden
+     *
+     * @param update Map mit Keys und Values
+     * @param id     Id der Attendance
+     * @return Gibt die verknüpfte AfterSchoolCare als DTO zurück
+     */
+    @PatchMapping("/attendance/{id}")
+    AfterSchoolCareDTO updateAttendance(@RequestBody Map<String, String> update, @PathVariable Long id) {
+        Attendance attendance = attendanceService.findOne(id);
+
+        String arrivalTimeString = update.get("arrivalTime");
+        if (arrivalTimeString != null && !arrivalTimeString.isEmpty()) {
+            LocalDateTime arrivalTime = (new StringToLocalDatetimeConverter()).convert(arrivalTimeString);
+            if (arrivalTime != null) {
+                attendance.setArrivalTime(arrivalTime);
+            }
+        } else {
+            if (update.containsKey("arrivalTime") && arrivalTimeString == null) {
+                // arrivalTime darf nur null gesetzt werden, wenn keine leaveTime gesetzt ist
+                if (attendance.getLeaveTime() == null) {
+                    attendance.setArrivalTime(null);
+                }
+            }
+        }
+
+        String leaveTimeString = update.get("leaveTime");
+        if (leaveTimeString != null && !leaveTimeString.isEmpty()) {
+            LocalDateTime leaveTime = (new StringToLocalDatetimeConverter()).convert(leaveTimeString);
+            if (leaveTime != null) {
+                // leaveTime darf nur gesetzt werden, wenn eine arrivalTime gesetzt ist
+                if (attendance.getArrivalTime() != null) {
+                    attendance.setLeaveTime(leaveTime);
+                }
+            }
+        } else {
+            if (update.containsKey("leaveTime") && arrivalTimeString == null) {
+                attendance.setLeaveTime(null);
+            }
+        }
+
+        return AfterSchoolCareConverter.toDto(attendanceService.save(attendance).getAfterSchoolCare());
     }
 
     @GetMapping("/invoices")

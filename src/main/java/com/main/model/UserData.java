@@ -37,6 +37,9 @@ public class UserData {
         User employee = builder.withName("Employee_Test").withPassword(encoder.encode("password")).withFullname("Malte Petersen")
                 .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").build();
         builder = User.UserBuilder.next();
+        User employee2 = builder.withName("Employee_Test2").withPassword(encoder.encode("password")).withFullname("Mitarbeiter Malte 2")
+                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").build();
+        builder = User.UserBuilder.next();
         User teacher = builder.withName("Teacher_Test").withPassword(encoder.encode("password")).withFullname("Malte Petersen")
                 .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").build();
         builder = User.UserBuilder.next();
@@ -47,12 +50,14 @@ public class UserData {
                 .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").withSchoolClass("7b").build();
         parent.setVerified(true);
         employee.setVerified(true);
+        employee2.setVerified(true);
         teacher.setVerified(true);
         child.setVerified(true);
         child2.setVerified(true);
         management.setVerified(true);
         Map<User, String> users = new HashMap<>();
         users.put(employee, "EMPLOYEE");
+        users.put(employee2, "EMPLOYEE");
         users.put(teacher, "TEACHER");
         users.put(child, "CHILD");
         users.put(child2, "CHILD");

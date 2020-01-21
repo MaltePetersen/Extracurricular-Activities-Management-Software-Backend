@@ -23,11 +23,12 @@ public class UserDTO implements IUserDTO {
     @NotBlank(message = "Fullname is mandatory")
     private String fullname;
     private String schoolClass;
-  
+    private Long childSchool;
+
 	private String phoneNumber;
     private String subject;
     private String iban;
     private String address;
     private boolean isSchoolCoordinator;
-
+    private Long school;
 }
