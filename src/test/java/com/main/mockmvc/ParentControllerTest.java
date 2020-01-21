@@ -38,7 +38,7 @@ public class ParentControllerTest extends AbstractMvcTest {
 	public void setUp() {
 		testAfternoonCare = new AfternoonCare();
 		testAfternoonCare.setName("Test-Nachmittagsbetreuung");
-		testAfternoonCare.setEmployee(userRepository.findByUsername("Employee_Test"));
+		testAfternoonCare.setOwner(userRepository.findByUsername("Employee_Test"));
 		afterSchoolCareService.save(testAfternoonCare);
 
 		Attendance attendance = new Attendance();
@@ -73,6 +73,20 @@ public class ParentControllerTest extends AbstractMvcTest {
 
 	@Test
 	@WithMockUser(authorities = "ROLE_PARENT")
+	public void testGetSchoolsWithParentAuthority() throws Exception {
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(TestParentControllerPath.SCHOOLS.getUri())).andReturn();
+		assertEquals(200, mvcResult.getResponse().getStatus());
+	}
+
+	@Test
+	@WithAnonymousUser
+	public void testGetSchoolsWithoutAuthorities() throws Exception {
+		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(TestParentControllerPath.SCHOOLS.getUri())).andReturn();
+		assertEquals(401, mvcResult.getResponse().getStatus());
+	}
+
+	@Test
+	@WithMockUser(authorities = "ROLE_PARENT")
 	public void testGetAfternoonCaresWithParentAuthority() throws Exception {
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(TestParentControllerPath.AFTER_SCHOOL_CARES.getUri())).andReturn();
 		assertEquals(200, mvcResult.getResponse().getStatus());
@@ -98,7 +112,7 @@ public class ParentControllerTest extends AbstractMvcTest {
 
 		assertEquals(testAfternoonCare.getId(), resultAfternoonCare.getId());
 		assertEquals(testAfternoonCare.getName(), resultAfternoonCare.getName());
-		assertEquals(testAfternoonCare.getEmployee().getUsername(), resultAfternoonCare.getEmployee().getUsername());
+		assertEquals(testAfternoonCare.getOwner().getUsername(), resultAfternoonCare.getOwner().getUsername());
 		assertEquals(testAfternoonCare.getAttendances().get(0).getNote(), resultAfternoonCare.getAttendances().get(0).getNote());
 		assertEquals(testAfternoonCare.getAttendances().get(0).getChild().getUsername(), resultAfternoonCare.getAttendances().get(0).getChild().getUsername());
 	}

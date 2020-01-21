@@ -8,6 +8,7 @@ import java.util.Map;
 import com.main.model.User;
 import com.main.model.interfaces.IUser;
 import com.main.repository.UserRepository;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,9 +46,8 @@ public class AssuredExtendedUserControllerTest extends AbstractAssuredTest {
             given().with().auth().preemptive().basic(parent.getUsername(), parent.getPassword()).log().headers().when()
                     .get(TestUserControllerPath.EMAILCONFIRMATION.getUri() + token).then().assertThat().statusCode(202);
         }
-
-
     }
+
 
     @Test
     public void passwordResetTest() throws Exception {
@@ -57,9 +57,7 @@ public class AssuredExtendedUserControllerTest extends AbstractAssuredTest {
         String oldPassword = getPassword();
 
         // Login-Test
-        given().contentType(ContentType.JSON).with().auth().preemptive()
-                .basic(parent.getUsername(), parent.getPassword()).when().log().all().get(TestUserControllerPath.LOGIN.getUri()).then().assertThat()
-                .statusCode(200);
+        sendGetRequestWithAuth(parent, TestUserControllerPath.LOGIN.getUri()).statusCode(200);
         // Reset-Password-Test
         given().contentType(ContentType.JSON).with().auth().preemptive()
                 .basic(parent.getUsername(), parent.getPassword()).body(json).log().headers().when()
@@ -75,15 +73,17 @@ public class AssuredExtendedUserControllerTest extends AbstractAssuredTest {
 
     }
 
- /*   @Test
-    public void authTest() throws Exception {
-    	given().with().auth().preemptive()
-				.basic(parent.getUsername(), parent.getPassword())
-				.when()
-				.get("/profile")
-				.then().assertThat().statusCode(200);
-    }
-*/
+
+
+    /*   @Test
+       public void authTest() throws Exception {
+           given().with().auth().preemptive()
+                   .basic(parent.getUsername(), parent.getPassword())
+                   .when()
+                   .get("/profile")
+                   .then().assertThat().statusCode(200);
+       }
+   */
     @Test
     public void passwordResetNegativeTest() throws Exception {
 
