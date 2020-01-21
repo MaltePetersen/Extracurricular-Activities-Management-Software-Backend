@@ -112,7 +112,7 @@ public class ParentControllerTest extends AbstractMvcTest {
 
 		assertEquals(testAfternoonCare.getId(), resultAfternoonCare.getId());
 		assertEquals(testAfternoonCare.getName(), resultAfternoonCare.getName());
-		assertEquals(testAfternoonCare.getOwner().getUsername(), resultAfternoonCare.getName());
+		assertEquals(testAfternoonCare.getOwner().getUsername(), resultAfternoonCare.getOwner().getUsername());
 		assertEquals(testAfternoonCare.getAttendances().get(0).getNote(), resultAfternoonCare.getAttendances().get(0).getNote());
 		assertEquals(testAfternoonCare.getAttendances().get(0).getChild().getUsername(), resultAfternoonCare.getAttendances().get(0).getChild().getUsername());
 	}
