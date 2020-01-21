@@ -8,10 +8,20 @@ import javax.validation.constraints.Min;
 
 import com.main.dto.AfterSchoolCareDTO;
 import com.main.dto.converters.AfterSchoolCareConverter;
+import com.main.dto.interfaces.IUserDTO;
+import com.main.model.User;
+import com.main.model.interfaces.IChild;
+import com.main.model.interfaces.IUser;
 import com.main.service.AfterSchoolCareService;
+import com.main.service.UserService;
+import com.main.util.UserDTOValidator;
+import com.main.util.events.OnRegistrationCompleteEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,26 +34,34 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.main.dto.UserDTO;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
+import org.springframework.web.context.request.WebRequest;
 
 @RestController
 @RequestMapping("/api/parent")
 @CrossOrigin
 public class ParentController {
     AfterSchoolCareService afterSchoolCareService;
-    List<UserDTO> childs;
+    List<User> childs;
+    private UserDTOValidator userDTOValidator;
+    private UserService userService;
+    private ApplicationEventPublisher eventPublisher;
 
-    ParentController(AfterSchoolCareService afterSchoolCareService) {
+    ParentController(AfterSchoolCareService afterSchoolCareService, UserService userService, UserDTOValidator userDTOValidator, ApplicationEventPublisher eventPublisher) {
         this.afterSchoolCareService = afterSchoolCareService;
-        generateChildren();
+        this.userService = userService;
+        this.userDTOValidator = userDTOValidator;
+        this.eventPublisher = eventPublisher;
+        childs = new ArrayList<>();
+        //generateChildren();
     }
 
-    private void generateChildren(){
+   /* private void generateChildren(){
         childs = new ArrayList<>();
         for (int i = 1; i < 10; i++) {
             UserDTO child = UserDTO.builder().address("Adresse" + i).fullname("Kind "+ i).userType("ROLE_CHILD").schoolClass(i + "b").username("Kind " + i).build();
             childs.add(child);
         }
-    }
+    }*/
 
     @GetMapping("/authority")
     public ResponseEntity<Void> isParent(Authentication auth) {
@@ -95,23 +113,46 @@ public class ParentController {
     }
 
     @GetMapping("/childs")
-    public List<UserDTO> getChilds() {
-        return childs;
+    public List<User> getChilds(@PathVariable Long parentID) {
+        return userService.findOne(parentID).getChildren();
     }
 
     @PostMapping("/child")
     @ResponseStatus(HttpStatus.CREATED)
-    void createChild(@RequestBody UserDTO child) {
-        childs.add(child);
+    public ResponseEntity<String> createChild(@RequestBody UserDTO userDTO, Long parentID, Authentication auth, Errors errors,
+                                               WebRequest request) {
+        userDTOValidator.validate(userDTO, errors);
+        if (errors.hasErrors()) {
+            return new ResponseEntity<>(createErrorString(errors), HttpStatus.BAD_REQUEST);
+        }
+
+        IUser registered = userService.createAccount(userDTO, auth);
+
+        if (registered == null)
+            return new ResponseEntity<>("Error creating the account", HttpStatus.BAD_REQUEST);
+
+        try {
+            String appUrl = request.getContextPath();
+            eventPublisher
+                    .publishEvent(new OnRegistrationCompleteEvent((User) registered, request.getLocale(), appUrl));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Fehler beim Versenden", HttpStatus.BAD_REQUEST);
+        }
+
+        //childs.add((User) registered);
+        ((User) registered).setParent(userService.findOne(parentID));
+        userService.findOne(parentID).getChildren().add((User) registered);
+        return new ResponseEntity<>("Created: " + registered.getRoles(), HttpStatus.CREATED);
     }
 
     @GetMapping("/child/{id}")
-    UserDTO getChild(@PathVariable @Min(1) int id) {
+    User getChild(@PathVariable @Min(1) int id) {
         return childs.get(id - 1);
     }
 
     @PatchMapping("/child/{id}")
-    void changeChild(@RequestBody UserDTO child, @PathVariable int id) {
+    void changeChild(@RequestBody User child, @PathVariable int id) {
         childs.set(id - 1, child);
 
     }
@@ -121,4 +162,9 @@ public class ParentController {
         childs.remove(id - 1);
     }
 
+    private String createErrorString(Errors errors) {
+        return errors.getAllErrors().stream().map(ObjectError::toString).collect(Collectors.joining(","));
+    }
+
 }
+

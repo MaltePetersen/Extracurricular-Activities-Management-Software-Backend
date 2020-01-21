@@ -244,7 +244,8 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 			withPassword(userDTO.getPassword());
 			withSchoolClass(userDTO.getSchoolClass());
 			withPhoneNumber(userDTO.getPhoneNumber());
-			return withSubject(userDTO.getSubject());
+			withSubject(userDTO.getSubject());
+			return this;
 		}
 
 		@SuppressWarnings("unchecked")
