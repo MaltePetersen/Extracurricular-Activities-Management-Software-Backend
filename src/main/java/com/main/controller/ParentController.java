@@ -7,8 +7,11 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.Min;
 
 import com.main.dto.AfterSchoolCareDTO;
+import com.main.dto.SchoolDTO;
 import com.main.dto.converters.AfterSchoolCareConverter;
+import com.main.dto.converters.SchoolConverter;
 import com.main.service.AfterSchoolCareService;
+import com.main.service.SchoolService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -29,10 +32,12 @@ import com.main.model.afterSchoolCare.AfterSchoolCare;
 @RequestMapping("/api/parent")
 @CrossOrigin
 public class ParentController {
+    SchoolService schoolService;
     AfterSchoolCareService afterSchoolCareService;
     List<UserDTO> childs;
 
-    ParentController(AfterSchoolCareService afterSchoolCareService) {
+    ParentController(SchoolService schoolService, AfterSchoolCareService afterSchoolCareService) {
+        this.schoolService = schoolService;
         this.afterSchoolCareService = afterSchoolCareService;
         generateChildren();
     }
@@ -58,6 +63,11 @@ public class ParentController {
 
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/schools")
+    public List<SchoolDTO> getSchools() {
+        return schoolService.getAll().stream().map(SchoolConverter::toDto).collect(Collectors.toList());
     }
 
     @GetMapping("/booked_after_school_cares")
