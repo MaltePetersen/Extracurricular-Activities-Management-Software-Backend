@@ -1,7 +1,7 @@
 package com.main.dto.converters;
 
 import com.main.dto.AfterSchoolCareDTO;
-import com.main.dto.interfaces.IUserDTO;
+import com.main.dto.SimpleUserDTO;
 import com.main.model.User;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
 
@@ -24,7 +24,7 @@ public class AfterSchoolCareConverter {
 		if (afterSchoolCare.getEmployee() != null) {
 			User.UserBuilder builder = User.UserBuilder.next();
 			builder.withUser(afterSchoolCare.getEmployee());
-			IUserDTO userDTO = builder.toDto("EMPLOYEE");
+			SimpleUserDTO userDTO = builder.toSimpleDto("EMPLOYEE");
 			afterSchoolCareDTO.setEmployee(userDTO);
 		}
 

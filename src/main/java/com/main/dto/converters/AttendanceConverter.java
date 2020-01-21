@@ -1,7 +1,7 @@
 package com.main.dto.converters;
 
 import com.main.dto.AttendanceDTO;
-import com.main.dto.interfaces.IUserDTO;
+import com.main.dto.SimpleUserDTO;
 import com.main.model.Attendance;
 import com.main.model.User;
 
@@ -21,7 +21,7 @@ public class AttendanceConverter {
         if (attendance.getChild() != null) {
             User.UserBuilder builder = User.UserBuilder.next();
             builder.withUser(attendance.getChild());
-            IUserDTO userDTO = builder.toDto("CHILD");
+            SimpleUserDTO userDTO = builder.toSimpleDto("CHILD");
             attendanceDTO.setChild(userDTO);
         }
 
