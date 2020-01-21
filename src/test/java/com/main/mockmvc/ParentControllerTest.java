@@ -38,7 +38,7 @@ public class ParentControllerTest extends AbstractMvcTest {
 	public void setUp() {
 		testAfternoonCare = new AfternoonCare();
 		testAfternoonCare.setName("Test-Nachmittagsbetreuung");
-		testAfternoonCare.setEmployee(userRepository.findByUsername("Employee_Test"));
+		testAfternoonCare.setOwner(userRepository.findByUsername("Employee_Test"));
 		afterSchoolCareService.save(testAfternoonCare);
 
 		Attendance attendance = new Attendance();
@@ -112,7 +112,7 @@ public class ParentControllerTest extends AbstractMvcTest {
 
 		assertEquals(testAfternoonCare.getId(), resultAfternoonCare.getId());
 		assertEquals(testAfternoonCare.getName(), resultAfternoonCare.getName());
-		assertEquals(testAfternoonCare.getEmployee().getUsername(), resultAfternoonCare.getEmployee().getUsername());
+		assertEquals(testAfternoonCare.getOwner().getUsername(), resultAfternoonCare.getName());
 		assertEquals(testAfternoonCare.getAttendances().get(0).getNote(), resultAfternoonCare.getAttendances().get(0).getNote());
 		assertEquals(testAfternoonCare.getAttendances().get(0).getChild().getUsername(), resultAfternoonCare.getAttendances().get(0).getChild().getUsername());
 	}

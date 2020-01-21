@@ -29,8 +29,8 @@ public class AfterSchoolCareConverter {
 			User.UserBuilder builder = User.UserBuilder.next();
 
 			builder.withUser(afterSchoolCare.getOwner());
-			IUserDTO userDTO = builder.toDto("EMPLOYEE");
-			afterSchoolCareDTO.setOwner((UserDTO) userDTO);
+			SimpleUserDTO userDTO = builder.toSimpleDto("EMPLOYEE");
+			afterSchoolCareDTO.setOwner(userDTO);
 		}
 
 		if (afterSchoolCare.getAttendances() != null) {
