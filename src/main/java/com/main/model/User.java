@@ -103,12 +103,6 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 		this.password = password;
 		this.fullname = fullname;
 	}
-    // Constructur normal User
-    User(String username, String password, String fullname) {
-        this.username = username;
-        this.password = password;
-        this.fullname = fullname;
-    }
 
     // Constructor Child
     User(String username, String password, String fullname, String schoolClass) {
