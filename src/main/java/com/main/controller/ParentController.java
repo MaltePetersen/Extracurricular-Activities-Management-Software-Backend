@@ -2,6 +2,7 @@ package com.main.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.Min;
@@ -20,6 +21,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -45,12 +47,14 @@ public class ParentController {
     private UserDTOValidator userDTOValidator;
     private UserService userService;
     private ApplicationEventPublisher eventPublisher;
+    private PasswordEncoder encoder;
 
-    ParentController(AfterSchoolCareService afterSchoolCareService, UserService userService, UserDTOValidator userDTOValidator, ApplicationEventPublisher eventPublisher) {
+    ParentController(AfterSchoolCareService afterSchoolCareService, UserService userService, UserDTOValidator userDTOValidator, ApplicationEventPublisher eventPublisher, PasswordEncoder encoder) {
         this.afterSchoolCareService = afterSchoolCareService;
         this.userService = userService;
         this.userDTOValidator = userDTOValidator;
         this.eventPublisher = eventPublisher;
+        this.encoder = encoder;
         childs = new ArrayList<>();
         //generateChildren();
     }
@@ -112,37 +116,47 @@ public class ParentController {
         return AfterSchoolCareConverter.toDto(afterSchoolCareService.findOne(id));
     }
 
-    @GetMapping("/childs")
-    public List<User> getChilds(@PathVariable Long parentID) {
-        return userService.findOne(parentID).getChildren();
+    @GetMapping("/children")
+    public List<UserDTO> getChilds(Authentication auth) {
+        return ((User) userService.findByUsername(auth.getName())).getChildren().stream().map((child)-> {
+            User.UserBuilder builder = User.UserBuilder.next();
+            builder.withUser(child);
+            return (UserDTO) builder.toDto("CHILD");
+        }).collect(Collectors.toList());
     }
 
     @PostMapping("/child")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<String> createChild(@RequestBody UserDTO userDTO, Long parentID, Authentication auth, Errors errors,
+    public ResponseEntity<String> createChild(@RequestBody UserDTO userDTO, Authentication auth, Errors errors,
                                                WebRequest request) {
         userDTOValidator.validate(userDTO, errors);
         if (errors.hasErrors()) {
             return new ResponseEntity<>(createErrorString(errors), HttpStatus.BAD_REQUEST);
         }
 
-        IUser registered = userService.createAccount(userDTO, auth);
+        UUID username = UUID.randomUUID();
+        userDTO.setUsername(username.toString());
+        userDTO.setPassword(encoder.encode("password"));
+        userDTO.setEmail("test@test.de");
+        User registered = (User) userService.createAccount(userDTO, auth);
 
         if (registered == null)
             return new ResponseEntity<>("Error creating the account", HttpStatus.BAD_REQUEST);
 
         try {
             String appUrl = request.getContextPath();
-            eventPublisher
-                    .publishEvent(new OnRegistrationCompleteEvent((User) registered, request.getLocale(), appUrl));
+            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("Fehler beim Versenden", HttpStatus.BAD_REQUEST);
         }
 
-        //childs.add((User) registered);
-        ((User) registered).setParent(userService.findOne(parentID));
-        userService.findOne(parentID).getChildren().add((User) registered);
+        if(auth.getName() != null && !auth.getName().isEmpty()) {
+            User parent = (User) userService.findByUsername(auth.getName());
+            registered.setParent(parent);
+            parent.addChild(registered);
+            userService.update(parent);
+        }
         return new ResponseEntity<>("Created: " + registered.getRoles(), HttpStatus.CREATED);
     }
 

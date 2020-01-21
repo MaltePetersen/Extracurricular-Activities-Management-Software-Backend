@@ -93,6 +93,10 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 		this.roles.add(role);
 	}
 
+	public void addChild(User child) {this.children.add(child);}
+
+
+
 	// Constructur normal User
 	User(String username, String password, String fullname) {
 		this.username = username;
