@@ -27,7 +27,12 @@ public class AfterSchoolCareServiceImpl implements AfterSchoolCareService {
 		return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
 	}
 
-    @Override
+	@Override
+	public List<AfterSchoolCare> getAllByUser(String username) {
+		return StreamSupport.stream(repository.findAll().spliterator(), false).filter(afterSchoolCare -> afterSchoolCare.getEmployee().getUsername().equals(username)).collect(Collectors.toList());
+	}
+
+	@Override
     public AfterSchoolCare findOne(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("after school care id not found: " + id));

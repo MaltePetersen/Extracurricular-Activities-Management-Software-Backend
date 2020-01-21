@@ -14,6 +14,7 @@ import com.main.service.AfterSchoolCareService;
 import com.main.service.AttendanceService;
 import com.main.service.SchoolService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
@@ -85,9 +86,15 @@ public class EmployeeController {
         schoolService.deleteById(id);
     }
 
+    /**
+     * Gibt alle AfterSchoolCares zurück, bei denen der Employee Emyployee ist
+     *
+     * @param auth
+     * @return Liste an AfterSchoolCareDTOs
+     */
     @GetMapping("/after_school_cares")
-    public List<AfterSchoolCareDTO> getAfterSchoolCares() {
-        return afterSchoolCareService.getAll().stream().map(AfterSchoolCareConverter::toDto)
+    public List<AfterSchoolCareDTO> getAfterSchoolCares(Authentication auth) {
+        return afterSchoolCareService.getAllByUser(auth.getName()).stream().map(AfterSchoolCareConverter::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -109,8 +116,9 @@ public class EmployeeController {
 
     /**
      * Aktualisiert ArrivalTime und / oder LeaveTime einer Attendance, kann auch auf null gesetzt werden
+     *
      * @param update Map mit Keys und Values
-     * @param id Id der Attendance
+     * @param id     Id der Attendance
      * @return Gibt die verknüpfte AfterSchoolCare als DTO zurück
      */
     @PatchMapping("/attendance/{id}")
@@ -142,7 +150,7 @@ public class EmployeeController {
                 }
             }
         } else {
-            if(update.containsKey("leaveTime") && arrivalTimeString == null) {
+            if (update.containsKey("leaveTime") && arrivalTimeString == null) {
                 attendance.setLeaveTime(null);
             }
         }

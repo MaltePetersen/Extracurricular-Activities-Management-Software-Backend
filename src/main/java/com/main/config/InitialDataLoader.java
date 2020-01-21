@@ -155,7 +155,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		remedial.setStartTime(LocalDateTime.of(2020, 4, 5, 11, 0));
 		remedial.setEndTime(LocalDateTime.of(2020, 4, 5, 12, 15));
 		remedial.setParticipatingSchool(school1);
-		remedial.setEmployee(userRepository.findByUsername("Employee_Test"));
+		remedial.setEmployee(userRepository.findByUsername("Employee_Test2"));
 		afterSchoolCareService.save(remedial);
 
 		Attendance attendance2 = new Attendance();
