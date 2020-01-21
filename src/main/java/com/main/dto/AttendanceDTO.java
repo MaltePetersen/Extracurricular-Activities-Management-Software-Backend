@@ -13,7 +13,7 @@ public class AttendanceDTO {
 
     private Long afterSchoolCare;
 
-    private UserDTO child;
+    private SimpleUserDTO child;
 
     @JsonDeserialize(converter = StringToLocalDatetimeConverter.class)
     private LocalDateTime arrivalTime;

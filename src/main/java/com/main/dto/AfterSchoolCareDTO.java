@@ -24,7 +24,7 @@ public class AfterSchoolCareDTO {
 
 	private Long participatingSchool;
 
-	private IUserDTO employee;
+	private SimpleUserDTO employee;
 
 	private List<AttendanceDTO> attendances;
 }
