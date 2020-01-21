@@ -125,7 +125,10 @@ public class EmployeeController {
             }
         } else {
             if (update.containsKey("arrivalTime") && arrivalTimeString == null) {
-                attendance.setArrivalTime(null);
+                // arrivalTime darf nur null gesetzt werden, wenn keine leaveTime gesetzt ist
+                if (attendance.getLeaveTime() == null) {
+                    attendance.setArrivalTime(null);
+                }
             }
         }
 
@@ -133,7 +136,10 @@ public class EmployeeController {
         if (leaveTimeString != null && !leaveTimeString.isEmpty()) {
             LocalDateTime leaveTime = (new StringToLocalDatetimeConverter()).convert(leaveTimeString);
             if (leaveTime != null) {
-                attendance.setLeaveTime(leaveTime);
+                // leaveTime darf nur gesetzt werden, wenn eine arrivalTime gesetzt ist
+                if (attendance.getArrivalTime() != null) {
+                    attendance.setLeaveTime(leaveTime);
+                }
             }
         } else {
             if(update.containsKey("leaveTime") && arrivalTimeString == null) {
