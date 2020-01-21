@@ -120,7 +120,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		School school1 = new School("Holstenschule", "Altonaer Str. 40, 24534 Neumünster");
 		schoolRepo.save(school1);
 
-		School school2 = new School("Klaus-Groth-Schule", " Parkstraße 1, 24534 Neumünster");
+		School school2 = new School("Klaus-Groth-Schule", "Parkstraße 1, 24534 Neumünster");
 		schoolRepo.save(school2);
 
 		School school3 = new School("Wilhelm-Tanck-Schule", "Färberstraße 25, 24534 Neumünster");
