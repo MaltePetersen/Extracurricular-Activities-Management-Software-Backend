@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Log
-public class AssuredUserController extends AbstractAssuredTest {
+public class AssuredUserControllerTest extends AbstractAssuredTest {
 
 	@Override
 	@Before

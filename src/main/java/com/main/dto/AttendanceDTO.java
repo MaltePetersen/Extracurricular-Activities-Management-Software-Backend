@@ -29,4 +29,6 @@ public class AttendanceDTO {
 
     private int status;
 
+    private SchoolDTO school;
+
 }

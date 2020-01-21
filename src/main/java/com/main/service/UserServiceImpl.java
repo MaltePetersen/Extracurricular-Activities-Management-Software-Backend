@@ -120,6 +120,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void deleteUser(User user) {
+		user.setChildSchool(null);
+
+
+		user.setAfterSchoolCares(null);
+		user.setAttendances(null);
+		user.setEmployeesSchools(null);
+
 		userRepository.delete(user);
 	}
 
@@ -154,5 +161,6 @@ public class UserServiceImpl implements UserService {
 		update((User) user);
 		return newPassword;
 	}
+
 
 }

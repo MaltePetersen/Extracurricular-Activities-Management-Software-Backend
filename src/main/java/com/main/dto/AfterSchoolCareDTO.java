@@ -24,7 +24,7 @@ public class AfterSchoolCareDTO {
 
 	private Long participatingSchool;
 
-	private SimpleUserDTO employee;
+	private UserDTO owner;
 
 	private List<AttendanceDTO> attendances;
 }

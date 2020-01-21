@@ -51,7 +51,8 @@ public class School implements IContactDetails, ISchool {
 
 	@OneToMany(mappedBy = "participatingSchool", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<AfterSchoolCare> afterSchoolCares;
-	
+
+
 	public School() {
 		name = null;
 		address = null;

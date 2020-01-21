@@ -1,5 +1,7 @@
 package com.main.dto.interfaces;
 
+import com.main.dto.SchoolDTO;
+
 public interface IUserDTO {
 
 	String getUserType();
@@ -45,5 +47,9 @@ public interface IUserDTO {
 	boolean isSchoolCoordinator();
 
 	void setSchoolCoordinator(boolean isSchoolCoordinator);
+
+	Long getSchool();
+
+	void setSchool(Long school);
 
 }
