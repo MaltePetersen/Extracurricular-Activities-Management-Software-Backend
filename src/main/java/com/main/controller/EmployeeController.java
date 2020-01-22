@@ -87,7 +87,7 @@ public class EmployeeController {
     }
 
     /**
-     * Gibt alle AfterSchoolCares zurück, bei denen der Employee Emyployee ist
+     * Gibt alle AfterSchoolCares zurück, bei denen der Employee Owner ist
      *
      * @param auth
      * @return Liste an AfterSchoolCareDTOs
