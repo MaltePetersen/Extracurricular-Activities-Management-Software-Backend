@@ -19,7 +19,7 @@ public class ChildDTO {
     @NotBlank(message = "Fullname is mandatory")
     private String schoolClass;
     @NotBlank(message = "Fullname is mandatory")
-    private Long childSchool;
+    private Long school;
 
     public IUserDTO toUserDTO(String username, String password, String email){
         IUserDTO dto = UserDTO.builder().build();
@@ -29,7 +29,7 @@ public class ChildDTO {
         dto.setEmail(email);
         dto.setFullname(fullname);
         dto.setSchoolClass(schoolClass);
-        dto.setSchool(childSchool);
+        dto.setSchool(school);
         return dto;
     }
 }

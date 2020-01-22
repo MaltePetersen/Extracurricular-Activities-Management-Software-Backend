@@ -2,6 +2,7 @@ package com.main.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -10,6 +11,7 @@ import javax.validation.constraints.Min;
 import com.main.dto.*;
 import com.main.dto.converters.AfterSchoolCareConverter;
 import com.main.dto.interfaces.IUserDTO;
+import com.main.model.School;
 import com.main.model.User;
 import com.main.model.interfaces.IChild;
 import com.main.model.interfaces.IUser;
@@ -138,8 +140,10 @@ public class ParentController {
     public ResponseEntity<String> createChild(@RequestBody ChildDTO childDTO, Authentication auth, Errors errors,
                                               WebRequest request) {
         UUID username = UUID.randomUUID();
-        childDTO.setUsername(username.toString());
-        UserDTO userDTO = (UserDTO) childDTO.toUserDTO(username.toString(), encoder.encode("password"), "test@test.de");
+        //childDTO.setUsername(username.toString());
+        UUID email = UUID.randomUUID();
+        //childDTO.setEmail(email.toString() + "@test.de");
+        UserDTO userDTO = (UserDTO) childDTO.toUserDTO(username.toString(), encoder.encode("password"), email.toString() + "@test.de");
         userDTOValidator.validate(userDTO, errors);
         if (errors.hasErrors()) {
             return new ResponseEntity<>(createErrorString(errors), HttpStatus.BAD_REQUEST);
@@ -164,24 +168,60 @@ public class ParentController {
             parent.addChild(registered);
             userService.update(parent);
         }
-        return new ResponseEntity<>("Created: " + registered.getRoles(), HttpStatus.CREATED);
-    }
-
-    @GetMapping("/child/{id}")
-    User getChild(@PathVariable @Min(1) int id) {
-        return childs.get(id - 1);
+//        return new ResponseEntity<>("Created: " + registered.getRoles(), HttpStatus.CREATED);
+        return new ResponseEntity<>("Created: " + registered.getId(), HttpStatus.CREATED);
     }
 
     @PatchMapping("/child/{id}")
-    void changeChild(@RequestBody User child, @PathVariable int id) {
-        childs.set(id - 1, child);
+    IUserDTO updateChild(@RequestBody Map<String, String> update, @PathVariable Long id){
+        User child = userService.findOne(id);
 
+        String fullname = update.get("fullname");
+        if(fullname != null && !fullname.isEmpty()){
+            child.setFullname(fullname);
+        }
+
+        String schoolClass = update.get("schoolClass");
+        if(schoolClass != null && !schoolClass.isEmpty()){
+            child.setSchoolClass(schoolClass);
+        }
+
+        Long school = Long.parseLong(update.get("school"));
+        child.setChildSchool(schoolService.findOne(school));
+
+        /*String schoolString = update.get("school");
+        if(schoolString != null && !schoolString.isEmpty()){
+            child.setChildSchool(schoolService.findOne(Long.parseLong(schoolString)));
+        }*/
+
+        userService.update(child);
+        User.UserBuilder builder = User.UserBuilder.next();
+        builder.withUser(child);
+        IUserDTO dto = builder.toDto("CHILD");
+        dto.setSchool(school);
+        return dto;
     }
 
-    @DeleteMapping("/child/{id}")
-    void deleteChild(@PathVariable int id) {
-        childs.remove(id - 1);
+    @GetMapping("/child/{id}")
+    UserDTO getChild(@PathVariable @Min(1) Long id) {
+        User.UserBuilder builder = User.UserBuilder.next();
+        builder.withUser(userService.findOne(id));
+        return (UserDTO) builder.toDto("CHILD");
     }
+
+    //Funktioniert noch nciht richtig, zum Schutz vor unerwarteten Auswirkungen erst einmal deaktiviert
+   /* @DeleteMapping("/child/{id}")
+    void deleteChild(@PathVariable Long id, Authentication auth) {
+        User parent = (User) userService.findByUsername(auth.getName());
+        User child = userService.findOne(id);
+
+        parent.removeChild(child);
+        userService.deleteUser(child);
+
+
+        userService.update(parent);
+
+    }*/
 
     private String createErrorString(Errors errors) {
         return errors.getAllErrors().stream().map(ObjectError::toString).collect(Collectors.joining(","));

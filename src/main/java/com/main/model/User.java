@@ -95,6 +95,8 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 
 	public void addChild(User child) {this.children.add(child);}
 
+	public void removeChild(User child) {this.children.remove(child);}
+
 
 
 	// Constructur normal User
