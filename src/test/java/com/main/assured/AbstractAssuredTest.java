@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.main.dto.interfaces.IUserDTO;
 import com.main.repository.RoleRepository;
 import com.main.service.AfterSchoolCareService;
+import com.main.service.AttendanceService;
 import com.main.service.UserService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -14,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.context.WebApplicationContext;
@@ -26,6 +26,9 @@ import static io.restassured.RestAssured.given;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AbstractAssuredTest {
+
+    @LocalServerPort
+    private int port;
 
     @Autowired
     WebApplicationContext context;
@@ -42,9 +45,8 @@ public abstract class AbstractAssuredTest {
     @Autowired
     protected AfterSchoolCareService afterSchoolCareService;
 
-    @LocalServerPort
-    private int port;
-
+    @Autowired
+    protected AttendanceService attendanceService;
 
     protected ObjectMapper objectMapper;
 
