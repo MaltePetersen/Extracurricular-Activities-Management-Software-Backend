@@ -20,13 +20,9 @@ import java.util.Arrays;
 public class SwaggerConfig {
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build()
-                .securityContexts(Arrays.asList(securityContext()))
-                .securitySchemes(Arrays.asList(basicAuthScheme()));
+        return new Docket(DocumentationType.SWAGGER_2).host("backend.softwareprojekt-kiel.de").select()
+                .apis(RequestHandlerSelectors.any()).paths(PathSelectors.any()).build()
+                .securityContexts(Arrays.asList(securityContext())).securitySchemes(Arrays.asList(basicAuthScheme()));
 
     }
 
@@ -35,10 +31,8 @@ public class SwaggerConfig {
     }
 
     private SecurityContext securityContext() {
-        return SecurityContext.builder()
-                .securityReferences(Arrays.asList(basicAuthReference()))
-                .forPaths(PathSelectors.any())
-                .build();
+        return SecurityContext.builder().securityReferences(Arrays.asList(basicAuthReference()))
+                .forPaths(PathSelectors.any()).build();
     }
 
     private SecurityReference basicAuthReference() {

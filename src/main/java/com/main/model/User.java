@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+import com.main.dto.ChildDTO;
 import com.main.dto.SimpleUserDTO;
 import com.main.dto.UserDTO;
 import com.main.dto.interfaces.IUserDTO;
@@ -85,12 +86,18 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
         this.roles.add(role);
     }
 
-    // Constructur normal User
-    User(String username, String password, String fullname) {
-        this.username = username;
-        this.password = password;
-        this.fullname = fullname;
-    }
+	public void addChild(User child) {this.children.add(child);}
+
+	public void removeChild(User child) {this.children.remove(child);}
+
+
+
+	// Constructur normal User
+	User(String username, String password, String fullname) {
+		this.username = username;
+		this.password = password;
+		this.fullname = fullname;
+	}
 
     // Constructor Child
     User(String username, String password, String fullname, String schoolClass) {
@@ -224,22 +231,24 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
         }
 
 
-        public UserBuilder<T> withDto(IUserDTO userDTO) {
-            withName(userDTO.getUsername());
-            withAddress(userDTO.getAddress());
-            withEmail(userDTO.getEmail());
-            withFullname(userDTO.getFullname());
-            withIban(userDTO.getIban());
-            withPassword(userDTO.getPassword());
-            withSchoolClass(userDTO.getSchoolClass());
-            withPhoneNumber(userDTO.getPhoneNumber());
-            return withSubject(userDTO.getSubject());
-        }
+		public UserBuilder<T> withDto(IUserDTO userDTO) {
+			withName(userDTO.getUsername());
+			withAddress(userDTO.getAddress());
+			withEmail(userDTO.getEmail());
+			withFullname(userDTO.getFullname());
+			withIban(userDTO.getIban());
+			withPassword(userDTO.getPassword());
+			withSchoolClass(userDTO.getSchoolClass());
+			withPhoneNumber(userDTO.getPhoneNumber());
+			withSubject(userDTO.getSubject());
+			return this;
+		}
 
         @SuppressWarnings("unchecked")
         public T build() {
             return (T) user;
         }
+
 
         public IUserDTO toDto(String type) {
             IUserDTO dto = UserDTO.builder().build();
@@ -262,7 +271,6 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 //			} else {
             dto.setUserType(type);
 //			}
-
             dto.setSchoolCoordinator(user.isSchoolCoordinator());
             return dto;
         }

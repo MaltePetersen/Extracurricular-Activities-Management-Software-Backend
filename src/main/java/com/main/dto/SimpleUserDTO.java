@@ -18,4 +18,6 @@ public class SimpleUserDTO {
     @NotBlank(message = "Fullname is mandatory")
     private String fullname;
     private String schoolClass;
+
+    private Long childSchool;
 }

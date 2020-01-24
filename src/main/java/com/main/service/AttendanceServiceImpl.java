@@ -1,7 +1,8 @@
 package com.main.service;
 
+import com.main.dto.AttendanceInputDTO;
 import com.main.model.Attendance;
-import com.main.repository.AfterSchoolCareRepository;
+import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.repository.AttendanceRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,13 @@ import java.util.stream.StreamSupport;
 public class AttendanceServiceImpl implements AttendanceService {
 
     private AttendanceRepository repository;
+    private AfterSchoolCareService afterSchoolCareService;
+    private UserService userService;
 
-    public AttendanceServiceImpl(AttendanceRepository repository){
+    public AttendanceServiceImpl(AttendanceRepository repository, AfterSchoolCareService afterSchoolCareService, UserService userService){
         this.repository = repository;
-
+        this.afterSchoolCareService = afterSchoolCareService;
+        this.userService = userService;
     }
 
     @Override
@@ -35,6 +39,22 @@ public class AttendanceServiceImpl implements AttendanceService {
         repository.save(newAttendance);
 
         return newAttendance;
+    }
+
+    @Override
+    public Attendance saveByInputDTO(AttendanceInputDTO attendanceInputDTO, AfterSchoolCare afterSchoolCare) {
+        Attendance attendance = new Attendance();
+
+        attendance.setChild(userService.findOne(attendanceInputDTO.getChildId()));
+        attendance.setNote(attendanceInputDTO.getNote());
+        attendance.setAfterSchoolCare(afterSchoolCare);
+
+        save(attendance);
+
+        afterSchoolCare.addAttendance(attendance);
+        afterSchoolCareService.save(afterSchoolCare);
+
+        return attendance;
     }
 
     @Override

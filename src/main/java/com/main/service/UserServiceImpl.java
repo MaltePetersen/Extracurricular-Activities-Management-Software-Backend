@@ -8,6 +8,7 @@ import java.util.stream.StreamSupport;
 
 import javax.validation.Valid;
 
+import com.main.model.School;
 import com.main.model.interfaces.IContactDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,13 +35,15 @@ public class UserServiceImpl implements UserService {
 	private PasswordEncoder passwordEncoder;
 	private VerificationTokenRepository verificationTokenRepository;
 	private RoleRepository roleRepository;
+	private SchoolService schoolService;
 
 	@Autowired
 	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,
-			VerificationTokenRepository verificationTokenRepository, RoleRepository roleRepository) {
+			VerificationTokenRepository verificationTokenRepository, RoleRepository roleRepository, SchoolService schoolService) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.roleRepository = roleRepository;
+		this.schoolService = schoolService;
 		this.verificationTokenRepository = verificationTokenRepository;
 	}
 
@@ -95,6 +98,11 @@ public class UserServiceImpl implements UserService {
 			if (iuser != null) {
 				User user = (User) iuser;
 				user.addRole(role);
+				if (userDTO.getSchool() != null) {
+					School childSchool = schoolService.findOne(userDTO.getSchool());
+					if (childSchool != null)
+						user.setChildSchool(childSchool);
+				}
 				update(user);
 			}
 			return iuser;
@@ -121,6 +129,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteUser(User user) {
 		user.setChildSchool(null);
+		user.setParent(null);
 
 
 		user.setAfterSchoolCares(null);
