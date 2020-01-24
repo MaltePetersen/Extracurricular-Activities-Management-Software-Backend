@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import com.main.model.School;
@@ -30,6 +31,7 @@ import com.main.repository.UserRepository;
 import com.main.repository.VerificationTokenRepository;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 	private PasswordEncoder passwordEncoder;
@@ -85,8 +87,20 @@ public class UserServiceImpl implements UserService {
 		return new ResponseEntity<>("Role not valid", HttpStatus.CONFLICT);
 	}
 
-	public void update(User user) {
-		userRepository.save(user);
+	public User update(User user) {
+		return this.update(user, null);
+	}
+
+	@Override
+	public User update(User user, UserRole roleName) {
+		if(roleName != null){
+			Role role = roleRepository.findByName(roleName.toString());
+			if(role != null){
+				user.addRole(role);
+			}
+		}
+		return userRepository.save(user);
+
 	}
 
 	@Override

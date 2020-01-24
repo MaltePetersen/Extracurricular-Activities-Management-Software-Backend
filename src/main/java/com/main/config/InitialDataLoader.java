@@ -70,18 +70,18 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		Privilege resetPasswordPrivilege = createPrivilegeIfNotFound(UserPrivilege.RESET_PASSWORD.toString());
 		Privilege resetChildPassword = createPrivilegeIfNotFound(UserPrivilege.RESET_CHILD_PASSWORD.toString());
 
-		createRoleIfNotFound(UserRole.ROLE_CHILD.toString(), Collections.emptyList());
-		createRoleIfNotFound(UserRole.ROLE_EMPLOYEE.toString(), Collections.emptyList());
+		createRoleIfNotFound(UserRole.ROLE_CHILD.toString(), new ArrayList<>());
+		createRoleIfNotFound(UserRole.ROLE_EMPLOYEE.toString(), new ArrayList<>());
 
-		createRoleIfNotFound(UserRole.ROLE_MANAGEMENT.toString(), Collections.emptyList());
+		createRoleIfNotFound(UserRole.ROLE_MANAGEMENT.toString(), new ArrayList<>());
 
-		createRoleIfNotFound(UserRole.ROLE_PARENT.toString(), Collections.singletonList(resetChildPassword));
+		createRoleIfNotFound(UserRole.ROLE_PARENT.toString(), new ArrayList<>( Arrays.asList(resetChildPassword) ));
 
 
-		createRoleIfNotFound(UserRole.ROLE_SCHOOLCOORDINATOR.toString(), Collections.emptyList());
-		createRoleIfNotFound(UserRole.ROLE_TEACHER.toString(), Collections.emptyList());
-		createRoleIfNotFound(UserRole.ROLE_USER.toString(), Collections.singletonList(resetPasswordPrivilege));
-		createRoleIfNotFound("ROLE_NEW_USER", Collections.singletonList(resetTokenPrivilege));
+		createRoleIfNotFound(UserRole.ROLE_SCHOOLCOORDINATOR.toString(), new ArrayList<>());
+		createRoleIfNotFound(UserRole.ROLE_TEACHER.toString(), new ArrayList<>());
+		createRoleIfNotFound(UserRole.ROLE_USER.toString(), new ArrayList<>( Arrays.asList( resetPasswordPrivilege )));
+		createRoleIfNotFound("ROLE_NEW_USER", new ArrayList<>( Arrays.asList( resetTokenPrivilege)));
 
 		alreadySetup = true;
 		createUsers();
@@ -118,7 +118,11 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 	void createSchoolsAndAfterSchoolCares() {
 		// adds schools for simpler testing
 		School school1 = new School("Holstenschule", "Altonaer Str. 40, 24534 Neumünster");
-		schoolRepo.save(school1);
+		school1 = schoolRepo.save(school1);
+
+
+		User user = userRepository.findByUsername("Child_Test");
+		user.setChildSchool(school1);
 
 		School school2 = new School("Klaus-Groth-Schule", "Parkstraße 1, 24534 Neumünster");
 		schoolRepo.save(school2);

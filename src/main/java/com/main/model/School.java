@@ -50,7 +50,7 @@ public class School implements IContactDetails, ISchool {
 	private List<User> children = new ArrayList<>();
 
 	@OneToMany(mappedBy = "participatingSchool", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<AfterSchoolCare> afterSchoolCares;
+	private List<AfterSchoolCare> afterSchoolCares = new ArrayList<>();
 
 
 	public School() {

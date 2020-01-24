@@ -1,9 +1,12 @@
 package com.main.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import javax.validation.constraints.NotBlank;
 
 import com.main.dto.ChildDTO;
@@ -39,8 +42,10 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
     @NotBlank(message = "Fullname is mandatory")
     private String fullname;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    @ManyToMany
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles = new ArrayList<>();
 
     private String email;
@@ -70,6 +75,11 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "school_id")
     private School childSchool;
+
+    public void setChildSchool(School school){
+        school.addChild(this);
+        this.childSchool = school;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User parent;

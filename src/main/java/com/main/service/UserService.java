@@ -2,6 +2,7 @@ package com.main.service;
 
 import java.util.List;
 
+import com.main.model.user.UserRole;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
@@ -13,7 +14,8 @@ import com.main.model.interfaces.IVerificationToken;
 
 public interface UserService {
     ResponseEntity<String> save(IUserDTO userDTO, Authentication auth);
-    void update(User user);
+    User update(User user);
+    User update(User user, UserRole role);
 	IUser createAccount(UserDTO userDTO, Authentication auth);
 	IVerificationToken createVerificationToken(User user, String token);
 	IUser findByEmail(String email);

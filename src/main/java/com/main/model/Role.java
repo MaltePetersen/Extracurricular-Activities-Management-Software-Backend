@@ -1,7 +1,9 @@
 package com.main.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -35,9 +37,11 @@ public class Role implements IRole {
 	@ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
 	private List<User> users = new ArrayList<>();
 
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
-	private List<Privilege> privileges = new ArrayList<Privilege>();
+	@ManyToMany
+	@JoinTable(name = "roles_privileges",
+			joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
+	private List<Privilege> privileges = new ArrayList<>();
 
 	@Override
 	public void addUser(User user) {
