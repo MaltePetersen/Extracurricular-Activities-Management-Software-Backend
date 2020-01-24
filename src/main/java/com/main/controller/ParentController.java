@@ -165,6 +165,7 @@ public class ParentController {
         if(auth.getName() != null && !auth.getName().isEmpty()) {
             User parent = (User) userService.findByUsername(auth.getName());
             registered.setParent(parent);
+            userService.update(registered);
             parent.addChild(registered);
             userService.update(parent);
         }
