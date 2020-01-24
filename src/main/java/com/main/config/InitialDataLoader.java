@@ -158,7 +158,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		remedial.setName("Mathe Nachhilfe");
 		remedial.setStartTime(LocalDateTime.of(2020, 4, 5, 11, 0));
 		remedial.setEndTime(LocalDateTime.of(2020, 4, 5, 12, 15));
-		remedial.setParticipatingSchool(school1);
+		remedial.setParticipatingSchool(school2);
 
 		remedial.setOwner(userRepository.findByUsername("Employee_Test"));
 		afterSchoolCareService.save(remedial);
