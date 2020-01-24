@@ -3,18 +3,7 @@ package com.main.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 import com.main.dto.SimpleUserDTO;
@@ -35,6 +24,7 @@ import lombok.Data;
 public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITeacher {
     private static final long serialVersionUID = 1337L;
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -48,7 +38,7 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
     @NotBlank(message = "Fullname is mandatory")
     private String fullname;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles = new ArrayList<>();
 
@@ -59,11 +49,11 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
     private String iban;
     private String schoolClass;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.ALL, CascadeType.MERGE})
     @JoinTable(name = "employee_school", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "school_id"))
     private List<School> employeesSchools = new ArrayList<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.ALL, CascadeType.MERGE})
     @JoinTable(name = "participatingSchool", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "school_id"))
     private List<School> schoolCoordinatorsSchools = new ArrayList<>();
 
@@ -73,7 +63,10 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AfterSchoolCare> afterSchoolCares = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private VerificationToken verificationTokens;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "school_id")
     private School childSchool;
 
@@ -137,12 +130,11 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 
     }
 
-    User() {
+    public User() {
         username = null;
         password = null;
         fullname = null;
         verified = false;
-
     }
 
     /**
@@ -275,29 +267,29 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
             return dto;
         }
 
-		public SimpleUserDTO toSimpleDto(String type) {
-			SimpleUserDTO dto = new SimpleUserDTO();
-			dto.setEmail(user.getEmail());
-			dto.setFullname(user.getFullname());
-			dto.setUsername(user.getUsername());
-			dto.setSchoolClass(user.getSchoolClass());
+        public SimpleUserDTO toSimpleDto(String type) {
+            SimpleUserDTO dto = new SimpleUserDTO();
+            dto.setEmail(user.getEmail());
+            dto.setFullname(user.getFullname());
+            dto.setUsername(user.getUsername());
+            dto.setSchoolClass(user.getSchoolClass());
 //			if (user.getRoles() != null) {
 //				if (user.getRoles().size() != 0) {
 //					dto.setUserType(user.getRoles().get(0).getName());
 //				}
 //			} else {
-			dto.setUserType(type);
+            dto.setUserType(type);
 //			}
 
-			return dto;
-		}
+            return dto;
+        }
 
-		/**
-		 * Gibt eine neue Instanz der Klasse {@link UserBuilder} zurück.
-		 *
-		 * @param <U extends IUser>
-		 * @return Neue Instanz
-		 */
+        /**
+         * Gibt eine neue Instanz der Klasse {@link UserBuilder} zurück.
+         *
+         * @param <U extends IUser>
+         * @return Neue Instanz
+         */
 
         public static <U extends IUser> UserBuilder<U> next() {
             return new UserBuilder<>();

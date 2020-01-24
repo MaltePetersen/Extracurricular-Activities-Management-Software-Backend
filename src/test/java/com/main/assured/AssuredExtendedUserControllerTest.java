@@ -48,6 +48,12 @@ public class AssuredExtendedUserControllerTest extends AbstractAssuredTest {
         }
     }
 
+    @After
+    public void tearDown(){
+        if(userService.findByUsername(parent.getUsername()) != null)
+            userService.deleteByName(parent.getUsername());
+    }
+
 
     @Test
     public void passwordResetTest() throws Exception {

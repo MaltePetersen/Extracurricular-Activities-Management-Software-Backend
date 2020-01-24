@@ -40,10 +40,10 @@ public class School implements IContactDetails, ISchool {
 	private String email;
 	private String phoneNumber;
 
-	@ManyToMany(mappedBy = "employeesSchools")
+	@ManyToMany(mappedBy = "employeesSchools", cascade = CascadeType.ALL)
 	private List<User> employees = new ArrayList<>();
 
-	@ManyToMany(mappedBy = "schoolCoordinatorsSchools")
+	@ManyToMany(mappedBy = "schoolCoordinatorsSchools", cascade = CascadeType.ALL)
 	private List<User> schoolCoordinators = new ArrayList<>();
 
 	@OneToMany(mappedBy = "childSchool", cascade = CascadeType.ALL, orphanRemoval = true)

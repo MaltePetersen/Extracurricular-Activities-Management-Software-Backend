@@ -4,6 +4,7 @@ import static io.restassured.RestAssured.given;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.main.model.interfaces.IUser;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +27,8 @@ public class AssuredUserControllerTest extends AbstractAssuredTest {
 	public void setUp() throws Exception {
 		super.setUp();
 	}
+
+
 
 	@Test
 	public void registerNewParentTest() throws Exception {

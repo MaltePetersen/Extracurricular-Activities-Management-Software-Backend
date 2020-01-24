@@ -25,5 +25,7 @@ public interface UserService {
 	String changePassword(IUser user);
 	List<User> findAllByVerified(boolean b);
     UserDTO toDto(IUser user);
+
+    void deleteByName(String username);
 }
 

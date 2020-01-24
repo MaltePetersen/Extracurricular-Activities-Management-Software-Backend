@@ -162,5 +162,9 @@ public class UserServiceImpl implements UserService {
 		return newPassword;
 	}
 
-
+	@Override
+	public void deleteByName(String username) {
+		User user = (User) findByUsername(username);
+		userRepository.delete(user);
+	}
 }
