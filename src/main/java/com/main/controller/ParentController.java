@@ -83,9 +83,8 @@ public class ParentController {
     }
 
     @GetMapping("/booked_after_school_cares")
-    public List<AfterSchoolCareDTO> getBookedAfterSchoolCares() {
-        // TODO: filtern auf gebuchte AfterSchoolCares fehlt noch
-        return afterSchoolCareService.getAll().stream().map(AfterSchoolCareConverter::toDto)
+    public List<AfterSchoolCareDTO> getBookedAfterSchoolCares(Authentication auth) {
+        return afterSchoolCareService.getAllByParent(auth.getName()).stream().map(AfterSchoolCareConverter::toDto)
                 .collect(Collectors.toList());
     }
 

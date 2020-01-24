@@ -11,6 +11,8 @@ public interface AfterSchoolCareService {
 
 	List<AfterSchoolCare> getAllByOwner(String username);
 
+    List<AfterSchoolCare> getAllByParent(String username);
+
     AfterSchoolCare findOne(Long id);
 
     AfterSchoolCare save(AfterSchoolCare newAfterSchoolCare);
