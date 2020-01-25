@@ -41,11 +41,13 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 	private UserData userData;
 
+	private PasswordEncoder encoder;
+
 	@Autowired
 	public InitialDataLoader(UserRepository userRepository, RoleRepository roleRepository,
 			PrivilegeRepository privilegeRepository, PasswordEncoder passwordEncoder, SchoolRepository schoolRepo,
 			AfterSchoolCareService afterSchoolCareService, AttendanceRepository attendanceRepository,
-			UserData userData) {
+			UserData userData, PasswordEncoder encoder) {
 		super();
 		this.userRepository = userRepository;
 		this.roleRepository = roleRepository;
@@ -55,6 +57,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		this.afterSchoolCareService = afterSchoolCareService;
 		this.attendanceRepository = attendanceRepository;
 		this.userData = userData;
+		this.encoder = encoder;
 	}
 
 	@Override
@@ -177,12 +180,15 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 			userRepository.save(user);
 		});
 
-		/*User child = userRepository.findByUsername("Child_Test");
 		User parent = userRepository.findByUsername("Parent_Test");
+		User child = userRepository.findByUsername("Child_Test");
+
+		User.UserBuilder<User> builder = User.UserBuilder.next();
+
+		parent.addChild(child);
+		userRepository.save(parent);
 		child.setParent(parent);
 		userRepository.save(child);
-		parent.addChild(child);
-		userRepository.save(parent);*/
 
 	}
 
