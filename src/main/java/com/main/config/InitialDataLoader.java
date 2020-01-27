@@ -2,6 +2,7 @@ package com.main.config;
 
 import com.main.model.*;
 import com.main.model.afterSchoolCare.AfternoonCare;
+import com.main.model.afterSchoolCare.Amplification;
 import com.main.model.afterSchoolCare.Remedial;
 import com.main.model.user.UserPrivilege;
 import com.main.model.user.UserRole;
@@ -171,6 +172,22 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 		remedial.addAttendance(attendance);
 		afterSchoolCareService.save(remedial);
+
+		Amplification amplification = new Amplification();
+		amplification.setName("Deutsch Verstärkung");
+		amplification.setStartTime(LocalDateTime.of(2020, 6, 17, 10, 45));
+		amplification.setEndTime(LocalDateTime.of(2020, 6, 17, 11, 30));
+		amplification.setParticipatingSchool(school2);
+		amplification.setOwner(userRepository.findByUsername("Employee_Test"));
+		afterSchoolCareService.save(amplification);
+
+		Attendance attendance4 = new Attendance();
+		attendance4.setAfterSchoolCare(amplification);
+		attendance4.setChild(userRepository.findByUsername("Child_Test"));
+		attendanceRepository.save(attendance4);
+
+		amplification.addAttendance(attendance4);
+		afterSchoolCareService.save(amplification);
 	}
 
 	@Transactional
