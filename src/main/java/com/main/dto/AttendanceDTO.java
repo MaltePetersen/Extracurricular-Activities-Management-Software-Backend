@@ -28,7 +28,4 @@ public class AttendanceDTO {
     private String note;
 
     private int status;
-
-    private SchoolDTO school;
-
 }

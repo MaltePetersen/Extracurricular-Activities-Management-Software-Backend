@@ -13,6 +13,7 @@ import com.main.service.UserService;
 import com.main.util.UserDTOValidator;
 import com.main.util.events.OnRegistrationCompleteEvent;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.constraints.Min;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +71,7 @@ public class ParentController {
             auth.getAuthorities().forEach((a) -> {
                 roles.add(a.getAuthority());
             });
-            if(roles.contains("ROLE_PARENT")) {
+            if (roles.contains("ROLE_PARENT")) {
                 return new ResponseEntity<>(HttpStatus.ACCEPTED);
             }
 
@@ -89,8 +91,17 @@ public class ParentController {
     }
 
     @GetMapping("/after_school_cares")
-    public List<AfterSchoolCareDTO> getAfterSchoolCares() {
-        return afterSchoolCareService.getAll().stream().map(AfterSchoolCareConverter::toDto)
+    public List<AfterSchoolCareDTO> getAfterSchoolCares(
+            @RequestParam(required = false, name = "school") Long schoolId,
+            @RequestParam(required = false) Integer type,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        return afterSchoolCareService.getAll().stream()
+                .filter(afterSchoolCare -> schoolId == null || afterSchoolCare.getParticipatingSchool().getId().equals(schoolId))
+                .filter(afterSchoolCare -> type == null || afterSchoolCare.getType().getId() == type)
+                .filter(afterSchoolCare -> startDate == null || afterSchoolCare.getEndTime().isAfter(startDate))
+                .filter(afterSchoolCare -> endDate == null || afterSchoolCare.getStartTime().isBefore(endDate))
+                .map(AfterSchoolCareConverter::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -119,7 +130,7 @@ public class ParentController {
 
     @GetMapping("/children")
     public List<UserDTO> getChilds(Authentication auth) {
-        return ((User) userService.findByUsername(auth.getName())).getChildren().stream().map((child)-> {
+        return ((User) userService.findByUsername(auth.getName())).getChildren().stream().map((child) -> {
             User.UserBuilder builder = User.UserBuilder.next();
             builder.withUser(child);
             return (UserDTO) builder.toDto("CHILD");
@@ -153,7 +164,7 @@ public class ParentController {
             return new ResponseEntity<>("Fehler beim Versenden", HttpStatus.BAD_REQUEST);
         }
 
-        if(auth.getName() != null && !auth.getName().isEmpty()) {
+        if (auth.getName() != null && !auth.getName().isEmpty()) {
             User parent = (User) userService.findByUsername(auth.getName());
             registered.setParent(parent);
             userService.update(registered);
@@ -165,16 +176,16 @@ public class ParentController {
     }
 
     @PatchMapping("/child/{id}")
-    IUserDTO updateChild(@RequestBody Map<String, String> update, @PathVariable Long id){
+    IUserDTO updateChild(@RequestBody Map<String, String> update, @PathVariable Long id) {
         User child = userService.findOne(id);
 
         String fullname = update.get("fullname");
-        if(fullname != null && !fullname.isEmpty()){
+        if (fullname != null && !fullname.isEmpty()) {
             child.setFullname(fullname);
         }
 
         String schoolClass = update.get("schoolClass");
-        if(schoolClass != null && !schoolClass.isEmpty()){
+        if (schoolClass != null && !schoolClass.isEmpty()) {
             child.setSchoolClass(schoolClass);
         }
 

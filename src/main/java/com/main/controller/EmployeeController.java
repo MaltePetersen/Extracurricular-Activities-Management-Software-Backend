@@ -13,6 +13,7 @@ import com.main.model.interfaces.ISchool;
 import com.main.service.AfterSchoolCareService;
 import com.main.service.AttendanceService;
 import com.main.service.SchoolService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -93,9 +94,17 @@ public class EmployeeController {
      * @return Liste an AfterSchoolCareDTOs
      */
     @GetMapping("/after_school_cares")
-    public List<AfterSchoolCareDTO> getAfterSchoolCares(@RequestParam(required = false, name="school") Long schoolId, Authentication auth) {
+    public List<AfterSchoolCareDTO> getAfterSchoolCares(
+            Authentication auth,
+            @RequestParam(required = false, name="school") Long schoolId,
+            @RequestParam(required = false) Integer type,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
         return afterSchoolCareService.getAllByOwner(auth.getName()).stream()
                 .filter(afterSchoolCare -> schoolId == null || afterSchoolCare.getParticipatingSchool().getId().equals(schoolId))
+                .filter(afterSchoolCare -> type == null || afterSchoolCare.getType().getId() == type)
+                .filter(afterSchoolCare -> startDate == null || afterSchoolCare.getEndTime().isAfter(startDate))
+                .filter(afterSchoolCare -> endDate == null || afterSchoolCare.getStartTime().isBefore(endDate))
                 .map(AfterSchoolCareConverter::toDto)
                 .collect(Collectors.toList());
     }
