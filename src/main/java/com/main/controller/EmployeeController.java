@@ -15,6 +15,7 @@ import com.main.service.AttendanceService;
 import com.main.service.SchoolService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -130,10 +131,10 @@ public class EmployeeController {
      *
      * @param update Map mit Keys und Values
      * @param id     Id der Attendance
-     * @return Gibt die verknüpfte AfterSchoolCare als DTO zurück
+     * @return Gibt die verknüpfte AfterSchoolCare als DTO oder eine Fehlermeldung zurück
      */
     @PatchMapping("/attendance/{id}")
-    AfterSchoolCareDTO updateAttendance(@RequestBody Map<String, String> update, @PathVariable Long id) {
+    ResponseEntity updateAttendance(@RequestBody Map<String, String> update, @PathVariable Long id) {
         Attendance attendance = attendanceService.findOne(id);
 
         String arrivalTimeString = update.get("arrivalTime");
@@ -147,6 +148,10 @@ public class EmployeeController {
                 // arrivalTime darf nur null gesetzt werden, wenn keine leaveTime gesetzt ist
                 if (attendance.getLeaveTime() == null) {
                     attendance.setArrivalTime(null);
+                } else {
+                    return ResponseEntity
+                            .badRequest()
+                            .body("Error: Setting arrival time to null is only allowed if no leave time is set.");
                 }
             }
         }
@@ -158,15 +163,21 @@ public class EmployeeController {
                 // leaveTime darf nur gesetzt werden, wenn eine arrivalTime gesetzt ist
                 if (attendance.getArrivalTime() != null) {
                     attendance.setLeaveTime(leaveTime);
+                } else {
+                    return ResponseEntity
+                            .badRequest()
+                            .body("Error: Setting a leave time is only allowed if an arrival time is already set.");
                 }
             }
         } else {
-            if (update.containsKey("leaveTime") && arrivalTimeString == null) {
+            if (update.containsKey("leaveTime") && leaveTimeString == null) {
                 attendance.setLeaveTime(null);
             }
         }
 
-        return AfterSchoolCareConverter.toDto(attendanceService.save(attendance).getAfterSchoolCare());
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(AfterSchoolCareConverter.toDto(attendanceService.save(attendance).getAfterSchoolCare()));
     }
 
     @GetMapping("/invoices")
