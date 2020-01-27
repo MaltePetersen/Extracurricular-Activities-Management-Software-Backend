@@ -202,7 +202,7 @@ public class ParentController {
     }
 
     //Funktioniert noch nciht richtig, zum Schutz vor unerwarteten Auswirkungen erst einmal deaktiviert
-   /* @DeleteMapping("/child/{id}")
+    @DeleteMapping("/child/{id}")
     void deleteChild(@PathVariable Long id, Authentication auth) {
         User parent = (User) userService.findByUsername(auth.getName());
         User child = userService.findOne(id);
@@ -213,7 +213,7 @@ public class ParentController {
 
         userService.update(parent);
 
-    }*/
+    }
 
     private String createErrorString(Errors errors) {
         return errors.getAllErrors().stream().map(ObjectError::toString).collect(Collectors.joining(","));

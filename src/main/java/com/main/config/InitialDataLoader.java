@@ -184,7 +184,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 			userRepository.save(user);
 		});
 
-		User parent = userRepository.findByUsername("Parent_Test");
+		/*User parent = userRepository.findByUsername("Parent_Test");
 		User child = userRepository.findByUsername("Child_Test");
 
 		User.UserBuilder<User> builder = User.UserBuilder.next();
@@ -192,7 +192,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		parent.addChild(child);
 		userRepository.save(parent);
 		child.setParent(parent);
-		userRepository.save(child);
+		userRepository.save(child);*/
 
 	}
 

@@ -77,8 +77,10 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
     private School childSchool;
 
     public void setChildSchool(School school){
-        school.addChild(this);
-        this.childSchool = school;
+        if(school!= null) {
+            school.addChild(this);
+            this.childSchool = school;
+        } else this.childSchool = null;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
