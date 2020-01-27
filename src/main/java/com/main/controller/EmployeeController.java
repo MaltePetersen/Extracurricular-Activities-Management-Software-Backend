@@ -97,10 +97,12 @@ public class EmployeeController {
     public List<AfterSchoolCareDTO> getAfterSchoolCares(
             Authentication auth,
             @RequestParam(required = false, name="school") Long schoolId,
+            @RequestParam(required = false) Integer type,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
         return afterSchoolCareService.getAllByOwner(auth.getName()).stream()
                 .filter(afterSchoolCare -> schoolId == null || afterSchoolCare.getParticipatingSchool().getId().equals(schoolId))
+                .filter(afterSchoolCare -> type == null || afterSchoolCare.getType().getId() == type)
                 .filter(afterSchoolCare -> startDate == null || afterSchoolCare.getEndTime().isAfter(startDate))
                 .filter(afterSchoolCare -> endDate == null || afterSchoolCare.getStartTime().isBefore(endDate))
                 .map(AfterSchoolCareConverter::toDto)
