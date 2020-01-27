@@ -59,6 +59,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.PUT, "/api/teacher/**").hasAnyAuthority(UserRole.ROLE_TEACHER.toString())
 				.antMatchers(HttpMethod.DELETE, "/api/teacher/**").hasAnyAuthority(UserRole.ROLE_TEACHER.toString())
 
+				.antMatchers(HttpMethod.GET, "/api/sc/**").hasAnyAuthority(UserRole.ROLE_SCHOOLCOORDINATOR.toString())
+				.antMatchers(HttpMethod.POST, "/api/sc/**").hasAnyAuthority(UserRole.ROLE_SCHOOLCOORDINATOR.toString())
+				.antMatchers(HttpMethod.PUT, "/api/sc/**").hasAnyAuthority(UserRole.ROLE_SCHOOLCOORDINATOR.toString())
+				.antMatchers(HttpMethod.DELETE, "/api/sc/**").hasAnyAuthority(UserRole.ROLE_SCHOOLCOORDINATOR.toString())
+
 				.antMatchers(HttpMethod.POST, "/user/register").permitAll().antMatchers(HttpMethod.GET, "/user/auth")
 				.permitAll().antMatchers(HttpMethod.GET, "/user/login").permitAll()
 				.antMatchers(HttpMethod.GET, "/user/registrationConfirm").permitAll()

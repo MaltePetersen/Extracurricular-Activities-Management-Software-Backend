@@ -1,15 +1,11 @@
 package com.main.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 
 import lombok.Data;
 
@@ -38,12 +34,14 @@ public class Role implements IRole {
 
 	private String name;
 
-	@ManyToMany(mappedBy = "roles")
+	@ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
 	private List<User> users = new ArrayList<>();
 
 	@ManyToMany
-	@JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
-	private List<Privilege> privileges = new ArrayList<Privilege>();
+	@JoinTable(name = "roles_privileges",
+			joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
+	private List<Privilege> privileges = new ArrayList<>();
 
 	@Override
 	public void addUser(User user) {

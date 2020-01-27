@@ -9,7 +9,9 @@ import java.util.List;
 public interface AfterSchoolCareService {
 	List<AfterSchoolCare> getAll();
 
-	List<AfterSchoolCare> getAllByUser(String username);
+	List<AfterSchoolCare> getAllByOwner(String username);
+
+    List<AfterSchoolCare> getAllByParent(String username);
 
     AfterSchoolCare findOne(Long id);
 

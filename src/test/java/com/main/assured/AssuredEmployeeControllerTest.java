@@ -14,6 +14,7 @@ import io.restassured.response.ValidatableResponse;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +30,7 @@ public class AssuredEmployeeControllerTest extends AbstractAssuredTest {
 
     @Override
     @Before
+    @Transactional
     public void setUp() throws Exception {
         super.setUp();
 
@@ -39,9 +41,9 @@ public class AssuredEmployeeControllerTest extends AbstractAssuredTest {
         User user = (User) User.UserBuilder.next().withDto(this.employee).build();
         user.setPassword(encoder.encode(user.getPassword()));
         Role role = roleRepository.findByName(UserRole.ROLE_EMPLOYEE.toString());
-        user.getRoles().add(role);
+        user = userService.update(user, UserRole.ROLE_EMPLOYEE);
 
-        userService.update(user);
+
 
         testAfternoonCareWithUser = new AfternoonCare();
         testAfternoonCareWithUser.setName("Test-Nachmittagsbetreuung");

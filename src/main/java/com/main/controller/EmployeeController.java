@@ -89,12 +89,14 @@ public class EmployeeController {
     /**
      * Gibt alle AfterSchoolCares zurück, bei denen der Employee Owner ist
      *
-     * @param auth
+     * @param schoolId Die Id der Schule, auf die gefiltert werden soll (optional)
      * @return Liste an AfterSchoolCareDTOs
      */
     @GetMapping("/after_school_cares")
-    public List<AfterSchoolCareDTO> getAfterSchoolCares(Authentication auth) {
-        return afterSchoolCareService.getAllByUser(auth.getName()).stream().map(AfterSchoolCareConverter::toDto)
+    public List<AfterSchoolCareDTO> getAfterSchoolCares(@RequestParam(required = false, name="school") Long schoolId, Authentication auth) {
+        return afterSchoolCareService.getAllByOwner(auth.getName()).stream()
+                .filter(afterSchoolCare -> schoolId == null || afterSchoolCare.getParticipatingSchool().getId().equals(schoolId))
+                .map(AfterSchoolCareConverter::toDto)
                 .collect(Collectors.toList());
     }
 

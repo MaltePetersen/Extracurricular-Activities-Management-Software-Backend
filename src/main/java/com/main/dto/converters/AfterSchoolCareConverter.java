@@ -2,8 +2,6 @@ package com.main.dto.converters;
 
 import com.main.dto.AfterSchoolCareDTO;
 import com.main.dto.SimpleUserDTO;
-import com.main.dto.UserDTO;
-import com.main.dto.interfaces.IUserDTO;
 import com.main.model.User;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
 

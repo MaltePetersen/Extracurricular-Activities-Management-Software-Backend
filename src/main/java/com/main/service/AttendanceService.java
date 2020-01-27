@@ -1,6 +1,8 @@
 package com.main.service;
 
+import com.main.dto.AttendanceInputDTO;
 import com.main.model.Attendance;
+import com.main.model.afterSchoolCare.AfterSchoolCare;
 
 import java.util.List;
 
@@ -11,6 +13,8 @@ public interface AttendanceService {
     Attendance findOne(Long id);
 
     Attendance save(Attendance newAttendance);
+
+    Attendance saveByInputDTO(AttendanceInputDTO attendanceInputDTO, AfterSchoolCare afterSchoolCare);
 
     void deleteById(Long id);
 
