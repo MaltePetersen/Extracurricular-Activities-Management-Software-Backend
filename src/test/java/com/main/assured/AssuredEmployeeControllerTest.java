@@ -44,7 +44,7 @@ public class AssuredEmployeeControllerTest extends AbstractAssuredTest {
         user = userService.update(user, UserRole.ROLE_EMPLOYEE);
 
 
-
+        // Testdaten erstellen
         testAfternoonCareWithUser = new AfternoonCare();
         testAfternoonCareWithUser.setName("Test-Nachmittagsbetreuung");
         testAfternoonCareWithUser.setOwner((User) userService.findByUsername(employee.getUsername()));
@@ -70,8 +70,9 @@ public class AssuredEmployeeControllerTest extends AbstractAssuredTest {
     public void testGetAfternoonCaresWithEmployeeAuthority() {
         ValidatableResponse response = super.sendGetRequestWithAuth(employee, TestEmployeeControllerPath.AFTER_SCHOOL_CARES.getUri()).statusCode(200);
 
-        AfterSchoolCareDTO[] resultAfternoonCaresArray = response.extract().body().as(AfterSchoolCareDTO[].class);
-        List<AfterSchoolCareDTO> resultAfternoonCares = Arrays.asList(resultAfternoonCaresArray);
+        List<AfterSchoolCareDTO> resultAfternoonCares = Arrays.asList(response.extract().body().as(AfterSchoolCareDTO[].class));
+
+        // verifiziert, dass korrekt gefiltert wurde, so dass u.a. keine AfterSchoolCares von anderen Employees enthalten sind
         assertTrue(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCareWithUser.getId())));
         assertFalse(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCareWithDifferentUser.getId())));
     }
