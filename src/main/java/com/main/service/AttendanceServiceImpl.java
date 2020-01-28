@@ -2,6 +2,7 @@ package com.main.service;
 
 import com.main.dto.AttendanceInputDTO;
 import com.main.model.Attendance;
+import com.main.model.User;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.repository.AttendanceRepository;
 import org.springframework.stereotype.Service;
@@ -45,7 +46,10 @@ public class AttendanceServiceImpl implements AttendanceService {
     public Attendance saveByInputDTO(AttendanceInputDTO attendanceInputDTO, AfterSchoolCare afterSchoolCare) {
         Attendance attendance = new Attendance();
 
-        attendance.setChild(userService.findOne(attendanceInputDTO.getChildId()));
+        attendance.setChild((User) userService.findByUsername(attendanceInputDTO.getChildUsername()));
+        attendance.setPredefinedLeaveTime(attendanceInputDTO.getPredefinedLeaveTime());
+        attendance.setLatestArrivalTime(attendanceInputDTO.getLatestArrivalTime());
+        attendance.setAllowedToLeaveAfterFinishedHomework(attendanceInputDTO.isAllowedToLeaveAfterFinishedHomework());
         attendance.setNote(attendanceInputDTO.getNote());
         attendance.setAfterSchoolCare(afterSchoolCare);
 

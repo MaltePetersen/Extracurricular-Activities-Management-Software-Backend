@@ -38,26 +38,26 @@ public class Attendance {
     private LocalDateTime arrivalTime;
 
     //spätester Zeitpunkt der möglichen Anmeldung, bevor die Eskalation startet
-    //private LocalDateTime latestArrivalTime;
+    private LocalDateTime latestArrivalTime;
 
     //Zeitpunkt, an dem das Kind sich beim Betreuer abmeldet
     private LocalDateTime leaveTime;
 
     //Zeitpunkt, an dem das Kind durch eine Erlaubnis die Betreuung früher verlassen darf
-    //private LocalDateTime predefinedLeaveTime;
+    private LocalDateTime predefinedLeaveTime;
+
+    private boolean allowedToLeaveAfterFinishedHomework;
 
     private String note;
 
     public int determineStatus() {
-
         if (arrivalTime == null && leaveTime == null) {
-            if (afterSchoolCare.getStartTime().isBefore(LocalDateTime.now())) {
+            if ((latestArrivalTime != null ? latestArrivalTime : afterSchoolCare.getStartTime()).isBefore(LocalDateTime.now())) {
                 return AttendanceStatus.OVERDUE;
             } else return AttendanceStatus.REGISTERED;
         } else if (leaveTime == null) return AttendanceStatus.PRESENT;
         else if (arrivalTime != null) return AttendanceStatus.GONE;
         else return AttendanceStatus.ERROR;
-
     }
 
 

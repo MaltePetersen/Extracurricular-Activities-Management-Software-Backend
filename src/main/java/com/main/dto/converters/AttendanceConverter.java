@@ -27,7 +27,13 @@ public class AttendanceConverter {
 
         attendanceDTO.setArrivalTime(attendance.getArrivalTime());
 
+        attendanceDTO.setLatestArrivalTime(attendance.getLatestArrivalTime());
+
         attendanceDTO.setLeaveTime(attendance.getLeaveTime());
+
+        attendanceDTO.setPredefinedLeaveTime(attendance.getPredefinedLeaveTime());
+
+        attendanceDTO.setAllowedToLeaveAfterFinishedHomework(attendance.isAllowedToLeaveAfterFinishedHomework());
 
         attendanceDTO.setNote(attendance.getNote());
 

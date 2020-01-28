@@ -43,6 +43,23 @@ public class AttendanceTest {
     }
 
     @Test
+    public void determineStatus1LatestArrivalTime() {
+
+        AfterSchoolCare afterSchoolCare = new AfternoonCare();
+        afterSchoolCare.setStartTime(LocalDateTime.now().minusMinutes(30));
+        afterSchoolCare.setEndTime(LocalDateTime.now().plusDays(1));
+
+        Attendance attendance = new Attendance();
+        attendance.setAfterSchoolCare(afterSchoolCare);
+        attendance.setArrivalTime(null);
+        attendance.setLeaveTime(null);
+        attendance.setLatestArrivalTime(LocalDateTime.now().plusMinutes(10));
+
+        assertEquals(Attendance.AttendanceStatus.REGISTERED, attendance.determineStatus());
+
+    }
+
+    @Test
     public void determineStatus2() {
 
         AfterSchoolCare afterSchoolCare = new AfternoonCare();
@@ -53,6 +70,23 @@ public class AttendanceTest {
         attendance.setAfterSchoolCare(afterSchoolCare);
         attendance.setArrivalTime(null);
         attendance.setLeaveTime(null);
+
+        assertEquals(Attendance.AttendanceStatus.OVERDUE, attendance.determineStatus());
+
+    }
+
+    @Test
+    public void determineStatus2LatestArrivalTime() {
+
+        AfterSchoolCare afterSchoolCare = new AfternoonCare();
+        afterSchoolCare.setStartTime(LocalDateTime.now().minusHours(2));
+        afterSchoolCare.setEndTime(LocalDateTime.now().plusDays(1));
+
+        Attendance attendance = new Attendance();
+        attendance.setAfterSchoolCare(afterSchoolCare);
+        attendance.setArrivalTime(null);
+        attendance.setLeaveTime(null);
+        attendance.setLatestArrivalTime(LocalDateTime.now().minusHours(1));
 
         assertEquals(Attendance.AttendanceStatus.OVERDUE, attendance.determineStatus());
 
