@@ -93,6 +93,18 @@ public class AssuredEmployeeControllerTest extends AbstractAssuredTest {
         // verifiziert, dass korrekt gefiltert wurde, so dass u.a. keine AfterSchoolCares von anderen Employees enthalten sind
         assertTrue(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCareWithUserSchool1.getId())));
         assertTrue(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testRemedialWithUserSchool2.getId())));
+        assertTrue(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCareWithDifferentUser.getId())));
+    }
+
+    @Test
+    public void testGetAfternoonCaresWithEmployeeAuthorityAndShowOnlyOwnFilter() {
+        ValidatableResponse response = super.sendGetRequestWithAuth(employee, TestEmployeeControllerPath.AFTER_SCHOOL_CARES.getUri() + "?showOnlyOwn=true").statusCode(200);
+
+        List<AfterSchoolCareDTO> resultAfternoonCares = Arrays.asList(response.extract().body().as(AfterSchoolCareDTO[].class));
+
+        // verifiziert, dass korrekt gefiltert wurde, so dass u.a. keine AfterSchoolCares von anderen Employees enthalten sind
+        assertTrue(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCareWithUserSchool1.getId())));
+        assertTrue(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testRemedialWithUserSchool2.getId())));
         assertFalse(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCareWithDifferentUser.getId())));
     }
 
