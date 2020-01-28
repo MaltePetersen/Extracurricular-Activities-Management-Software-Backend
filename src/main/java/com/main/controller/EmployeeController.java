@@ -100,9 +100,11 @@ public class EmployeeController {
             @RequestParam(required = false, name="school") Long schoolId,
             @RequestParam(required = false) Integer type,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
-        return afterSchoolCareService.getAllByOwner(auth.getName()).stream()
-                .filter(afterSchoolCare -> schoolId == null || afterSchoolCare.getParticipatingSchool().getId().equals(schoolId))
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+            @RequestParam(required = false) boolean showOnlyOwn) {
+        return afterSchoolCareService.getAll().stream()
+                .filter(afterSchoolCare -> !showOnlyOwn || afterSchoolCare.getOwner() != null && afterSchoolCare.getOwner().getUsername().equals(auth.getName()))
+                .filter(afterSchoolCare -> schoolId == null || afterSchoolCare.getParticipatingSchool() != null && afterSchoolCare.getParticipatingSchool().getId().equals(schoolId))
                 .filter(afterSchoolCare -> type == null || afterSchoolCare.getType().getId() == type)
                 .filter(afterSchoolCare -> startDate == null || afterSchoolCare.getEndTime().isAfter(startDate))
                 .filter(afterSchoolCare -> endDate == null || afterSchoolCare.getStartTime().isBefore(endDate))

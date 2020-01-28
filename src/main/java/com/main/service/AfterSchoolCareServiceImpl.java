@@ -30,11 +30,6 @@ public class AfterSchoolCareServiceImpl implements AfterSchoolCareService {
         return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
     }
 
-	@Override
-	public List<AfterSchoolCare> getAllByOwner(String username) {
-		return StreamSupport.stream(repository.findAll().spliterator(), false).filter(afterSchoolCare -> afterSchoolCare.getOwner() != null && afterSchoolCare.getOwner().getUsername().equals(username)).collect(Collectors.toList());
-	}
-
     @Override
     public List<AfterSchoolCare> getAllByParent(String username) {
         return StreamSupport.stream(repository.findAll().spliterator(), false).

@@ -189,7 +189,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		amplification.setStartTime(LocalDateTime.of(2020, 6, 17, 10, 45));
 		amplification.setEndTime(LocalDateTime.of(2020, 6, 17, 11, 30));
 		amplification.setParticipatingSchool(school2);
-		amplification.setOwner(userRepository.findByUsername("Employee_Test"));
+		amplification.setOwner(userRepository.findByUsername("Employee_Test2"));
 		afterSchoolCareService.save(amplification);
 
 		Attendance attendance4 = new Attendance();
