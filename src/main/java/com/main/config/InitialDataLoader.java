@@ -158,12 +158,19 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		attendanceRepository.save(attendance);
 
 		Attendance attendance3 = new Attendance();
-		attendance3.setArrivalTime(LocalDateTime.of(2020, 4, 3, 12, 5));
+		attendance3.setLatestArrivalTime(LocalDateTime.of(2020, 4, 3, 12, 10));
 		attendance3.setAfterSchoolCare(afternoonCare);
 		attendance3.setChild(userRepository.findByUsername("Child_Test2"));
 		attendanceRepository.save(attendance3);
 
-		afternoonCare.addAttendance(attendance);
+		Attendance attendance5 = new Attendance();
+		attendance5.setArrivalTime(LocalDateTime.of(2020, 4, 3, 12, 5));
+		attendance5.setPredefinedLeaveTime(LocalDateTime.of(2020, 4, 3, 14, 0));
+		attendance5.setAllowedToLeaveAfterFinishedHomework(true);
+		attendance5.setAfterSchoolCare(afternoonCare);
+		attendance5.setChild(userRepository.findByUsername("Child_Test4"));
+		attendanceRepository.save(attendance5);
+
 		afterSchoolCareService.save(afternoonCare);
 
 		Remedial remedial = new Remedial();
