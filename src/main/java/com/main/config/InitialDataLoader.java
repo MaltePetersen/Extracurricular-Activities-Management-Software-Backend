@@ -131,6 +131,9 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		School school2 = new School("Klaus-Groth-Schule", "Parkstraße 1, 24534 Neumünster");
 		schoolRepo.save(school2);
 
+		User user2 = userRepository.findByUsername("Child_Test2");
+		user2.setChildSchool(school2);
+
 		School school3 = new School("Wilhelm-Tanck-Schule", "Färberstraße 25, 24534 Neumünster");
 		schoolRepo.save(school3);
 
