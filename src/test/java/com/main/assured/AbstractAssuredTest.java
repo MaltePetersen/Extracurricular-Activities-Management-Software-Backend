@@ -6,6 +6,7 @@ import com.main.dto.interfaces.IUserDTO;
 import com.main.repository.RoleRepository;
 import com.main.service.AfterSchoolCareService;
 import com.main.service.AttendanceService;
+import com.main.service.SchoolService;
 import com.main.service.UserService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -47,6 +48,9 @@ public abstract class AbstractAssuredTest {
 
     @Autowired
     protected AttendanceService attendanceService;
+
+    @Autowired
+    protected SchoolService schoolService;
 
     protected ObjectMapper objectMapper;
 
