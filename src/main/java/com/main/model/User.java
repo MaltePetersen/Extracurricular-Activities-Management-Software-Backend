@@ -298,6 +298,9 @@ public class User implements IChild, IEmployee, IManagement, IParent, IUser, ITe
 //					dto.setUserType(user.getRoles().get(0).getName());
 //				}
 //			} else {
+            if (user.getChildSchool() != null) {
+                dto.setChildSchool(user.getChildSchool().getId());
+            }
             dto.setUserType(type);
 //			}
 

@@ -213,16 +213,18 @@ public class ParentController {
     }
 
     //Funktioniert noch nciht richtig, zum Schutz vor unerwarteten Auswirkungen erst einmal deaktiviert
-    @DeleteMapping("/child/{id}")
-    void deleteChild(@PathVariable Long id, Authentication auth) {
+    @DeleteMapping("/child/{username}")
+    ResponseEntity<String> deleteChild(@PathVariable String username, Authentication auth) {
         User parent = (User) userService.findByUsername(auth.getName());
-        User child = userService.findOne(id);
+        User child = (User) userService.findByUsername(username);
 
         parent.removeChild(child);
         userService.deleteUser(child);
 
 
         userService.update(parent);
+
+        return new ResponseEntity<>("Das Kind wurde erfolgreich gelöscht!", HttpStatus.GONE);
 
     }
 

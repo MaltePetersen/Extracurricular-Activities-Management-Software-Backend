@@ -31,7 +31,7 @@ public class UserData {
 
         User parent = builder.withName("Parent_Test").withPassword(encoder.encode("password")).withFullname("Craig Walls").withEmail("craig@walls.com").withPhoneNumber("112").build();
         builder = User.UserBuilder.next();
-        User parent2 = builder.withName("Parent_Test2").withPassword(encoder.encode("password")).withFullname("Craig Walls 2").withEmail("craig@walls.com").withPhoneNumber("112").build();
+        User parent2 = builder.withName("Parent_Test2").withPassword(encoder.encode("password")).withFullname("Craig Walls 2").withEmail("craig2@walls.com").withPhoneNumber("112").build();
         builder = User.UserBuilder.next();
         User management = builder.withName("Management_Test").withPassword(encoder.encode("password")).withFullname("Malte Petersen")
                 .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").build();
