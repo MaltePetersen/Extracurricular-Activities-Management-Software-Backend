@@ -175,9 +175,9 @@ public class ParentController {
         return new ResponseEntity<>("Created: " + registered.getId(), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/child/{id}")
-    IUserDTO updateChild(@RequestBody Map<String, String> update, @PathVariable Long id) {
-        User child = userService.findOne(id);
+    @PatchMapping("/child/{username}")
+    IUserDTO updateChild(@RequestBody Map<String, String> update, @PathVariable String username) {
+        User child = (User) userService.findByUsername(username);
 
         String fullname = update.get("fullname");
         if (fullname != null && !fullname.isEmpty()) {
@@ -205,10 +205,10 @@ public class ParentController {
         return dto;
     }
 
-    @GetMapping("/child/{id}")
-    UserDTO getChild(@PathVariable @Min(1) Long id) {
+    @GetMapping("/child/{username}")
+    UserDTO getChild(@PathVariable @Min(1) String username) {
         User.UserBuilder builder = User.UserBuilder.next();
-        builder.withUser(userService.findOne(id));
+        builder.withUser((User) userService.findByUsername(username));
         return (UserDTO) builder.toDto("CHILD");
     }
 
