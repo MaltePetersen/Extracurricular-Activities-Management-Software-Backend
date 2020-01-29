@@ -2,18 +2,18 @@ package com.main.model.afterSchoolCare;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.*;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.main.model.Attendance;
 import com.main.model.School;
 import com.main.model.User;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.persistence.Id;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Die Klasse für die Nachmittagsbetreuung. Pro Schule und Termin (Tag) gibt es
@@ -84,9 +84,18 @@ public abstract class AfterSchoolCare {
     private List<Attendance> attendances = new ArrayList<>();
 
 
-
     public void addAttendance(Attendance attendance) {
         this.attendances.add(attendance);
     }
 
+    public static Map<Integer, String> getTypes() {
+        Map<Integer, String> types = new HashMap<>();
+
+        types.put(Type.AFTERNOON_CARE.getId(), "Nachmittagsbetreuung");
+        types.put(Type.WORKING_GROUP.getId(), "AG");
+        types.put(Type.REMEDIAL.getId(), "Nachhilfe");
+        types.put(Type.AMPLIFICATION.getId(), "Verstärkung");
+
+        return types;
+    }
 }

@@ -84,6 +84,11 @@ public class ParentController {
         return schoolService.getAll().stream().map(SchoolConverter::toDto).collect(Collectors.toList());
     }
 
+    @GetMapping("/after_school_cares/types")
+    Map<Integer, String> getAfterSchoolCaresTypes() {
+        return AfterSchoolCare.getTypes();
+    }
+
     @GetMapping("/booked_after_school_cares")
     public List<AfterSchoolCareDTO> getBookedAfterSchoolCares(Authentication auth) {
         return afterSchoolCareService.getAllByParent(auth.getName()).stream().map(AfterSchoolCareConverter::toDto)
