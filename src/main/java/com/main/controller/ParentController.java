@@ -184,6 +184,8 @@ public class ParentController {
     IUserDTO updateChild(@RequestBody Map<String, String> update, @PathVariable String username) {
         User child = (User) userService.findByUsername(username);
 
+        Long school;
+
         String fullname = update.get("fullname");
         if (fullname != null && !fullname.isEmpty()) {
             child.setFullname(fullname);
@@ -194,8 +196,12 @@ public class ParentController {
             child.setSchoolClass(schoolClass);
         }
 
-        Long school = Long.parseLong(update.get("school"));
-        child.setChildSchool(schoolService.findOne(school));
+        if (update.get("school") != null) {
+            school = Long.parseLong(update.get("school"));
+            child.setChildSchool(schoolService.findOne(school));
+        } else{
+            school = child.getChildSchool().getId();
+        }
 
         /*String schoolString = update.get("school");
         if(schoolString != null && !schoolString.isEmpty()){
