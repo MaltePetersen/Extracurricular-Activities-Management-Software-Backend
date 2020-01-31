@@ -85,6 +85,11 @@ public class ParentController {
         return schoolService.getAll().stream().map(SchoolConverter::toDto).collect(Collectors.toList());
     }
 
+    @GetMapping("/after_school_cares/types")
+    Map<Integer, String> getAfterSchoolCaresTypes() {
+        return AfterSchoolCare.getTypes();
+    }
+
     @GetMapping("/booked_after_school_cares")
     public List<AfterSchoolCareDTO> getBookedAfterSchoolCares(Authentication auth) {
         return afterSchoolCareService.getAllByParent(auth.getName()).stream().map(AfterSchoolCareConverter::toDto)
@@ -176,9 +181,11 @@ public class ParentController {
         return new ResponseEntity<>("Created: " + registered.getId(), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/child/{id}")
-    IUserDTO updateChild(@RequestBody Map<String, String> update, @PathVariable Long id) {
-        User child = userService.findOne(id);
+    @PatchMapping("/child/{username}")
+    IUserDTO updateChild(@RequestBody Map<String, String> update, @PathVariable String username) {
+        User child = (User) userService.findByUsername(username);
+
+        Long school;
 
         String fullname = update.get("fullname");
         if (fullname != null && !fullname.isEmpty()) {
@@ -190,8 +197,12 @@ public class ParentController {
             child.setSchoolClass(schoolClass);
         }
 
-        Long school = Long.parseLong(update.get("school"));
-        child.setChildSchool(schoolService.findOne(school));
+        if (update.get("school") != null) {
+            school = Long.parseLong(update.get("school"));
+            child.setChildSchool(schoolService.findOne(school));
+        } else{
+            school = child.getChildSchool().getId();
+        }
 
         /*String schoolString = update.get("school");
         if(schoolString != null && !schoolString.isEmpty()){
@@ -206,10 +217,10 @@ public class ParentController {
         return dto;
     }
 
-    @GetMapping("/child/{id}")
-    UserDTO getChild(@PathVariable @Min(1) Long id) {
+    @GetMapping("/child/{username}")
+    UserDTO getChild(@PathVariable @Min(1) String username) {
         User.UserBuilder builder = User.UserBuilder.next();
-        builder.withUser(userService.findOne(id));
+        builder.withUser((User) userService.findByUsername(username));
         return (UserDTO) builder.toDto("CHILD");
     }
 

@@ -18,12 +18,16 @@ public class AttendanceDTO {
     @JsonDeserialize(converter = StringToLocalDatetimeConverter.class)
     private LocalDateTime arrivalTime;
 
-    //private LocalDateTime latestArrivalTime;
+    @JsonDeserialize(converter = StringToLocalDatetimeConverter.class)
+    private LocalDateTime latestArrivalTime;
 
     @JsonDeserialize(converter = StringToLocalDatetimeConverter.class)
     private LocalDateTime leaveTime;
 
-    //private LocalDateTime predefinedLeaveTime;
+    @JsonDeserialize(converter = StringToLocalDatetimeConverter.class)
+    private LocalDateTime predefinedLeaveTime;
+
+    private boolean allowedToLeaveAfterFinishedHomework;
 
     private String note;
 

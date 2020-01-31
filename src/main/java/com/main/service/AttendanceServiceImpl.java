@@ -4,6 +4,7 @@ import com.main.dto.AttendanceDTO;
 import com.main.dto.AttendanceInputDTO;
 import com.main.dto.converters.AttendanceConverter;
 import com.main.model.Attendance;
+import com.main.model.User;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.repository.AttendanceRepository;
 import org.jetbrains.annotations.NotNull;

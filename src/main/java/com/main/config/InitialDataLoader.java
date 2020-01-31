@@ -124,15 +124,23 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		School school1 = new School("Holstenschule", "Altonaer Str. 40, 24534 Neumünster");
 		school1 = schoolRepo.save(school1);
 
-
-		User user = userRepository.findByUsername("Child_Test");
-		user.setChildSchool(school1);
-
 		School school2 = new School("Klaus-Groth-Schule", "Parkstraße 1, 24534 Neumünster");
 		schoolRepo.save(school2);
 
 		School school3 = new School("Wilhelm-Tanck-Schule", "Färberstraße 25, 24534 Neumünster");
 		schoolRepo.save(school3);
+
+		//setChildSchools
+		User user = userRepository.findByUsername("Child_Test");
+		user.setChildSchool(school1);
+		User user2 = userRepository.findByUsername("Child_Test2");
+		user2.setChildSchool(school2);
+		User user3 = userRepository.findByUsername("Child_Test3");
+		user3.setChildSchool(school3);
+		User user4 = userRepository.findByUsername("Child_Test4");
+		user4.setChildSchool(school3);
+		User user5 = userRepository.findByUsername("Child_Test5");
+		user5.setChildSchool(school1);
 
 		AfternoonCare afternoonCare = new AfternoonCare();
 		afternoonCare.setName("Test-Nachmittagsbetreuung");
@@ -150,12 +158,19 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		attendanceRepository.save(attendance);
 
 		Attendance attendance3 = new Attendance();
-		attendance3.setArrivalTime(LocalDateTime.of(2020, 4, 3, 12, 5));
+		attendance3.setLatestArrivalTime(LocalDateTime.of(2020, 4, 3, 12, 10));
 		attendance3.setAfterSchoolCare(afternoonCare);
 		attendance3.setChild(userRepository.findByUsername("Child_Test2"));
 		attendanceRepository.save(attendance3);
 
-		afternoonCare.addAttendance(attendance);
+		Attendance attendance5 = new Attendance();
+		attendance5.setArrivalTime(LocalDateTime.of(2020, 4, 3, 12, 5));
+		attendance5.setPredefinedLeaveTime(LocalDateTime.of(2020, 4, 3, 14, 0));
+		attendance5.setAllowedToLeaveAfterFinishedHomework(true);
+		attendance5.setAfterSchoolCare(afternoonCare);
+		attendance5.setChild(userRepository.findByUsername("Child_Test4"));
+		attendanceRepository.save(attendance5);
+
 		afterSchoolCareService.save(afternoonCare);
 
 		Remedial remedial = new Remedial();
@@ -181,12 +196,12 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		amplification.setStartTime(LocalDateTime.of(2020, 6, 17, 10, 45));
 		amplification.setEndTime(LocalDateTime.of(2020, 6, 17, 11, 30));
 		amplification.setParticipatingSchool(school2);
-		amplification.setOwner(userRepository.findByUsername("Employee_Test"));
+		amplification.setOwner(userRepository.findByUsername("Employee_Test2"));
 		afterSchoolCareService.save(amplification);
 
 		Attendance attendance4 = new Attendance();
 		attendance4.setAfterSchoolCare(amplification);
-		attendance4.setChild(userRepository.findByUsername("Child_Test"));
+		attendance4.setChild(userRepository.findByUsername("Child_Test3"));
 		attendanceRepository.save(attendance4);
 
 		amplification.addAttendance(attendance4);
@@ -201,17 +216,23 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 			userRepository.save(user);
 		});
 
-//		User parent = userRepository.findByUsername("Parent_Test");
-		/*User child = userRepository.findByUsername("Child_Test");
-		User parent = userRepository.findByEmail("craig@walls.com");
-		User.UserBuilder<User> builder = User.UserBuilder.next();
-
-
+		User parent = userRepository.findByUsername("Parent_Test");
+		User child = userRepository.findByUsername("Child_Test");
 		parent.addChild(child);
-		userRepository.save(parent);
 		child.setParent(parent);
-		userRepository.save(child);*/
 
+		User parent2 = userRepository.findByUsername("Parent_Test2");
+		User child2 = userRepository.findByUsername("Child_Test2");
+		User child3 = userRepository.findByUsername("Child_Test3");
+		User child4 = userRepository.findByUsername("Child_Test4");
+
+		parent2.addChild(child2);
+		parent2.addChild(child3);
+		parent2.addChild(child4);
+
+		child2.setParent(parent2);
+		child3.setParent(parent2);
+		child4.setParent(parent2);
 	}
 
 }
