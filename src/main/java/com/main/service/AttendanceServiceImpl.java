@@ -2,7 +2,6 @@ package com.main.service;
 
 import com.main.dto.AttendanceDTO;
 import com.main.dto.AttendanceInputDTO;
-import com.main.dto.converters.AttendanceConverter;
 import com.main.model.Attendance;
 import com.main.model.User;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
@@ -47,7 +46,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public Attendance saveByInputDTO(AttendanceInputDTO attendanceInputDTO, AfterSchoolCare afterSchoolCare) {
-        Attendance attendance = saveInputDto(attendanceInputDTO);
+        Attendance attendance = getAttendanceByInputDTO(attendanceInputDTO);
         attendance.setAfterSchoolCare(afterSchoolCare);
         save(attendance);
         afterSchoolCare.addAttendance(attendance);
@@ -58,11 +57,15 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @NotNull
     @Override
-    public Attendance saveInputDto(AttendanceInputDTO attendanceInputDTO) {
+    public Attendance getAttendanceByInputDTO(AttendanceInputDTO attendanceInputDTO) {
         Attendance attendance = new Attendance();
 
-        attendance.setChild(userService.findOne(attendanceInputDTO.getChildId()));
+        attendance.setChild((User) userService.findByUsername(attendanceInputDTO.getChildUsername()));
         attendance.setNote(attendanceInputDTO.getNote());
+        attendance.setChild((User) userService.findByUsername(attendanceInputDTO.getChildUsername()));
+        attendance.setPredefinedLeaveTime(attendanceInputDTO.getPredefinedLeaveTime());
+        attendance.setLatestArrivalTime(attendanceInputDTO.getLatestArrivalTime());
+        attendance.setAllowedToLeaveAfterFinishedHomework(attendanceInputDTO.isAllowedToLeaveAfterFinishedHomework());
         return attendance;
     }
 

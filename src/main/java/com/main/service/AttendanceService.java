@@ -19,7 +19,7 @@ public interface AttendanceService {
 
     void deleteById(Long id);
 
-    Attendance saveInputDto(AttendanceInputDTO dto);
+    Attendance getAttendanceByInputDTO(AttendanceInputDTO dto);
 
     Attendance saveDto(AttendanceDTO dto);
 }

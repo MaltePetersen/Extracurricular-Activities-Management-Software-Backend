@@ -21,6 +21,4 @@ public class AttendanceInputDTO {
     private boolean allowedToLeaveAfterFinishedHomework;
 
     private String note;
-
-    private Long childId;
 }
