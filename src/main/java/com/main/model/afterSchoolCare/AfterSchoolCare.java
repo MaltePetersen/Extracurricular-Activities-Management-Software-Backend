@@ -54,7 +54,7 @@ public abstract class AfterSchoolCare {
             return id;
         }
 
-        public Type getById(int id) {
+        public static Type getById(int id) {
             for (Type type : Type.values()) {
                 if (type.getId() == id) {
                     return type;

@@ -21,6 +21,7 @@ public interface UserService {
 	IUser findByEmail(String email);
 	boolean emailExist(String email);
 	void deleteUser(User user);
+	void deleteUserById(long id);
 	List<User> findAll();
 	IUser findByUsername(String username);
     User findOne(Long id);

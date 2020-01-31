@@ -1,10 +1,17 @@
 package com.main.model.user;
 
+import com.main.model.User;
 import org.springframework.security.core.GrantedAuthority;
 
 public enum UserRole implements GrantedAuthority {
-	ROLE_MANAGEMENT, ROLE_PARENT, ROLE_CHILD, ROLE_SCHOOLCOORDINATOR, ROLE_EMPLOYEE, ROLE_TEACHER, ROLE_USER,
-	ROLE_RESET_PASSWORD;
+	ROLE_MANAGEMENT(0), ROLE_PARENT(1), ROLE_CHILD(2), ROLE_SCHOOLCOORDINATOR(3), ROLE_EMPLOYEE(4), ROLE_TEACHER(5), ROLE_USER(6),
+	ROLE_RESET_PASSWORD(7);
+
+	private int id;
+
+	private UserRole(int id){
+		this.id = id;
+	}
 
 	@Override
 	public String getAuthority() {

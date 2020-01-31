@@ -6,6 +6,7 @@ import com.main.dto.converters.SchoolConverter;
 import com.main.dto.interfaces.IUserDTO;
 import com.main.model.User;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
+import com.main.model.interfaces.IUser;
 import com.main.service.AfterSchoolCareService;
 import com.main.service.AttendanceService;
 import com.main.service.SchoolService;
@@ -131,7 +132,7 @@ public class ParentController {
     @GetMapping("/children")
     public List<UserDTO> getChilds(Authentication auth) {
         return ((User) userService.findByUsername(auth.getName())).getChildren().stream().map((child) -> {
-            User.UserBuilder builder = User.UserBuilder.next();
+            User.UserBuilder<IUser> builder = User.UserBuilder.next();
             builder.withUser(child);
             return (UserDTO) builder.toDto("CHILD");
         }).collect(Collectors.toList());

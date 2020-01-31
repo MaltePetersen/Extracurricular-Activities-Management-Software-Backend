@@ -1,9 +1,12 @@
 package com.main.service;
 
+import com.main.dto.AttendanceDTO;
 import com.main.dto.AttendanceInputDTO;
+import com.main.dto.converters.AttendanceConverter;
 import com.main.model.Attendance;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.repository.AttendanceRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +20,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     private AfterSchoolCareService afterSchoolCareService;
     private UserService userService;
 
-    public AttendanceServiceImpl(AttendanceRepository repository, AfterSchoolCareService afterSchoolCareService, UserService userService){
+    public AttendanceServiceImpl(AttendanceRepository repository, AfterSchoolCareService afterSchoolCareService, UserService userService) {
         this.repository = repository;
         this.afterSchoolCareService = afterSchoolCareService;
         this.userService = userService;
@@ -43,22 +46,33 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public Attendance saveByInputDTO(AttendanceInputDTO attendanceInputDTO, AfterSchoolCare afterSchoolCare) {
-        Attendance attendance = new Attendance();
-
-        attendance.setChild(userService.findOne(attendanceInputDTO.getChildId()));
-        attendance.setNote(attendanceInputDTO.getNote());
+        Attendance attendance = saveInputDto(attendanceInputDTO);
         attendance.setAfterSchoolCare(afterSchoolCare);
-
         save(attendance);
-
         afterSchoolCare.addAttendance(attendance);
         afterSchoolCareService.save(afterSchoolCare);
 
         return attendance;
     }
 
+    @NotNull
     @Override
-    public void deleteById(Long id)  {
+    public Attendance saveInputDto(AttendanceInputDTO attendanceInputDTO) {
+        Attendance attendance = new Attendance();
+
+        attendance.setChild(userService.findOne(attendanceInputDTO.getChildId()));
+        attendance.setNote(attendanceInputDTO.getNote());
+        return attendance;
+    }
+
+    @Override
+    public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public Attendance saveDto(AttendanceDTO dto) {
+        //TODO Missing converter
+        return null;
     }
 }

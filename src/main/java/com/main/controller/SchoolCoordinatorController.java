@@ -34,8 +34,8 @@ public class SchoolCoordinatorController {
         this.userService = userService;
     }
 
-    //Add
-    @PostMapping("/add")
+    //Add Working Group
+    @PostMapping("/ag")
     public AfterSchoolCareDTO addAWorkingGroup(@RequestBody AfterSchoolCareDTO afterSchoolCareDTO) {
         if (afterSchoolCareDTO.getType() != 2) {
             return null;
@@ -45,8 +45,8 @@ public class SchoolCoordinatorController {
     }
 
 
-    //Remove
-    @GetMapping("/delete")
+    //Remove Working Group
+    @GetMapping("/ag")
     public ResponseEntity<String> removeWorkingGroup(@PathVariable Long id, Authentication authentication) {
         if (id == null)
             return ResponseEntity.badRequest().build();
@@ -59,7 +59,7 @@ public class SchoolCoordinatorController {
         return ResponseEntity.ok("");
     }
 
-    //Get
+    //Get All Working Groups
     @GetMapping("/ags")
     public List<AfterSchoolCareDTO> getMyWorkingGroup(Authentication authentication) {
         String username = authentication.getName();
@@ -69,6 +69,8 @@ public class SchoolCoordinatorController {
                 .collect(Collectors.toList());
     }
 
+
+    //Get Working Group by Id
     @GetMapping("/ag")
     public AfterSchoolCareDTO getWorkingGroupById(@RequestParam("id") Long id, Authentication authentication) {
         if (id == null)
@@ -85,8 +87,6 @@ public class SchoolCoordinatorController {
 
     //Update
 
-
-    //Add Child
 
     //Anwesendheit verwalten??
 

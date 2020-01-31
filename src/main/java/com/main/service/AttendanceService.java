@@ -1,5 +1,6 @@
 package com.main.service;
 
+import com.main.dto.AttendanceDTO;
 import com.main.dto.AttendanceInputDTO;
 import com.main.model.Attendance;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
@@ -18,4 +19,7 @@ public interface AttendanceService {
 
     void deleteById(Long id);
 
+    Attendance saveInputDto(AttendanceInputDTO dto);
+
+    Attendance saveDto(AttendanceDTO dto);
 }

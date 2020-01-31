@@ -66,7 +66,6 @@ public class UserControllerTest extends AbstractMvcTest {
 
 		int status = mvcResult.getResponse().getStatus();
 		assertEquals(201, status);
-
 	}
 
 	/**

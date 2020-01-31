@@ -46,7 +46,7 @@ public class EmployeeController {
         invoiceDTOs = new ArrayList<>();
         for (int i = 1; i < 9; i++) {
             InvoiceDTO invoiceDTO = new InvoiceDTO();
-            invoiceDTO.setId(new Long(i));
+            invoiceDTO.setId((long) i);
             invoiceDTO.setData("Abbrechnung Nr " + i);
             invoiceDTO.setTime(LocalDateTime.of(i, i, i, i, i));
             invoiceDTOs.add(invoiceDTO);
@@ -97,7 +97,7 @@ public class EmployeeController {
     @GetMapping("/after_school_cares")
     public List<AfterSchoolCareDTO> getAfterSchoolCares(
             Authentication auth,
-            @RequestParam(required = false, name="school") Long schoolId,
+            @RequestParam(required = false, name = "school") Long schoolId,
             @RequestParam(required = false) Integer type,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {

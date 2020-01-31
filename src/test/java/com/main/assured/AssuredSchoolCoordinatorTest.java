@@ -8,6 +8,7 @@ import com.main.model.User;
 import com.main.model.afterSchoolCare.WorkingGroup;
 import com.main.model.interfaces.IUser;
 import com.main.model.user.UserRole;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,8 +36,6 @@ public class AssuredSchoolCoordinatorTest extends AbstractAssuredTest {
         user.setPassword(encoder.encode(user.getPassword()));
         user = userService.update(user, UserRole.ROLE_SCHOOLCOORDINATOR);
 
-
-
         WorkingGroup workingGroup = new WorkingGroup();
         workingGroup.setName("Working Group");
         workingGroup.setOwner(user);
@@ -44,6 +43,15 @@ public class AssuredSchoolCoordinatorTest extends AbstractAssuredTest {
         afterSchoolCareService.save(workingGroup);
 
         id = workingGroup.getId().toString();
+    }
+
+    @After
+    @Transactional
+    public void teardown(){
+        IUser user = userService.findByUsername(userDTO.getUsername());
+        if(user == null)
+            return;
+        userService.deleteUserById(user.getId());
     }
 
 
