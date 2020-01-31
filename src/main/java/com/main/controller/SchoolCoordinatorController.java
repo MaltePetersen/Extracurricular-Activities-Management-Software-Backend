@@ -46,7 +46,7 @@ public class SchoolCoordinatorController {
 
 
     //Remove Working Group
-    @GetMapping("/ag")
+    @DeleteMapping("/ag")
     public ResponseEntity<String> removeWorkingGroup(@PathVariable Long id, Authentication authentication) {
         if (id == null)
             return ResponseEntity.badRequest().build();
