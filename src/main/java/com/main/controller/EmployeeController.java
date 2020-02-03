@@ -129,15 +129,24 @@ public class EmployeeController {
     }
 
     @PatchMapping("/after_school_cares/{id}/close")
-    AfterSchoolCareDTO closeAfterSchoolCare(@PathVariable @Min(1) Long id) {
+    ResponseEntity closeAfterSchoolCare(@PathVariable @Min(1) Long id) {
         AfterSchoolCare afterSchoolCare = afterSchoolCareService.findOne(id);
 
-        afterSchoolCare.setClosed(true);
-        afterSchoolCareService.save(afterSchoolCare);
+        if (afterSchoolCare.getAttendances().stream().allMatch(attendance -> attendance.determineStatus() == 4)) {
+            afterSchoolCare.setClosed(true);
+            afterSchoolCareService.save(afterSchoolCare);
 
-        // TODO: hier Implementierung für das Schreiben der CSV
+            // TODO: hier Implementierung für das Schreiben der CSV
 
-        return AfterSchoolCareConverter.toDto(afterSchoolCare);
+        } else {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Error: Closing an AfterSchoolCare is only allowed when all children have left.");
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(AfterSchoolCareConverter.toDto(afterSchoolCare));
     }
 
     /**
