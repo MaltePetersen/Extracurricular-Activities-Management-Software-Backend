@@ -14,6 +14,7 @@ public class AfterSchoolCareConverter {
 
 		afterSchoolCareDTO.setId(afterSchoolCare.getId());
 		afterSchoolCareDTO.setType(afterSchoolCare.getType().getId());
+		afterSchoolCareDTO.setClosed(afterSchoolCare.isClosed());
 		afterSchoolCareDTO.setName(afterSchoolCare.getName());
 		afterSchoolCareDTO.setStartTime(afterSchoolCare.getStartTime());
 		afterSchoolCareDTO.setEndTime(afterSchoolCare.getEndTime());

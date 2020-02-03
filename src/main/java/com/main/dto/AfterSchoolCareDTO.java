@@ -14,6 +14,8 @@ public class AfterSchoolCareDTO {
 
 	private int type;
 
+	private boolean closed;
+
 	private String name;
 
 	@JsonDeserialize(converter = StringToLocalDatetimeConverter.class)

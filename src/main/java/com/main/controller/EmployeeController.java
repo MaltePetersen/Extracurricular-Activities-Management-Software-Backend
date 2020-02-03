@@ -128,6 +128,18 @@ public class EmployeeController {
         afterSchoolCareService.deleteById(id);
     }
 
+    @PatchMapping("/after_school_cares/{id}/close")
+    AfterSchoolCareDTO closeAfterSchoolCare(@PathVariable @Min(1) Long id) {
+        AfterSchoolCare afterSchoolCare = afterSchoolCareService.findOne(id);
+
+        afterSchoolCare.setClosed(true);
+        afterSchoolCareService.save(afterSchoolCare);
+
+        // TODO: hier Implementierung für das Schreiben der CSV
+
+        return AfterSchoolCareConverter.toDto(afterSchoolCare);
+    }
+
     /**
      * Aktualisiert ArrivalTime und / oder LeaveTime einer Attendance, kann auch auf null gesetzt werden
      *
@@ -139,42 +151,48 @@ public class EmployeeController {
     ResponseEntity updateAttendance(@RequestBody Map<String, String> update, @PathVariable Long id) {
         Attendance attendance = attendanceService.findOne(id);
 
-        String arrivalTimeString = update.get("arrivalTime");
-        if (arrivalTimeString != null && !arrivalTimeString.isEmpty()) {
-            LocalDateTime arrivalTime = (new StringToLocalDatetimeConverter()).convert(arrivalTimeString);
-            if (arrivalTime != null) {
-                attendance.setArrivalTime(arrivalTime);
-            }
-        } else {
-            if (update.containsKey("arrivalTime") && arrivalTimeString == null) {
-                // arrivalTime darf nur null gesetzt werden, wenn keine leaveTime gesetzt ist
-                if (attendance.getLeaveTime() == null) {
-                    attendance.setArrivalTime(null);
-                } else {
-                    return ResponseEntity
-                            .badRequest()
-                            .body("Error: Setting arrival time to null is only allowed if no leave time is set.");
+        if (!attendance.getAfterSchoolCare().isClosed()) {
+            String arrivalTimeString = update.get("arrivalTime");
+            if (arrivalTimeString != null && !arrivalTimeString.isEmpty()) {
+                LocalDateTime arrivalTime = (new StringToLocalDatetimeConverter()).convert(arrivalTimeString);
+                if (arrivalTime != null) {
+                    attendance.setArrivalTime(arrivalTime);
+                }
+            } else {
+                if (update.containsKey("arrivalTime") && arrivalTimeString == null) {
+                    // arrivalTime darf nur null gesetzt werden, wenn keine leaveTime gesetzt ist
+                    if (attendance.getLeaveTime() == null) {
+                        attendance.setArrivalTime(null);
+                    } else {
+                        return ResponseEntity
+                                .badRequest()
+                                .body("Error: Setting arrival time to null is only allowed if no leave time is set.");
+                    }
                 }
             }
-        }
 
-        String leaveTimeString = update.get("leaveTime");
-        if (leaveTimeString != null && !leaveTimeString.isEmpty()) {
-            LocalDateTime leaveTime = (new StringToLocalDatetimeConverter()).convert(leaveTimeString);
-            if (leaveTime != null) {
-                // leaveTime darf nur gesetzt werden, wenn eine arrivalTime gesetzt ist
-                if (attendance.getArrivalTime() != null) {
-                    attendance.setLeaveTime(leaveTime);
-                } else {
-                    return ResponseEntity
-                            .badRequest()
-                            .body("Error: Setting a leave time is only allowed if an arrival time is already set.");
+            String leaveTimeString = update.get("leaveTime");
+            if (leaveTimeString != null && !leaveTimeString.isEmpty()) {
+                LocalDateTime leaveTime = (new StringToLocalDatetimeConverter()).convert(leaveTimeString);
+                if (leaveTime != null) {
+                    // leaveTime darf nur gesetzt werden, wenn eine arrivalTime gesetzt ist
+                    if (attendance.getArrivalTime() != null) {
+                        attendance.setLeaveTime(leaveTime);
+                    } else {
+                        return ResponseEntity
+                                .badRequest()
+                                .body("Error: Setting a leave time is only allowed if an arrival time is already set.");
+                    }
+                }
+            } else {
+                if (update.containsKey("leaveTime") && leaveTimeString == null) {
+                    attendance.setLeaveTime(null);
                 }
             }
         } else {
-            if (update.containsKey("leaveTime") && leaveTimeString == null) {
-                attendance.setLeaveTime(null);
-            }
+            return ResponseEntity
+                    .badRequest()
+                    .body("Error: Modifying a closed AfterSchoolCare is not allowed.");
         }
 
         return ResponseEntity

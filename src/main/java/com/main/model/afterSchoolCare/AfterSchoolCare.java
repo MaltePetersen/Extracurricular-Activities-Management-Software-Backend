@@ -65,6 +65,11 @@ public abstract class AfterSchoolCare {
         }
     }
 
+    /**
+     * closed gibt an, dass das AfterSchoolCare abgeschlossen ist und nicht mehr bearbeitet werden kann
+     */
+    private boolean closed;
+
     private String name;
 
     private LocalDateTime startTime;
@@ -82,7 +87,6 @@ public abstract class AfterSchoolCare {
 
     @OneToMany(mappedBy = "afterSchoolCare", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attendance> attendances = new ArrayList<>();
-
 
     public void addAttendance(Attendance attendance) {
         this.attendances.add(attendance);
