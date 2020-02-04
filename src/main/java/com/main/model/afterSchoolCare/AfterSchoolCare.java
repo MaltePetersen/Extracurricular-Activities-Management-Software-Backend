@@ -90,7 +90,7 @@ public abstract class AfterSchoolCare {
     private List<Attendance> attendances = new ArrayList<>();
 
     public List<Attendance> getParentFilteredAttendances(String username) {
-        return this.attendances.stream().filter(attendance -> attendance.getChild().getParent() != null && attendance.getChild().getParent().getUsername().equals(username)).collect(Collectors.toList());
+        return this.attendances.stream().filter(attendance -> attendance.getChild() != null && attendance.getChild().getParent() != null && attendance.getChild().getParent().getUsername().equals(username)).collect(Collectors.toList());
     }
 
     public void addAttendance(Attendance attendance) {
