@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Die Klasse für die Nachmittagsbetreuung. Pro Schule und Termin (Tag) gibt es
@@ -87,6 +88,10 @@ public abstract class AfterSchoolCare {
 
     @OneToMany(mappedBy = "afterSchoolCare", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attendance> attendances = new ArrayList<>();
+
+    public List<Attendance> getParentFilteredAttendances(String username) {
+        return this.attendances.stream().filter(attendance -> attendance.getChild().getParent() != null && attendance.getChild().getParent().getUsername().equals(username)).collect(Collectors.toList());
+    }
 
     public void addAttendance(Attendance attendance) {
         if(!attendances.contains(attendance))

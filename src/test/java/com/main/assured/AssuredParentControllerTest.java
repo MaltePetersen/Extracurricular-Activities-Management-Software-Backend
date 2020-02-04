@@ -1,12 +1,8 @@
 package com.main.assured;
 
-import com.main.data.TestEmployeeControllerPath;
 import com.main.data.TestParentControllerPath;
 import com.main.data.TestUserData;
-import com.main.dto.AfterSchoolCareDTO;
-import com.main.dto.UserDTO;
 import com.main.dto.interfaces.IUserDTO;
-import com.main.model.Attendance;
 import com.main.model.Role;
 import com.main.model.School;
 import com.main.model.User;
@@ -17,8 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 

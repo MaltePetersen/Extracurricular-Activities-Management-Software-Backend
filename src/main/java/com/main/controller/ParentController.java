@@ -98,7 +98,9 @@ public class ParentController {
 
     @GetMapping("/booked_after_school_cares")
     public List<AfterSchoolCareDTO> getBookedAfterSchoolCares(Authentication auth) {
-        return afterSchoolCareService.getAllByParent(auth.getName()).stream().map(AfterSchoolCareConverter::toDto)
+        return afterSchoolCareService.getAllByParent(auth.getName()).stream()
+                .peek(afterSchoolCare -> afterSchoolCare.setAttendances(afterSchoolCare.getParentFilteredAttendances(auth.getName())))
+                .map(AfterSchoolCareConverter::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -107,19 +109,25 @@ public class ParentController {
             @RequestParam(required = false, name = "school") Long schoolId,
             @RequestParam(required = false) Integer type,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+            Authentication auth) {
         return afterSchoolCareService.getAll().stream()
                 .filter(afterSchoolCare -> schoolId == null || afterSchoolCare.getParticipatingSchool().getId().equals(schoolId))
                 .filter(afterSchoolCare -> type == null || afterSchoolCare.getType().getId() == type)
                 .filter(afterSchoolCare -> startDate == null || afterSchoolCare.getEndTime().isAfter(startDate))
                 .filter(afterSchoolCare -> endDate == null || afterSchoolCare.getStartTime().isBefore(endDate))
+                .peek(afterSchoolCare -> afterSchoolCare.setAttendances(afterSchoolCare.getParentFilteredAttendances(auth.getName())))
                 .map(AfterSchoolCareConverter::toDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/after_school_cares/{id}")
-    public AfterSchoolCareDTO getAfterSchoolCare(@PathVariable Long id) {
-        return AfterSchoolCareConverter.toDto(afterSchoolCareService.findOne(id));
+    public AfterSchoolCareDTO getAfterSchoolCare(@PathVariable Long id, Authentication auth) {
+        AfterSchoolCare afterSchoolCare = afterSchoolCareService.findOne(id);
+
+        afterSchoolCare.setAttendances(afterSchoolCare.getParentFilteredAttendances(auth.getName()));
+
+        return AfterSchoolCareConverter.toDto(afterSchoolCare);
     }
 
     @PostMapping("/after_school_cares/{afterSchoolCareId}/attendance")
