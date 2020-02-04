@@ -11,3 +11,4 @@ public class BasicErrorController extends AbstractErrorController {
 		HttpStatus status = getStatus(request);
 		return new ResponseEntity<>(body, status);
 	}
+}
