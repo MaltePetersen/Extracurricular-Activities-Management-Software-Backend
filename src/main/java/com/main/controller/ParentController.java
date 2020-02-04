@@ -66,6 +66,30 @@ public class ParentController {
         }
     }*/
 
+    @PatchMapping("/update")
+    @Transactional
+    ResponseEntity updateParent(@RequestBody Map<String, String> update, Authentication auth, Errors errors) {
+        User parent = (User) userService.findByUsername(auth.getName());
+
+        User.UserBuilder builder = User.UserBuilder.next();
+        builder.withUser(parent);
+        UserDTO parentDTO = (UserDTO) builder.toDto("PARENT");
+
+        String fullname = update.get("fullname");
+        if (fullname != null && !fullname.isEmpty()) {
+            parentDTO.setFullname(fullname);
+        }
+
+        String username = update.get("username");
+        if (username != null && !username.isEmpty()) {
+            userDTOValidator.validateUsername(username, errors);
+            if (!errors.hasErrors()) {
+                parentDTO.setUsername(username);
+            } else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
+        }
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(parentDTO);
+    }
+
     @GetMapping("/authority")
     public ResponseEntity<Void> isParent(Authentication auth) {
         if (auth != null) {
