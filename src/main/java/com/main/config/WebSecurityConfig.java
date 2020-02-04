@@ -46,8 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.GET, "/api/management/**").hasAnyAuthority(UserRole.ROLE_MANAGEMENT.toString())
 				.antMatchers(HttpMethod.POST, "/api/management/**").hasAnyAuthority(UserRole.ROLE_MANAGEMENT.toString())
 				.antMatchers(HttpMethod.PUT, "/api/management/**").hasAnyAuthority(UserRole.ROLE_MANAGEMENT.toString())
-				.antMatchers(HttpMethod.DELETE, "/api/management/**")
-				.hasAnyAuthority(UserRole.ROLE_MANAGEMENT.toString())
+				.antMatchers(HttpMethod.DELETE, "/api/management/**").hasAnyAuthority(UserRole.ROLE_MANAGEMENT.toString())
 
 				.antMatchers(HttpMethod.GET, "/api/child/**").hasAnyAuthority(UserRole.ROLE_CHILD.toString())
 				.antMatchers(HttpMethod.POST, "/api/child/**").hasAnyAuthority(UserRole.ROLE_CHILD.toString())

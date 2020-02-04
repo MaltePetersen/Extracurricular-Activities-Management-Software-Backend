@@ -1,6 +1,7 @@
 package com.main.service;
 
 import com.main.dto.AfterSchoolCareDTO;
+import com.main.dto.AttendanceDTO;
 import com.main.dto.converters.AfterSchoolCareConverter;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.Attendance;
@@ -9,7 +10,9 @@ import com.main.repository.AfterSchoolCareRepository;
 import com.main.repository.AttendanceRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -37,7 +40,7 @@ public class AfterSchoolCareServiceImpl implements AfterSchoolCareService {
                 .collect(Collectors.toList());
     }
 
-	@Override
+    @Override
     public AfterSchoolCare findOne(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("after school care id not found: " + id));
@@ -104,5 +107,27 @@ public class AfterSchoolCareServiceImpl implements AfterSchoolCareService {
         afterSchoolCare.setName(afterSchoolCareDTO.getName());
 
         return AfterSchoolCareConverter.toDto(save(afterSchoolCare));
+    }
+
+
+    @Override
+    @Transactional
+    public void update(AfterSchoolCare afterSchoolCare, AfterSchoolCareDTO afterSchoolCareDTO) {
+        if (afterSchoolCare.getName() != null)
+            afterSchoolCare.setName(afterSchoolCareDTO.getName());
+        if (afterSchoolCareDTO.getEndTime() != null)
+            afterSchoolCare.setEndTime(afterSchoolCareDTO.getEndTime());
+        if (afterSchoolCareDTO.getStartTime() != null)
+            afterSchoolCare.setStartTime(afterSchoolCareDTO.getStartTime());
+        if (afterSchoolCareDTO.getAttendances() != null) {
+            for (AttendanceDTO attendanceDTO : afterSchoolCareDTO.getAttendances()) {
+                Optional<Attendance> optionalAttendance = attendanceRepository.findById(attendanceDTO.getId());
+                if(optionalAttendance.isPresent()){
+                    Attendance attendance = optionalAttendance.get();
+                    afterSchoolCare.addAttendance(attendance);
+                }
+            }
+        }
+        //TODO Adding User change
     }
 }

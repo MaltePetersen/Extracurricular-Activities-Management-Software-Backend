@@ -55,4 +55,11 @@ public class AssuredManagementTest extends AbstractAssuredTest {
         response.log().body();
     }
 
+    @Test
+    public void getAttendanceList(){
+        ValidatableResponse response = super.sendGetRequestWithAuth(userDTO, TestManagementControllerPath.GET_ATTENDANCE_LIST.getUri());
+        response.log().all();
+
+    }
+
 }
