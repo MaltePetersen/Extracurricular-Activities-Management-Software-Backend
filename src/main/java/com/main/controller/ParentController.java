@@ -24,6 +24,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.transaction.Transactional;
 import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -140,6 +141,7 @@ public class ParentController {
     }
 
     @GetMapping("/children")
+    @Transactional
     public List<UserDTO> getChilds(Authentication auth) {
         return ((User) userService.findByUsername(auth.getName())).getChildren().stream().map((child) -> {
             User.UserBuilder<IUser> builder = User.UserBuilder.next();
@@ -150,6 +152,7 @@ public class ParentController {
 
     @PostMapping("/child")
     @ResponseStatus(HttpStatus.CREATED)
+    @Transactional
     public ResponseEntity createChild(@RequestBody ChildDTO childDTO, Authentication auth, Errors errors,
                                               WebRequest request) {
         UUID username = UUID.randomUUID();
@@ -190,6 +193,7 @@ public class ParentController {
     }
 
     @PatchMapping("/child/{username}")
+    @Transactional
     IUserDTO updateChild(@RequestBody Map<String, String> update, @PathVariable String username) {
         User child = (User) userService.findByUsername(username);
 
@@ -234,6 +238,7 @@ public class ParentController {
 
     //Funktioniert noch nciht richtig, zum Schutz vor unerwarteten Auswirkungen erst einmal deaktiviert
     @DeleteMapping("/child/{username}")
+    @Transactional
     ResponseEntity<String> deleteChild(@PathVariable String username, Authentication auth) {
         User parent = (User) userService.findByUsername(auth.getName());
         User child = (User) userService.findByUsername(username);
