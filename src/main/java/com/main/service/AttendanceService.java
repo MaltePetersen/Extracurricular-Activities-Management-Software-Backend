@@ -5,6 +5,7 @@ import com.main.dto.AttendanceInputDTO;
 import com.main.model.Attendance;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public interface AttendanceService {
@@ -22,4 +23,6 @@ public interface AttendanceService {
     Attendance getAttendanceByInputDTO(AttendanceInputDTO dto);
 
     Attendance saveDto(AttendanceDTO dto);
+
+    byte[] getAttendanceList() throws FileNotFoundException, Exception;
 }

@@ -22,4 +22,6 @@ public interface AfterSchoolCareService {
     List<AfterSchoolCareDTO> findAllByTypeWorkingGroup();
 
     AfterSchoolCareDTO createNew(AfterSchoolCareDTO afterSchoolCareDTO);
+
+    void update(AfterSchoolCare afterSchoolCare, AfterSchoolCareDTO afterSchoolCareDTO);
 }

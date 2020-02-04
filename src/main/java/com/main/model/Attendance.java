@@ -50,6 +50,8 @@ public class Attendance {
 
     private String note;
 
+    private boolean isClosed;
+
     public int determineStatus() {
         if (arrivalTime == null && leaveTime == null) {
             if ((latestArrivalTime != null ? latestArrivalTime : afterSchoolCare.getStartTime()).isBefore(LocalDateTime.now())) {

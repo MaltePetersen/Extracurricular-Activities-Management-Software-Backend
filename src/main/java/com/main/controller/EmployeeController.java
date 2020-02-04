@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -129,15 +130,16 @@ public class EmployeeController {
     }
 
     @PatchMapping("/after_school_cares/{id}/close")
+    @Transactional
     ResponseEntity closeAfterSchoolCare(@PathVariable @Min(1) Long id) {
         AfterSchoolCare afterSchoolCare = afterSchoolCareService.findOne(id);
 
         if (afterSchoolCare.getAttendances().stream().allMatch(attendance -> attendance.determineStatus() == 4)) {
             afterSchoolCare.setClosed(true);
             afterSchoolCareService.save(afterSchoolCare);
-
-            // TODO: hier Implementierung für das Schreiben der CSV
-
+            for (Attendance attendance : afterSchoolCare.getAttendances()){
+                attendance.setClosed(true);
+            }
         } else {
             return ResponseEntity
                     .badRequest()

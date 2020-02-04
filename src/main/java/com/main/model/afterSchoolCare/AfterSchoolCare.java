@@ -89,7 +89,10 @@ public abstract class AfterSchoolCare {
     private List<Attendance> attendances = new ArrayList<>();
 
     public void addAttendance(Attendance attendance) {
-        this.attendances.add(attendance);
+        if(!attendances.contains(attendance))
+        {
+            this.attendances.add(attendance);
+        }
     }
 
     public static Map<Integer, String> getTypes() {

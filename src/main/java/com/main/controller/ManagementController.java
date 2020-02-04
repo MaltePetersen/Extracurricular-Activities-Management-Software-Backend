@@ -13,9 +13,7 @@ import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.user.UserRole;
 import com.main.service.AfterSchoolCareService;
 import com.main.service.AttendanceService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
@@ -27,7 +25,8 @@ import com.main.service.UserService;
 import com.main.util.UserDTOValidator;
 
 @CrossOrigin
-@RestController("/api/management")
+@RestController
+@RequestMapping("/api/management")
 public class ManagementController {
 
 
@@ -169,4 +168,20 @@ public class ManagementController {
     private String createErrorString(Errors errors) {
         return errors.getAllErrors().stream().map(ObjectError::toString).collect(Collectors.joining(","));
     }
+
+    //Anwesenheitsliste
+    @GetMapping("/list")
+    public byte[] getAttendanceList() throws Exception {
+
+        byte[] data = attendanceService.getAttendanceList();
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType("application/csv"));
+        headers.setContentDispositionFormData("attendanceList.csv", "attendanceList.csv");
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
+        return new ResponseEntity<>(data ,headers, HttpStatus.OK).getBody();
+    }
+
 }

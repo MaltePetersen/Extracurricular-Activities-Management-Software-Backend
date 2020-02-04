@@ -1,10 +1,11 @@
 package com.main.controller;
 
 import com.main.dto.AfterSchoolCareDTO;
+import com.main.dto.ChildDTO;
 import com.main.dto.converters.AfterSchoolCareConverter;
+import com.main.model.Attendance;
 import com.main.model.User;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
-import com.main.model.afterSchoolCare.WorkingGroup;
 import com.main.model.interfaces.IUser;
 import com.main.service.AfterSchoolCareService;
 import com.main.service.UserService;
@@ -44,17 +45,31 @@ public class SchoolCoordinatorController {
         return afterSchoolCareDTO;
     }
 
+    //Add Child
+    @PostMapping("/ag/child")
+    public ResponseEntity<String> updateChild(@PathVariable Long id,
+                                              @RequestBody ChildDTO childDTO,
+                                              Authentication authentication) {
+        if (checkIfUserIsAuth(id, authentication) == null)
+            return null;
+
+        AfterSchoolCare afterSchoolCare = afterSchoolCareService.findOne(id);
+
+        Attendance attendance = new Attendance();
+        attendance.setAfterSchoolCare(afterSchoolCare);
+        IUser user = userService.findByUsername(childDTO.getUsername());
+        attendance.setChild((User) user);
+        afterSchoolCare.addAttendance(attendance);
+        return ResponseEntity.ok("Child was successfully added");
+    }
+
 
     //Remove Working Group
     @DeleteMapping("/ag")
     public ResponseEntity<String> removeWorkingGroup(@PathVariable Long id, Authentication authentication) {
-        if (id == null)
-            return ResponseEntity.badRequest().build();
-        AfterSchoolCare afterSchoolCare = afterSchoolCareService.findOne(id);
-        if (!afterSchoolCare.getType().equals(AfterSchoolCare.Type.WORKING_GROUP))
-            return ResponseEntity.badRequest().build();
-        if (!afterSchoolCare.getOwner().getUsername().equals(authentication.getName()))
-            return ResponseEntity.badRequest().build();
+        if (checkIfUserIsAuth(id, authentication) == null)
+            return null;
+
         afterSchoolCareService.deleteById(id);
         return ResponseEntity.ok("");
     }
@@ -85,8 +100,27 @@ public class SchoolCoordinatorController {
     }
 
 
-    //Update
+    @PatchMapping("/ag")
+    public ResponseEntity<String> updateAg(@PathVariable Long id,
+                                           @RequestBody AfterSchoolCareDTO afterSchoolCareDTO,
+                                           Authentication authentication) {
+        if (checkIfUserIsAuth(id, authentication) == null)
+            return ResponseEntity.badRequest().build();
+        AfterSchoolCare afterSchoolCare = afterSchoolCareService.findOne(id);
+        afterSchoolCareService.update(afterSchoolCare, afterSchoolCareDTO);
+        return ResponseEntity.ok().build();
+    }
 
+    protected ResponseEntity<Object> checkIfUserIsAuth(@PathVariable Long id, Authentication authentication) {
+        if (id == null)
+            return ResponseEntity.badRequest().build();
+        AfterSchoolCare afterSchoolCare = afterSchoolCareService.findOne(id);
+        if (!afterSchoolCare.getType().equals(AfterSchoolCare.Type.WORKING_GROUP))
+            return ResponseEntity.badRequest().build();
+        if (!afterSchoolCare.getOwner().getUsername().equals(authentication.getName()))
+            return ResponseEntity.badRequest().build();
+        return null;
+    }
 
     //Anwesendheit verwalten??
 
