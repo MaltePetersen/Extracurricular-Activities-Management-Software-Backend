@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -84,7 +82,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     @Transactional
     public byte[] getAttendanceList() throws Exception {
-        List<Attendance> all = repository.findByClosedTrue();
+        List<Attendance> all = repository.findByIsClosedTrue();
         File file = new File("attendance.csv");
         if (!file.exists())
             file.createNewFile();

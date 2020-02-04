@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface AttendanceRepository extends CrudRepository<Attendance, Long> {
-    List<Attendance> findByClosedTrue();
+    List<Attendance> findByIsClosedTrue();
 }
