@@ -90,11 +90,7 @@ public class AssuredParentControllerTest extends AbstractAssuredTest {
                 "\n" +
                 "\t");
 
-        User.UserBuilder builder = User.UserBuilder.next();
-        User child = (User) builder.withDto(response.extract().body().as(UserDTO.class)).build();
         assertEquals(201, response.extract().statusCode());
-        assertEquals(parentDTO.getUsername(), ((User) userService.findByUsername(child.getUsername())).getParent().getUsername());
-
 
     }
 
