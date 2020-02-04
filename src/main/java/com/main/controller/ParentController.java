@@ -3,7 +3,9 @@ package com.main.controller;
 import com.main.dto.*;
 import com.main.dto.converters.AfterSchoolCareConverter;
 import com.main.dto.converters.SchoolConverter;
+import com.main.dto.converters.StringToLocalDatetimeConverter;
 import com.main.dto.interfaces.IUserDTO;
+import com.main.model.Attendance;
 import com.main.model.User;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.interfaces.IUser;
@@ -141,6 +143,59 @@ public class ParentController {
         return AfterSchoolCareConverter.toDto(afterSchoolCare);
     }
 
+    @PatchMapping("/attendance/{id}")
+    ResponseEntity updateAttendance(@RequestBody Map<String, String> update, @PathVariable Long id, Authentication auth) {
+        Attendance attendance = attendanceService.findOne(id);
+
+        if (attendance.getAfterSchoolCare().isClosed()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Error: Modifying a closed AfterSchoolCare is not allowed.");
+        } else if (attendance.getAfterSchoolCare().getStartTime().isBefore(LocalDateTime.now())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Error: Modifying an already started AfterSchoolCare is not allowed.");
+        } else {
+            String latestArrivalTimeString = update.get("latestArrivalTime");
+            if (latestArrivalTimeString != null && !latestArrivalTimeString.isEmpty()) {
+                LocalDateTime latestArrivalTime = (new StringToLocalDatetimeConverter()).convert(latestArrivalTimeString);
+                if (latestArrivalTime != null) {
+                    attendance.setLatestArrivalTime(latestArrivalTime);
+                }
+            } else {
+                if (update.containsKey("latestArrivalTime") && latestArrivalTimeString == null) {
+                    attendance.setLatestArrivalTime(null);
+                }
+            }
+
+            String predefinedLeaveTimeString = update.get("predefinedLeaveTime");
+            if (predefinedLeaveTimeString != null && !predefinedLeaveTimeString.isEmpty()) {
+                LocalDateTime predefinedLeaveTime = (new StringToLocalDatetimeConverter()).convert(predefinedLeaveTimeString);
+                if (predefinedLeaveTime != null) {
+                    attendance.setPredefinedLeaveTime(predefinedLeaveTime);
+                }
+            } else {
+                if (update.containsKey("predefinedLeaveTime") && predefinedLeaveTimeString == null) {
+                    attendance.setPredefinedLeaveTime(null);
+                }
+            }
+
+            String allowedToLeaveAfterFinishedHomeworkString = update.get("allowedToLeaveAfterFinishedHomework");
+            if (allowedToLeaveAfterFinishedHomeworkString != null && !allowedToLeaveAfterFinishedHomeworkString.isEmpty()) {
+                attendance.setAllowedToLeaveAfterFinishedHomework(Boolean.parseBoolean(allowedToLeaveAfterFinishedHomeworkString));
+            }
+
+            attendance.setNote(update.get("note"));
+        }
+
+        AfterSchoolCare afterSchoolCare = attendanceService.save(attendance).getAfterSchoolCare();
+        afterSchoolCare.setAttendances(afterSchoolCare.getParentFilteredAttendances(auth.getName()));
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(AfterSchoolCareConverter.toDto(afterSchoolCare));
+    }
+
     @DeleteMapping("/attendance/{id}")
     ResponseEntity<String> deleteAttendance(@PathVariable Long id) {
         // TODO: Eltern sollten nur Attendances von eigenen Kindern entfernen dürfen
@@ -162,7 +217,7 @@ public class ParentController {
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
     public ResponseEntity createChild(@RequestBody ChildDTO childDTO, Authentication auth, Errors errors,
-                                              WebRequest request) {
+                                      WebRequest request) {
         UUID username = UUID.randomUUID();
         //childDTO.setUsername(username.toString());
         UUID email = UUID.randomUUID();
@@ -220,7 +275,7 @@ public class ParentController {
         if (update.get("school") != null) {
             school = Long.parseLong(update.get("school"));
             child.setChildSchool(schoolService.findOne(school));
-        } else{
+        } else {
             school = child.getChildSchool().getId();
         }
 
