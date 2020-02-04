@@ -1,4 +1,4 @@
-package org.springframework.boot.autoconfigure.web.servlet.error;
+/*package org.springframework.boot.autoconfigure.web.servlet.error;
 
 @Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
@@ -12,3 +12,4 @@ public class BasicErrorController extends AbstractErrorController {
 		return new ResponseEntity<>(body, status);
 	}
 }
+*/
