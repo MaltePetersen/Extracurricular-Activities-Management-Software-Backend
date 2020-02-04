@@ -87,5 +87,13 @@ public abstract class AbstractAssuredTest {
                 .post(uri).then().assertThat();
     }
 
+    protected ValidatableResponse sendPatchWithAuthAndUserNameAndJSON(IUserDTO user, String uri, String json) {
+        return given().contentType(ContentType.JSON).with()
+                .auth().preemptive().basic(user.getUsername(), user.getPassword())
+                .body(json)
+                .when().log().all()
+                .patch(uri).then().assertThat();
+    }
+
 
 }

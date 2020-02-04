@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(User user) {
         user.setChildSchool(null);
         user.setParent(null);
-
+        
 
         user.setAfterSchoolCares(null);
         user.setAttendances(null);

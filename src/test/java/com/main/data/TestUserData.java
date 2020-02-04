@@ -26,17 +26,32 @@ public enum TestUserData {
 			.isSchoolCoordinator(true)
             .withPassword("password").withEmail("max.teacher@gmail.com").withPhoneNumber("0153323123")
             .toDto("SCHOOL_COORDINATOR")),
-    TEST_PARENT_2(User.UserBuilder.<IParent>next().withName("Max_Parent_2").withFullname("Mustermann")
-            .withPassword("password").withEmail("max.parent2@gmx.de").withPhoneNumber("0153323123").toDto("PARENT")),
-    TEST_PARENT_3(User.UserBuilder.<IParent>next().withName("Max_Parent_3").withFullname("Mustermann")
-            .withPassword("password").withEmail("max.parent3@gmx.de").withPhoneNumber("0153323123").toDto("PARENT")),
     TEST_PARENT(User.UserBuilder.<IParent>next().withName("Max_Parent").withFullname("Mustermann")
             .withPassword("password").withEmail("max.parent@gmx.de").withPhoneNumber("0153323123").toDto("PARENT")),
+    TEST_PARENT_2(User.UserBuilder.<IParent>next().withName("Max_Parent2").withFullname("Mustermann")
+            .withPassword("password").withEmail("max.parent2@gmx.de").withPhoneNumber("0153323123").toDto("PARENT")),
+    TEST_PARENT_3(User.UserBuilder.<IParent>next().withName("Max_Parent3").withFullname("Mustermann")
+            .withPassword("password").withEmail("max.parent3@gmx.de").withPhoneNumber("0153323123").toDto("PARENT")),
+    TEST_PARENT_4(User.UserBuilder.<IParent>next().withName("Parent_Test").withFullname("Mustermann")
+            .withPassword("password").withEmail("max.parent3@gmx.de").withPhoneNumber("0153323123").toDto("PARENT")),
+    TEST_PARENT_5(User.UserBuilder.<IParent>next().withName("Parent_Test2").withFullname("Mustermann")
+            .withPassword("password").withEmail("max.parent3@gmx.de").withPhoneNumber("0153323123").toDto("PARENT")),
+    TEST_PARENT_6(User.UserBuilder.<IParent>next().withName("Parent_Test3").withFullname("Mustermann")
+            .withPassword("password").withEmail("max.parent3@gmx.de").withPhoneNumber("0153323123").toDto("PARENT")),
     TEST_USER(User.UserBuilder.<IUser>next().withName("Max_User").withFullname("Mustermann").withPassword("password")
             .withEmail("max.user@gmail.com").withPhoneNumber("0153323123").toDto("USER")),
     TEST_CHILD(User.UserBuilder.<IChild>next().withName("Max_Child").withFullname("Mustermann").withPassword("password")
             .withEmail("max.child@gmail.com").withSchoolClass("1a").withPhoneNumber("0153323123").toDto("CHILD")),
-    TEST_CHILD_2(User.UserBuilder.<IChild>next().withName("Max_Child_2").withFullname("Mustermann")
+    TEST_CHILD_2(User.UserBuilder.<IChild>next().withName("Child_Test2").withFullname("Mustermann")
+            .withPassword("password").withEmail("max.child2@gmail.com").withSchoolClass("1a")
+            .withPhoneNumber("0153323123").toDto("CHILD")),
+    TEST_CHILD_3(User.UserBuilder.<IChild>next().withName("Child_Test3").withFullname("Mustermann")
+            .withPassword("password").withEmail("max.child2@gmail.com").withSchoolClass("3a")
+            .withPhoneNumber("0153323123").toDto("CHILD")),
+    TEST_CHILD_4(User.UserBuilder.<IChild>next().withName("Child_Test4").withFullname("Mustermann")
+            .withPassword("password").withEmail("max.child2@gmail.com").withSchoolClass("4a")
+            .withPhoneNumber("0153323123").toDto("CHILD")),
+    TEST_CHILD_5(User.UserBuilder.<IChild>next().withName("Child_Test5").withFullname("Mustermann")
             .withPassword("password").withEmail("max.child2@gmail.com").withSchoolClass("1a")
             .withPhoneNumber("0153323123").toDto("CHILD"));
 

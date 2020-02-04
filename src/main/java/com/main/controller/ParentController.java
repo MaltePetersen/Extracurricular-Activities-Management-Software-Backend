@@ -150,7 +150,7 @@ public class ParentController {
 
     @PostMapping("/child")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<String> createChild(@RequestBody ChildDTO childDTO, Authentication auth, Errors errors,
+    public ResponseEntity createChild(@RequestBody ChildDTO childDTO, Authentication auth, Errors errors,
                                               WebRequest request) {
         UUID username = UUID.randomUUID();
         //childDTO.setUsername(username.toString());
@@ -182,8 +182,11 @@ public class ParentController {
             parent.addChild(registered);
             userService.update(parent);
         }
+        User.UserBuilder builder = User.UserBuilder.next();
+        builder.withUser(registered);
 //        return new ResponseEntity<>("Created: " + registered.getRoles(), HttpStatus.CREATED);
-        return new ResponseEntity<>("Created: " + registered.getId(), HttpStatus.CREATED);
+//        return new ResponseEntity<>("Created: " + registered.getId(), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body((UserDTO) builder.toDto("CHILD"));
     }
 
     @PatchMapping("/child/{username}")
@@ -241,7 +244,7 @@ public class ParentController {
 
         userService.update(parent);
 
-        return new ResponseEntity<>("Das Kind wurde erfolgreich gelöscht!", HttpStatus.GONE);
+        return new ResponseEntity<>("Das Kind wurde erfolgreich gelöscht!", HttpStatus.OK);
 
     }
 
