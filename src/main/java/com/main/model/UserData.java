@@ -91,7 +91,7 @@ public class UserData {
         users.put(parent2, "PARENT");
         users.put(parent3, "PARENT");
         users.put(management, "MANAGEMENT");
-       // users.put(schoolCoordinator, "SCHOOLCOORDINATOR");
+        users.put(schoolCoordinator, "SCHOOLCOORDINATOR");
         return users;
     }
 }
