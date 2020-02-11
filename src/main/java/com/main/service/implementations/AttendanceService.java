@@ -1,4 +1,4 @@
-package com.main.service;
+package com.main.service.implementations;
 
 import com.main.dto.AttendanceDTO;
 import com.main.dto.AttendanceInputDTO;

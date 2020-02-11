@@ -1,13 +1,14 @@
-package com.main.service;
+package com.main.service.interfaces;
 
 import com.main.dto.AfterSchoolCareDTO;
 import com.main.dto.AttendanceDTO;
 import com.main.dto.converters.AfterSchoolCareConverter;
-import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.Attendance;
+import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.afterSchoolCare.AfterSchoolCareCreator;
 import com.main.repository.AfterSchoolCareRepository;
 import com.main.repository.AttendanceRepository;
+import com.main.service.implementations.AfterSchoolCareService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

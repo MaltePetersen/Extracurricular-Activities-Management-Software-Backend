@@ -63,7 +63,7 @@ public class AssuredExtendedUserControllerTest extends AbstractAssuredTest {
         String oldPassword = getPassword();
 
         // Login-Test
-        sendGetRequestWithAuth(parent, TestUserControllerPath.LOGIN.getUri()).statusCode(200);
+        sendGetRequestWithAuth(parent, TestUserControllerPath.LOGIN.getUri()).then().assertThat().statusCode(200);
         // Reset-Password-Test
         given().contentType(ContentType.JSON).with().auth().preemptive()
                 .basic(parent.getUsername(), parent.getPassword()).body(json).log().headers().when()

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import com.main.dto.interfaces.IUserDTO;
-import com.main.service.UserService;
+import com.main.service.implementations.UserService;
 
 @Component
 public class UserDTOValidator {

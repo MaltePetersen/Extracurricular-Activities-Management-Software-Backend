@@ -51,14 +51,14 @@ public class AssuredManagementTest extends AbstractAssuredTest {
 
     @Test
     public void getAllUsersTest() {
-        ValidatableResponse response = super.sendGetRequestWithAuth(userDTO, TestManagementControllerPath.GET_ALL_USERS.getUri());
+        ValidatableResponse response = super.sendGetRequestWithAuth(userDTO, TestManagementControllerPath.GET_ALL_USERS.getUri()).then().assertThat();
         response.log().body();
     }
 
     @Test
     public void getAttendanceList(){
-        ValidatableResponse response = super.sendGetRequestWithAuth(userDTO, TestManagementControllerPath.GET_ATTENDANCE_LIST.getUri());
-        response.log().all();
+        byte[] response = super.sendGetRequestWithAuth(userDTO, TestManagementControllerPath.GET_ATTENDANCE_LIST.getUri()).asByteArray();
+        System.out.println(response.length);
 
     }
 

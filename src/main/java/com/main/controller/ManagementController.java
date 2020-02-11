@@ -8,11 +8,9 @@ import com.main.dto.AfterSchoolCareDTO;
 import com.main.dto.AttendanceDTO;
 import com.main.dto.converters.AfterSchoolCareConverter;
 import com.main.dto.converters.AttendanceConverter;
-import com.main.model.Attendance;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
-import com.main.model.user.UserRole;
-import com.main.service.AfterSchoolCareService;
-import com.main.service.AttendanceService;
+import com.main.service.implementations.AfterSchoolCareService;
+import com.main.service.implementations.AttendanceService;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.Errors;
@@ -21,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.main.dto.UserDTO;
 import com.main.model.User;
-import com.main.service.UserService;
+import com.main.service.implementations.UserService;
 import com.main.util.UserDTOValidator;
 
 @CrossOrigin
@@ -60,9 +58,9 @@ public class ManagementController {
         List<UserDTO> userDTOS;
 
         if (type == null) {
-                 userDTOS = userService.findAll().stream()
-                         .map(each -> (UserDTO) User.UserBuilder.next().withUser(each).toDto("USER"))
-                        .collect(Collectors.toList());
+            userDTOS = userService.findAll().stream()
+                    .map(each -> (UserDTO) User.UserBuilder.next().withUser(each).toDto("USER"))
+                    .collect(Collectors.toList());
         } else {
             userDTOS = userService.findAll().stream()
                     .filter(each -> each.getRoles().get(0).getId() == type)
@@ -111,24 +109,24 @@ public class ManagementController {
     @GetMapping("/afterSchoolCare/{id}")
     public AfterSchoolCareDTO geAfterSchoolCareById(@PathVariable long id) {
         AfterSchoolCare afterSchoolCare = afterSchoolCareService.findOne(id);
-        if(afterSchoolCare != null)
+        if (afterSchoolCare != null)
             return AfterSchoolCareConverter.toDto(afterSchoolCare);
         return null;
     }
 
     @PatchMapping("/afterSchoolCare/{id}")
-    public AfterSchoolCareDTO patchAfterSchoolCare(@RequestBody AfterSchoolCareDTO afterSchoolCareDTO, @PathVariable long id){
+    public AfterSchoolCareDTO patchAfterSchoolCare(@RequestBody AfterSchoolCareDTO afterSchoolCareDTO, @PathVariable long id) {
         AfterSchoolCare afterSchoolCare = afterSchoolCareService.findOne(id);
-        if(afterSchoolCare == null)
+        if (afterSchoolCare == null)
             return null;
-        if(afterSchoolCareDTO.getStartTime() != null)
+        if (afterSchoolCareDTO.getStartTime() != null)
             afterSchoolCare.setStartTime(afterSchoolCareDTO.getStartTime());
-        if(afterSchoolCareDTO.getEndTime() != null)
+        if (afterSchoolCareDTO.getEndTime() != null)
             afterSchoolCare.setEndTime(afterSchoolCareDTO.getEndTime());
-        if(afterSchoolCareDTO.getName() != null)
+        if (afterSchoolCareDTO.getName() != null)
             afterSchoolCare.setName(afterSchoolCareDTO.getName());
-        if(afterSchoolCareDTO.getType() != 0)
-            afterSchoolCare.setType( AfterSchoolCare.Type.getById( afterSchoolCareDTO.getType()));
+        if (afterSchoolCareDTO.getType() != 0)
+            afterSchoolCare.setType(AfterSchoolCare.Type.getById(afterSchoolCareDTO.getType()));
 
         afterSchoolCareService.save(afterSchoolCare);
         return AfterSchoolCareConverter.toDto(afterSchoolCare);
@@ -138,14 +136,24 @@ public class ManagementController {
     public ResponseEntity<String> deleteAfterSchoolCare(@RequestBody(required = false) AfterSchoolCareDTO afterSchoolCareDTO, @PathVariable long id) {
         AfterSchoolCare afterSchoolCare = afterSchoolCareService.findOne(id);
 
-        if(afterSchoolCare == null){
+        if (afterSchoolCare == null) {
             return ResponseEntity.unprocessableEntity().build();
-        }else{
+        } else {
             afterSchoolCareService.deleteById(id);
             return ResponseEntity.ok().build();
-    }}
+        }
+    }
 
+    @PostMapping("/afterSchoolCare")
+    public ResponseEntity<String> addAfterSchoolCare(@RequestBody(required = false) AfterSchoolCareDTO afterSchoolCareDTO){
+        AfterSchoolCareDTO response = afterSchoolCareService.createNew(afterSchoolCareDTO);
+        if(response == null){
+            return ResponseEntity.unprocessableEntity().build();
+        }else{
+            return ResponseEntity.ok().build();
+        }
 
+    }
     //-------------------
 
 
@@ -172,16 +180,14 @@ public class ManagementController {
     //Anwesenheitsliste
     @GetMapping("/list")
     public byte[] getAttendanceList() throws Exception {
-
         byte[] data = attendanceService.getAttendanceList();
-
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType("application/csv"));
         headers.setContentDispositionFormData("attendanceList.csv", "attendanceList.csv");
         headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 
-        return new ResponseEntity<>(data ,headers, HttpStatus.OK).getBody();
+        return new ResponseEntity<>(data, headers, HttpStatus.OK).getBody();
     }
 
 }

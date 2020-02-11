@@ -31,7 +31,7 @@ import com.main.model.interfaces.IContactDetails;
 import com.main.model.interfaces.IUser;
 import com.main.model.interfaces.IVerificationToken;
 import com.main.repository.VerificationTokenRepository;
-import com.main.service.UserService;
+import com.main.service.implementations.UserService;
 import com.main.util.UserDTOValidator;
 import com.main.util.events.OnRegistrationCompleteEvent;
 import com.main.util.events.OnResetPasswordEvent;

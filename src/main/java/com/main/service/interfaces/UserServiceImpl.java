@@ -1,16 +1,20 @@
-package com.main.service;
+package com.main.service.interfaces;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import javax.transaction.Transactional;
-import javax.validation.Valid;
-
+import com.main.dto.UserDTO;
+import com.main.dto.interfaces.IUserDTO;
+import com.main.model.Role;
 import com.main.model.School;
+import com.main.model.User;
+import com.main.model.VerificationToken;
 import com.main.model.interfaces.IContactDetails;
+import com.main.model.interfaces.IUser;
+import com.main.model.interfaces.IVerificationToken;
+import com.main.model.user.UserRole;
+import com.main.repository.RoleRepository;
+import com.main.repository.UserRepository;
+import com.main.repository.VerificationTokenRepository;
+import com.main.service.implementations.SchoolService;
+import com.main.service.implementations.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +22,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.main.dto.UserDTO;
-import com.main.dto.interfaces.IUserDTO;
-import com.main.model.Role;
-import com.main.model.User;
-import com.main.model.VerificationToken;
-import com.main.model.interfaces.IUser;
-import com.main.model.interfaces.IVerificationToken;
-import com.main.model.user.UserRole;
-import com.main.repository.RoleRepository;
-import com.main.repository.UserRepository;
-import com.main.repository.VerificationTokenRepository;
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @Transactional

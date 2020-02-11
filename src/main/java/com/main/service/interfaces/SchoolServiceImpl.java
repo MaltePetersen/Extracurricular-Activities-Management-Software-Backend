@@ -1,8 +1,9 @@
-package com.main.service;
+package com.main.service.interfaces;
 
 import com.main.model.School;
 import com.main.model.interfaces.ISchool;
 import com.main.repository.SchoolRepository;
+import com.main.service.implementations.SchoolService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
