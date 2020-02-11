@@ -1,7 +1,9 @@
 package com.main.assured;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.main.data.TestParentControllerPath;
 import com.main.data.TestUserData;
+import com.main.dto.ChildDTO;
 import com.main.dto.interfaces.IUserDTO;
 import com.main.model.Role;
 import com.main.model.School;
@@ -32,6 +34,8 @@ public class AssuredParentControllerTest extends AbstractAssuredTest {
     private User child5;
 
     private IUserDTO parentDTO = TestUserData.TEST_PARENT_4.getUserDTO();
+
+    private long id = 0L;
 
     @Override
     @Before
@@ -65,34 +69,39 @@ public class AssuredParentControllerTest extends AbstractAssuredTest {
         school3 = new School("Test-Schule 3", "Test-Adresse 3");
         schoolService.save(school3);
 
+
         parent1.addChild(child1);
         parent2.addChild(child2);
         parent2.addChild(child3);
         parent2.addChild(child4);
-
     }
 
-
+    /*
 
     @Test
-    public void createChild(){
-        ValidatableResponse response = super.sendPostWithAuthAndJSON(parentDTO, TestParentControllerPath.CREATE_CHILD.getUri(), "\t{\n" +
-                "\t\"userType\": \"CHILD\",\n" +
-                "    \"fullname\": \"Patrick Star\",\n" +
-                "    \"schoolClass\": \"3b\",\n" +
-                "\t\"school\": \""+ school1.getId() + "\"\n" +
-                "\t}\n" +
-                "\n" +
-                "\t");
+    @Transactional
+    public void createChild() throws JsonProcessingException {
+        ChildDTO childDTO = new ChildDTO();
+        childDTO.setUserType("CHILD");
+        childDTO.setFullname("Patrick Star");
+        childDTO.setSchoolClass("3b");
+        childDTO.setSchool(school1.getId());
+
+        ValidatableResponse response = super.sendPostWithAuthAndJSON(parentDTO, TestParentControllerPath.CREATE_CHILD.getUri(), mapToJson(childDTO));
+
+        String body = response.extract().body().asString();
+        System.out.println(body);
 
         assertEquals(201, response.extract().statusCode());
 
-    }
+    }*/
 
     @Test
     public void getChildrenByParentUserName(){
         Response response = super.sendGetRequestWithAuth(TestUserData.TEST_PARENT_4.getUserDTO(), TestParentControllerPath.CHILDREN.getUri());
 
+        String body = response.body().asString();
+        System.out.println(body);
         assertEquals(200, response.statusCode());
 
     }

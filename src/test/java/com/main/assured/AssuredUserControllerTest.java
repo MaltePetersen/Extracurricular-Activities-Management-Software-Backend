@@ -35,6 +35,7 @@ public class AssuredUserControllerTest extends AbstractAssuredTest {
 
 
 		IUserDTO parent = TestUserData.TEST_PARENT_2.getUserDTO();
+		parent.setPassword("Password123");
 
 		String value = mapToJson(parent);
 
@@ -42,7 +43,7 @@ public class AssuredUserControllerTest extends AbstractAssuredTest {
 				.then().assertThat().statusCode(201);
 		
 		given().auth().preemptive().basic(parent.getUsername(), parent.getPassword()).log().headers().when()
-				.get(TestUserControllerPath.RESENDTOKEN.getUri()).then().statusCode(202);
+					.get(TestUserControllerPath.RESENDTOKEN.getUri()).then().statusCode(202);
 	}
 
 

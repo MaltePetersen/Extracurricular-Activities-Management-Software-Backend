@@ -53,6 +53,7 @@ public class UserControllerTest extends AbstractMvcTest {
 	public void createTeacherTest() throws Exception {
 		String uri = TestUserControllerPath.REGISTER.getUri();
 		IUserDTO teacher = TestUserData.TEST_TEACHER.getUserDTO();
+		teacher.setPassword("Password123");
 
 		String inputJson = super.mapToJson(teacher);
 		MvcResult mvcResult = mockMvc.perform(
@@ -77,6 +78,7 @@ public class UserControllerTest extends AbstractMvcTest {
 	public void createParentAndEmailConfirmationTest() throws Exception {
 
 		IUserDTO parent = TestUserData.TEST_PARENT_3.getUserDTO();
+		parent.setPassword("Password123");
 
 		String inputJson = super.mapToJson(parent);
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(TestUserControllerPath.REGISTER.getUri())
@@ -105,6 +107,8 @@ public class UserControllerTest extends AbstractMvcTest {
 	public void createChildTest() throws Exception {
 		String uri = TestUserControllerPath.REGISTER.getUri();
 		IUserDTO child = TestUserData.TEST_CHILD.getUserDTO();
+
+		child.setPassword("Password123");
 
 		String inputJson = super.mapToJson(child);
 		MvcResult mvcResult = mockMvc.perform(

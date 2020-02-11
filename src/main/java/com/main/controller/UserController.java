@@ -38,6 +38,7 @@ import com.main.util.events.OnResetPasswordEvent;
 
 import lombok.extern.java.Log;
 
+import javax.transaction.Transactional;
 import javax.validation.constraints.Email;
 
 @CrossOrigin

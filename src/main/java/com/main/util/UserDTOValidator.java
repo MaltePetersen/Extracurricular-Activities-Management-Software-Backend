@@ -6,6 +6,9 @@ import org.springframework.validation.Errors;
 import com.main.dto.interfaces.IUserDTO;
 import com.main.service.implementations.UserService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class UserDTOValidator {
 	
@@ -35,7 +38,31 @@ public class UserDTOValidator {
 
     private void validatePassword(String password, Errors errors) {
         if (stringIsEmptyOrNull(password))
+        {
             errors.reject("No password");
+            return;
+        }
+        if(password.length() < 7)
+        {
+            errors.reject("Password length must be larger than 7");
+            return;
+        }
+
+
+        //Hat eine Zahl
+        int hasOneNumber =  password.matches(".*\\d.*") ? 1 : 0;
+
+        int hasUppercase = !password.equals(password.toLowerCase()) ? 1: 0;
+        int hasLowercase = !password.equals(password.toUpperCase()) ? 1 : 0;
+
+        int result = hasOneNumber + hasUppercase + hasLowercase;
+        if(result < 2){
+            errors.reject("Please follow the password policy");
+        }
+
+
+
+
     }
 
     private void validateFullname(String fullname, Errors errors) {
@@ -70,7 +97,7 @@ public class UserDTOValidator {
             errors.reject("No schoolClass");
     }
 
-    private void validateaddress(String address, Errors errors) {
+    private void validateAdress(String address, Errors errors) {
         if (stringIsEmptyOrNull(address))
             errors.reject("No address");
     }
@@ -87,19 +114,15 @@ public class UserDTOValidator {
                 validatePhoneNumber(userDTO.getPhoneNumber(), errors);
                 validateSubject(userDTO.getSubject(), errors);
                 validateIban(userDTO.getIban(), errors);
-                validateaddress(userDTO.getAddress(), errors);
+                validateAdress(userDTO.getAddress(), errors);
                 break;
             case "MANAGEMENT":
                 validateUser(userDTO, errors);
                 validateEmail(userDTO.getEmail(), errors);
                 validatePhoneNumber(userDTO.getPhoneNumber(), errors);
-                validateaddress(userDTO.getAddress(), errors);
+                validateAdress(userDTO.getAddress(), errors);
                 break;
             case "PARENT":
-                validateUser(userDTO, errors);
-                validateEmail(userDTO.getEmail(), errors);
-                validatePhoneNumber(userDTO.getPhoneNumber(), errors);
-                break;
             case "TEACHER":
                 validateUser(userDTO, errors);
                 validateEmail(userDTO.getEmail(), errors);
