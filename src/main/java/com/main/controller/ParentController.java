@@ -57,39 +57,34 @@ public class ParentController {
         this.encoder = encoder;
         this.schoolService = schoolService;
         childs = new ArrayList<>();
-        //generateChildren();
     }
 
-   /* private void generateChildren(){
-        childs = new ArrayList<>();
-        for (int i = 1; i < 10; i++) {
-            UserDTO child = UserDTO.builder().address("Adresse" + i).fullname("Kind "+ i).userType("ROLE_CHILD").schoolClass(i + "b").username("Kind " + i).build();
-            childs.add(child);
-        }
-    }*/
 
     @PatchMapping("/update")
     @Transactional
     public ResponseEntity updateParent(@RequestBody Map<String, String> update, Authentication auth, Errors errors) {
-        User parent = (User) userService.findByUsername(auth.getName());
 
-        User.UserBuilder builder = User.UserBuilder.next();
-        builder.withUser(parent);
-        UserDTO parentDTO = (UserDTO) builder.toDto("PARENT");
+        User parent = (User) userService.findByUsername(auth.getName());
 
         String fullname = update.get("fullname");
         if (fullname != null && !fullname.isEmpty()) {
-            parentDTO.setFullname(fullname);
+            parent.setFullname(fullname);
         }
 
         String username = update.get("username");
         if (username != null && !username.isEmpty()) {
             userDTOValidator.validateUsername(username, errors);
             if (!errors.hasErrors()) {
-                parentDTO.setUsername(username);
+                parent.setUsername(username);
             } else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(createErrorString(errors));
         }
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(parentDTO);
+
+        userService.update(parent);
+        User.UserBuilder builder = User.UserBuilder.next();
+        builder.withUser(parent);
+        IUserDTO dto = builder.toDto("PARENT");
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(dto);
     }
 
     @GetMapping("/data")
