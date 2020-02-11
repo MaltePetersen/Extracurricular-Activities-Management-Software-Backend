@@ -150,6 +150,8 @@ public class UserServiceImpl implements UserService {
         user.setAttendances(null);
         user.setEmployeesSchools(null);
 
+        user.getParent().removeChild(user);
+
         userRepository.delete(user);
     }
 
