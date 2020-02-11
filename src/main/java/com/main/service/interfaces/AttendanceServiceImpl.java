@@ -1,4 +1,4 @@
-package com.main.service;
+package com.main.service.interfaces;
 
 import com.main.dto.AttendanceDTO;
 import com.main.dto.AttendanceInputDTO;
@@ -6,6 +6,9 @@ import com.main.model.Attendance;
 import com.main.model.User;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.repository.AttendanceRepository;
+import com.main.service.implementations.AfterSchoolCareService;
+import com.main.service.implementations.AttendanceService;
+import com.main.service.implementations.UserService;
 import org.aspectj.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -84,8 +87,11 @@ public class AttendanceServiceImpl implements AttendanceService {
     public byte[] getAttendanceList() throws Exception {
         List<Attendance> all = repository.findByIsClosedTrue();
         File file = new File("attendance.csv");
-        if (!file.exists())
-            file.createNewFile();
+        if (!file.exists()) {
+            boolean isCreated = file.createNewFile();
+            if(!isCreated)
+                throw new Exception();
+        }
         FileWriter fileWriter = new FileWriter(file);
 
         for (Attendance attendance : all) {

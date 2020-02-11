@@ -8,6 +8,7 @@ import com.main.model.School;
 import com.main.model.User;
 import com.main.model.interfaces.IUser;
 import com.main.model.user.UserRole;
+import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import org.junit.Before;
 import org.junit.Test;
@@ -90,9 +91,9 @@ public class AssuredParentControllerTest extends AbstractAssuredTest {
 
     @Test
     public void getChildrenByParentUserName(){
-        ValidatableResponse response = super.sendGetRequestWithAuth(TestUserData.TEST_PARENT_4.getUserDTO(), TestParentControllerPath.CHILDREN.getUri());
+        Response response = super.sendGetRequestWithAuth(TestUserData.TEST_PARENT_4.getUserDTO(), TestParentControllerPath.CHILDREN.getUri());
 
-        assertEquals(200, response.extract().statusCode());
+        assertEquals(200, response.statusCode());
 
     }
 

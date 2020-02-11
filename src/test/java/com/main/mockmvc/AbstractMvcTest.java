@@ -16,11 +16,6 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.main.FjoerdeBackendApplication;
-import com.main.repository.VerificationTokenRepository;
-import com.main.service.UserService;
-import com.main.util.UserDTOValidator;
-
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
 /**
  * 

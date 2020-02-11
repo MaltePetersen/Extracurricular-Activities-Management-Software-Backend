@@ -15,7 +15,7 @@ import com.main.model.User;
 import com.main.model.VerificationToken;
 import com.main.model.interfaces.IVerificationToken;
 import com.main.repository.VerificationTokenRepository;
-import com.main.service.UserService;
+import com.main.service.implementations.UserService;
 
 import lombok.extern.java.Log;
 

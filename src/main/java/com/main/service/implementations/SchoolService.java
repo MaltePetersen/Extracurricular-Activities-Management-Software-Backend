@@ -1,4 +1,4 @@
-package com.main.service;
+package com.main.service.implementations;
 
 import com.main.model.School;
 import com.main.model.interfaces.ISchool;

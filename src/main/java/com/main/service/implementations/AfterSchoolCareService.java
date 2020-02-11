@@ -1,4 +1,4 @@
-package com.main.service;
+package com.main.service.implementations;
 
 import com.main.dto.AfterSchoolCareDTO;
 import com.main.model.afterSchoolCare.AfterSchoolCare;

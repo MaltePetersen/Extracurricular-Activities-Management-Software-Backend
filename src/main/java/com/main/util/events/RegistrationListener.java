@@ -7,8 +7,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import com.main.model.User;
-import com.main.service.EmailService;
-import com.main.service.UserService;
+import com.main.service.implementations.EmailService;
+import com.main.service.implementations.UserService;
 
 @Component
 @Log
