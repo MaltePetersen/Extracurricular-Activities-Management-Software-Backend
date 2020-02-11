@@ -39,7 +39,7 @@ public enum TestUserData {
     TEST_PARENT_6(User.UserBuilder.<IParent>next().withName("Parent_Test3").withFullname("Mustermann")
             .withPassword("password").withEmail("max.parent3@gmx.de").withPhoneNumber("0153323123").toDto("PARENT")),
     TEST_PARENT_7(User.UserBuilder.<IParent>next().withName("Max_Parent_Test7").withFullname("Mustermann")
-            .withPassword("password").withEmail("max.parent3@gmx.de").withPhoneNumber("0153323123").toDto("PARENT")),
+            .withPassword("Password123").withEmail("max.parent3@gmx.de").withPhoneNumber("0153323123").toDto("PARENT")),
     TEST_USER(User.UserBuilder.<IUser>next().withName("Max_User").withFullname("Mustermann").withPassword("password")
             .withEmail("max.user@gmail.com").withPhoneNumber("0153323123").toDto("USER")),
     TEST_CHILD(User.UserBuilder.<IChild>next().withName("Max_Child").withFullname("Mustermann").withPassword("password")
