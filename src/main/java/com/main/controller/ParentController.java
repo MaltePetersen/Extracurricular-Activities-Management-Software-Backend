@@ -167,13 +167,21 @@ public class ParentController {
 
     @PostMapping("/after_school_cares/{afterSchoolCareId}/attendance")
     @ResponseStatus(HttpStatus.CREATED)
-    AfterSchoolCareDTO addAttendance(@RequestBody AttendanceInputDTO attendanceInputDTO, @PathVariable Long afterSchoolCareId) {
+    ResponseEntity addAttendance(@RequestBody AttendanceInputDTO attendanceInputDTO, @PathVariable Long afterSchoolCareId) {
         // TODO: Eltern sollten nur Attendances für eigene Kinder erstellen dürfen
         AfterSchoolCare afterSchoolCare = afterSchoolCareService.findOne(afterSchoolCareId);
 
-        attendanceService.saveByInputDTO(attendanceInputDTO, afterSchoolCare);
+        if (afterSchoolCare.getAttendances().stream().anyMatch(attendance -> attendance.getChild() != null && attendance.getChild().getUsername().equals(attendanceInputDTO.getChildUsername()))) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Error: Only one attendance per child can be added to an AfterSchoolCare.");
+        } else {
+            attendanceService.saveByInputDTO(attendanceInputDTO, afterSchoolCare);
 
-        return AfterSchoolCareConverter.toDto(afterSchoolCare);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(AfterSchoolCareConverter.toDto(afterSchoolCare));
+        }
     }
 
     @PatchMapping("/attendance/{id}")
