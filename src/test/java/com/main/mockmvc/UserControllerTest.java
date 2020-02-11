@@ -4,11 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.print.attribute.HashAttributeSet;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +20,7 @@ import com.main.model.interfaces.IContactDetails;
 import com.main.model.interfaces.IUser;
 import com.main.model.interfaces.IVerificationToken;
 import com.main.repository.VerificationTokenRepository;
-import com.main.service.UserService;
+import com.main.service.implementations.UserService;
 
 import lombok.extern.java.Log;
 

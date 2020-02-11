@@ -59,7 +59,9 @@ public class AssuredSchoolCoordinatorTest extends AbstractAssuredTest {
     public void getAllWorkingGroupsTest() {
 
         System.out.println(userService.findAll());
-        super.sendGetRequestWithAuth(userDTO, TestSchoolCoordinatorPath.GET_SCHOOLS.getUri()).statusCode(200)
+        super.sendGetRequestWithAuth(userDTO, TestSchoolCoordinatorPath.GET_SCHOOLS.getUri())
+                .then().assertThat()
+                .statusCode(200)
                 .log().body();
     }
 
@@ -67,14 +69,13 @@ public class AssuredSchoolCoordinatorTest extends AbstractAssuredTest {
     public void getWorkingGroupByIdTest() {
         HashMap<String, Object> params = new HashMap<>();
         params.put("id", id);
-        super.sendGetRequestWithAuthAndParams(userDTO, TestSchoolCoordinatorPath.GET_SCHOOL.getUri(), params).statusCode(200)
+        super.sendGetRequestWithAuthAndParams(userDTO, TestSchoolCoordinatorPath.GET_SCHOOL.getUri(), params)
+                .then().assertThat().statusCode(200)
                 .log().body();
     }
 
     @Test
     public void addWorkingGroup(){
-
-
 
     }
 

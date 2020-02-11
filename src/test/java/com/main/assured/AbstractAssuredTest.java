@@ -4,13 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.main.dto.interfaces.IUserDTO;
 import com.main.repository.RoleRepository;
-import com.main.service.AfterSchoolCareService;
-import com.main.service.AttendanceService;
-import com.main.service.SchoolService;
-import com.main.service.UserService;
+import com.main.service.implementations.AfterSchoolCareService;
+import com.main.service.implementations.AttendanceService;
+import com.main.service.implementations.SchoolService;
+import com.main.service.implementations.UserService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,15 +65,15 @@ public abstract class AbstractAssuredTest {
         return objectMapper.writeValueAsString(obj);
     }
 
-    protected ValidatableResponse sendGetRequestWithAuth(IUserDTO user, String uri) {
+    protected Response sendGetRequestWithAuth(IUserDTO user, String uri) {
         return sendGetRequestWithAuthAndParams(user, uri, new HashMap<>());
     }
 
-    protected ValidatableResponse sendGetRequestWithAuthAndParams(IUserDTO user, String uri, HashMap<String, Object> params) {
+    protected Response sendGetRequestWithAuthAndParams(IUserDTO user, String uri, HashMap<String, Object> params) {
         return given().contentType(ContentType.JSON).with()
                 .auth().preemptive().basic(user.getUsername(), user.getPassword())
                 .when().params(params).log().all()
-                .get(uri).then().assertThat();
+                .get(uri);
     }
 
     protected ValidatableResponse sendPostWithAuth(IUserDTO user, String uri) {

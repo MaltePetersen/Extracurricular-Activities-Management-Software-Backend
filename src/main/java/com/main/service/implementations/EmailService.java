@@ -1,4 +1,4 @@
-package com.main.service;
+package com.main.service.implementations;
 
 public interface EmailService {
     public void sendSimpleMessage(String to, String subject, String text);

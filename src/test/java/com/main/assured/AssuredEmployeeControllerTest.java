@@ -12,6 +12,7 @@ import com.main.model.afterSchoolCare.AfternoonCare;
 import com.main.model.afterSchoolCare.Remedial;
 import com.main.model.interfaces.IUser;
 import com.main.model.user.UserRole;
+import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Before;
@@ -42,7 +43,7 @@ public class AssuredEmployeeControllerTest extends AbstractAssuredTest {
         super.setUp();
 
         IUser myUser = userService.findByUsername(employee.getUsername());
-        if(myUser == null) {
+        if (myUser == null) {
             User user = (User) User.UserBuilder.next().withDto(this.employee).build();
             user.setPassword(encoder.encode(user.getPassword()));
             Role role = roleRepository.findByName(UserRole.ROLE_EMPLOYEE.toString());
@@ -86,7 +87,7 @@ public class AssuredEmployeeControllerTest extends AbstractAssuredTest {
 
     @Test
     public void testGetAfternoonCaresWithEmployeeAuthority() {
-        ValidatableResponse response = super.sendGetRequestWithAuth(employee, TestEmployeeControllerPath.AFTER_SCHOOL_CARES.getUri()).statusCode(200);
+        ValidatableResponse response = super.sendGetRequestWithAuth(employee, TestEmployeeControllerPath.AFTER_SCHOOL_CARES.getUri()).then().assertThat().statusCode(200);
 
         List<AfterSchoolCareDTO> resultAfternoonCares = Arrays.asList(response.extract().body().as(AfterSchoolCareDTO[].class));
 
@@ -98,7 +99,8 @@ public class AssuredEmployeeControllerTest extends AbstractAssuredTest {
 
     @Test
     public void testGetAfternoonCaresWithEmployeeAuthorityAndShowOnlyOwnFilter() {
-        ValidatableResponse response = super.sendGetRequestWithAuth(employee, TestEmployeeControllerPath.AFTER_SCHOOL_CARES.getUri() + "?showOnlyOwn=true").statusCode(200);
+        ValidatableResponse response = super.sendGetRequestWithAuth(employee, TestEmployeeControllerPath.AFTER_SCHOOL_CARES.getUri() + "?showOnlyOwn=true")
+                .then().assertThat().statusCode(200);
 
         List<AfterSchoolCareDTO> resultAfternoonCares = Arrays.asList(response.extract().body().as(AfterSchoolCareDTO[].class));
 
@@ -110,12 +112,16 @@ public class AssuredEmployeeControllerTest extends AbstractAssuredTest {
 
     @Test
     public void testGetAfterSchoolCaresWithEmployeeAuthorityAndSchoolFilter() {
-        ValidatableResponse response = super.sendGetRequestWithAuth(employee, TestEmployeeControllerPath.AFTER_SCHOOL_CARES.getUri() + "?school=" + testAfternoonCareWithUserSchool1.getParticipatingSchool().getId()).statusCode(200);
-
+        ValidatableResponse response = super.sendGetRequestWithAuth(employee, TestEmployeeControllerPath.AFTER_SCHOOL_CARES.getUri() + "?school=" + testAfternoonCareWithUserSchool1.getParticipatingSchool().getId()).then().assertThat().statusCode(200);
         List<AfterSchoolCareDTO> resultAfternoonCares = Arrays.asList(response.extract().body().as(AfterSchoolCareDTO[].class));
 
         assertTrue(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCareWithUserSchool1.getId())));
         assertFalse(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testRemedialWithUserSchool2.getId())));
+    }
+
+    @Test
+    public void testCloseAfterSchoolCareService() {
+
     }
 
     @After
