@@ -58,6 +58,7 @@ public class AssuredParentControllerTest extends AbstractAssuredTest {
         if(myUser == null) {
             User parent = (User) User.UserBuilder.next().withDto(this.parentDTO).build();
             parent.setPassword(encoder.encode(parent.getPassword()));
+            Role parentRole = roleRepository.findByName(UserRole.ROLE_PARENT.toString());
             parent = userService.update(parent, UserRole.ROLE_PARENT);
 
             child6 = (User) userService.findByUsername(child6DTO.getUsername());
@@ -65,6 +66,7 @@ public class AssuredParentControllerTest extends AbstractAssuredTest {
                 child6 = (User) User.UserBuilder.next().withDto(this.child6DTO).build();
                 child6.setPassword(encoder.encode(child6.getPassword()));
                 child6.setParent(parent);
+                Role childRole = roleRepository.findByName(UserRole.ROLE_CHILD.toString());
                 userService.update(child6, UserRole.ROLE_CHILD);
 
                 parent.addChild(child6);
