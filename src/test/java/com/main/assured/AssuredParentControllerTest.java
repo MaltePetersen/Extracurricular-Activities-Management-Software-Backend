@@ -3,16 +3,15 @@ package com.main.assured;
 import com.main.data.TestParentControllerPath;
 import com.main.data.TestUserData;
 import com.main.dto.interfaces.IUserDTO;
+import com.main.model.Role;
 import com.main.model.User;
 import com.main.model.interfaces.IUser;
 import com.main.model.user.UserRole;
-import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.transaction.Transactional;
-
-import static org.junit.Assert.assertEquals;
 
 public class AssuredParentControllerTest extends AbstractAssuredTest {
     private IUserDTO parentDTO = TestUserData.TEST_PARENT_7.getUserDTO();
@@ -24,20 +23,19 @@ public class AssuredParentControllerTest extends AbstractAssuredTest {
         super.setUp();
 
         IUser myUser = userService.findByUsername(parentDTO.getUsername());
-        if(myUser == null) {
-            User parent = (User) User.UserBuilder.next().withDto(parentDTO).build();
-            parent.setPassword(encoder.encode(parent.getPassword()));
-            parent = userService.update(parent, UserRole.ROLE_PARENT);
+        if (myUser == null) {
+            User user = (User) User.UserBuilder.next().withDto(this.parentDTO).build();
+            user.setPassword(encoder.encode(user.getPassword()));
+            Role role = roleRepository.findByName(UserRole.ROLE_PARENT.toString());
+            user = userService.update(user, UserRole.ROLE_PARENT);
         }
     }
 
     @Test
     public void getChildrenByParentUserName(){
-        Response response = super.sendGetRequestWithAuth(parentDTO, TestParentControllerPath.CHILDREN.getUri());
+        ValidatableResponse response = super.sendGetRequestWithAuth(parentDTO, TestParentControllerPath.CHILDREN.getUri()).then().assertThat().statusCode(200);
 
-        String body = response.body().asString();
+        String body = response.extract().body().asString();
         System.out.println(body);
-        assertEquals(200, response.statusCode());
-
     }
 }
