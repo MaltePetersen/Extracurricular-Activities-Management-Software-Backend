@@ -1,5 +1,7 @@
 package com.main.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.main.dto.*;
 import com.main.dto.converters.AfterSchoolCareConverter;
 import com.main.dto.converters.SchoolConverter;
@@ -28,6 +30,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.transaction.Transactional;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -257,14 +260,18 @@ public class ParentController {
     @PostMapping("/child")
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
-    public ResponseEntity createChild(@RequestBody ChildDTO childDTO, Authentication auth, Errors errors,
-                                      WebRequest request) {
+    public ResponseEntity<String> createChild(@RequestBody @NotNull ChildDTO childDTO,
+                                      Authentication auth,
+                                      Errors errors,
+                                      WebRequest request) throws JsonProcessingException {
         UUID username = UUID.randomUUID();
         //childDTO.setUsername(username.toString());
         UUID email = UUID.randomUUID();
         //childDTO.setEmail(email.toString() + "@test.de");
-        UserDTO userDTO = (UserDTO) childDTO.toUserDTO(username.toString(), encoder.encode("password"), email.toString() + "@test.de");
+        UserDTO userDTO = (UserDTO) childDTO.toUserDTO(username.toString(), "Password123", email.toString() + "@test.de");
         userDTOValidator.validate(userDTO, errors);
+        userDTO.setPassword( encoder.encode( userDTO.getPassword() ) );
+
         if (errors.hasErrors()) {
             return new ResponseEntity<>(createErrorString(errors), HttpStatus.BAD_REQUEST);
         }
@@ -293,7 +300,12 @@ public class ParentController {
         builder.withUser(registered);
 //        return new ResponseEntity<>("Created: " + registered.getRoles(), HttpStatus.CREATED);
 //        return new ResponseEntity<>("Created: " + registered.getId(), HttpStatus.CREATED);
-        return ResponseEntity.status(HttpStatus.CREATED).body((UserDTO) builder.toDto("CHILD"));
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        UserDTO child = (UserDTO) builder.toDto("CHILD");
+
+        String value = objectMapper.writeValueAsString(child);
+        return ResponseEntity.status(HttpStatus.CREATED).body(value);
     }
 
     @PatchMapping("/child/{username}")

@@ -20,7 +20,7 @@ public class VerificationToken implements IVerificationToken {
 
     private String token;
 
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 

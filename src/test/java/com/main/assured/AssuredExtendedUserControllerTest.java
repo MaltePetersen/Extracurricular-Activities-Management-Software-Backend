@@ -34,6 +34,7 @@ public class AssuredExtendedUserControllerTest extends AbstractAssuredTest {
         super.setUp();
         parent = TestUserData.TEST_PARENT.getUserDTO();
 
+        parent.setPassword("Password123");
         String value = mapToJson(parent);
 
         IUser user = userService.findByUsername(parent.getUsername());
