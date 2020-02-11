@@ -15,6 +15,7 @@ import com.main.model.interfaces.IUser;
 import com.main.model.user.UserRole;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -181,5 +182,12 @@ public class AssuredParentControllerTest extends AbstractAssuredTest {
 
         assertTrue(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCare.getId())));
         assertFalse(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCareWithDifferentParent.getId())));
+    }
+
+    @After
+    @Transactional
+    public void teardown() {
+        userService.deleteByName(child6DTO.getUsername());
+        userService.deleteByName(parentDTO.getUsername());
     }
 }
