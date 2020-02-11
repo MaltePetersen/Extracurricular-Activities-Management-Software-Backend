@@ -3,11 +3,14 @@ package com.main.assured;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.main.data.TestParentControllerPath;
 import com.main.data.TestUserData;
+import com.main.dto.AfterSchoolCareDTO;
 import com.main.dto.ChildDTO;
 import com.main.dto.interfaces.IUserDTO;
+import com.main.model.Attendance;
 import com.main.model.Role;
 import com.main.model.School;
 import com.main.model.User;
+import com.main.model.afterSchoolCare.AfternoonCare;
 import com.main.model.interfaces.IUser;
 import com.main.model.user.UserRole;
 import io.restassured.response.Response;
@@ -17,7 +20,10 @@ import org.junit.Test;
 
 import javax.transaction.Transactional;
 
-import static org.junit.Assert.assertEquals;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class AssuredParentControllerTest extends AbstractAssuredTest {
 
@@ -32,8 +38,12 @@ public class AssuredParentControllerTest extends AbstractAssuredTest {
     private User child3;
     private User child4;
     private User child5;
+    private User child6;
+    private AfternoonCare testAfternoonCare;
+    private AfternoonCare testAfternoonCareWithDifferentParent;
 
-    private IUserDTO parentDTO = TestUserData.TEST_PARENT_4.getUserDTO();
+    private IUserDTO parentDTO = TestUserData.TEST_PARENT_7.getUserDTO();
+    private IUserDTO child6DTO = TestUserData.TEST_CHILD_6.getUserDTO();
 
     private long id = 0L;
 
@@ -45,10 +55,20 @@ public class AssuredParentControllerTest extends AbstractAssuredTest {
 
         IUser myUser = userService.findByUsername(parentDTO.getUsername());
         if(myUser == null) {
-            User user = (User) User.UserBuilder.next().withDto(this.parentDTO).build();
-            user.setPassword(encoder.encode(user.getPassword()));
-            Role role = roleRepository.findByName(UserRole.ROLE_PARENT.toString());
-            user = userService.update(user, UserRole.ROLE_PARENT);
+            User parent = (User) User.UserBuilder.next().withDto(this.parentDTO).build();
+            parent.setPassword(encoder.encode(parent.getPassword()));
+            parent = userService.update(parent, UserRole.ROLE_PARENT);
+
+            child6 = (User) userService.findByUsername(child6DTO.getUsername());
+            if(child6 == null) {
+                child6 = (User) User.UserBuilder.next().withDto(this.child6DTO).build();
+                child6.setPassword(encoder.encode(child6.getPassword()));
+                child6.setParent(parent);
+                userService.update(child6, UserRole.ROLE_CHILD);
+
+                parent.addChild(child6);
+                userService.update(parent);
+            }
         }
 
         //create test data
@@ -69,28 +89,49 @@ public class AssuredParentControllerTest extends AbstractAssuredTest {
         school3 = new School("Test-Schule 3", "Test-Adresse 3");
         schoolService.save(school3);
 
-
         parent1.addChild(child1);
+        child1.setParent(parent1);
+
         parent2.addChild(child2);
+        child2.setParent(parent2);
+
         parent2.addChild(child3);
+        child3.setParent(parent2);
+
         parent2.addChild(child4);
+        child4.setParent(parent2);
+
+        testAfternoonCare = new AfternoonCare();
+        testAfternoonCare.setName("Test-Nachmittagsbetreuung");
+        testAfternoonCare.setParticipatingSchool(school1);
+        afterSchoolCareService.save(testAfternoonCare);
+
+
+        Attendance attendance1 = new Attendance();
+        attendance1.setChild((User) userService.findByUsername(child6DTO.getUsername()));
+        attendance1.setAfterSchoolCare(testAfternoonCare);
+        attendanceService.save(attendance1);
+
+        testAfternoonCare.addAttendance(attendance1);
+        afterSchoolCareService.save(testAfternoonCare);
+
+        testAfternoonCareWithDifferentParent = new AfternoonCare();
+        testAfternoonCareWithDifferentParent.setName("Test-Nachmittagsbetreuung");
+        testAfternoonCareWithDifferentParent.setParticipatingSchool(school1);
+        afterSchoolCareService.save(testAfternoonCareWithDifferentParent);
     }
 
     /*
-
     @Test
-    @Transactional
-    public void createChild() throws JsonProcessingException {
-        ChildDTO childDTO = new ChildDTO();
-        childDTO.setUserType("CHILD");
-        childDTO.setFullname("Patrick Star");
-        childDTO.setSchoolClass("3b");
-        childDTO.setSchool(school1.getId());
-
-        ValidatableResponse response = super.sendPostWithAuthAndJSON(parentDTO, TestParentControllerPath.CREATE_CHILD.getUri(), mapToJson(childDTO));
-
-        String body = response.extract().body().asString();
-        System.out.println(body);
+    public void createChild(){
+        ValidatableResponse response = super.sendPostWithAuthAndJSON(parentDTO, TestParentControllerPath.CREATE_CHILD.getUri(), "\t{\n" +
+                "\t\"userType\": \"CHILD\",\n" +
+                "    \"fullname\": \"Patrick Star\",\n" +
+                "    \"schoolClass\": \"3b\",\n" +
+                "\t\"school\": \""+ school1.getId() + "\"\n" +
+                "\t}\n" +
+                "\n" +
+                "\t");
 
         assertEquals(201, response.extract().statusCode());
 
@@ -98,7 +139,7 @@ public class AssuredParentControllerTest extends AbstractAssuredTest {
 
     @Test
     public void getChildrenByParentUserName(){
-        Response response = super.sendGetRequestWithAuth(TestUserData.TEST_PARENT_4.getUserDTO(), TestParentControllerPath.CHILDREN.getUri());
+        Response response = super.sendGetRequestWithAuth(TestUserData.TEST_PARENT_7.getUserDTO(), TestParentControllerPath.CHILDREN.getUri());
 
         String body = response.body().asString();
         System.out.println(body);
@@ -121,4 +162,24 @@ public class AssuredParentControllerTest extends AbstractAssuredTest {
 
         assertEquals(newFullname, dto.getFullname());
     }*/
+
+    @Test
+    public void testGetAfternoonCaresWithParentAuthority() {
+        ValidatableResponse response = super.sendGetRequestWithAuth(parentDTO, TestParentControllerPath.AFTER_SCHOOL_CARES.getUri()).then().assertThat().statusCode(200);
+
+        List<AfterSchoolCareDTO> resultAfternoonCares = Arrays.asList(response.extract().body().as(AfterSchoolCareDTO[].class));
+
+        assertTrue(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCare.getId())));
+        assertTrue(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCareWithDifferentParent.getId())));
+    }
+
+    @Test
+    public void testGetBookedAfternoonCaresWithParentAuthority() {
+        ValidatableResponse response = super.sendGetRequestWithAuth(parentDTO, TestParentControllerPath.BOOKED_AFTER_SCHOOL_CARES.getUri()).then().assertThat().statusCode(200);
+
+        List<AfterSchoolCareDTO> resultAfternoonCares = Arrays.asList(response.extract().body().as(AfterSchoolCareDTO[].class));
+
+        assertTrue(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCare.getId())));
+        assertFalse(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCareWithDifferentParent.getId())));
+    }
 }

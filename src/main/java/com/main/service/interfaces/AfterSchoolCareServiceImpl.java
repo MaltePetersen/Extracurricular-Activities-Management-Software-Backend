@@ -37,7 +37,7 @@ public class AfterSchoolCareServiceImpl implements AfterSchoolCareService {
     @Override
     public List<AfterSchoolCare> getAllByParent(String username) {
         return StreamSupport.stream(repository.findAll().spliterator(), false).
-                filter(afterSchoolCare -> afterSchoolCare.getAttendances().stream().anyMatch(attendance -> attendance.getChild().getParent() != null && attendance.getChild().getParent().getUsername().equals(username)))
+                filter(afterSchoolCare -> afterSchoolCare.getAttendances().stream().anyMatch(attendance -> attendance.getChild() != null && attendance.getChild().getParent() != null && attendance.getChild().getParent().getUsername().equals(username)))
                 .collect(Collectors.toList());
     }
 

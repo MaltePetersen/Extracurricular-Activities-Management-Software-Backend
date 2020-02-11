@@ -38,6 +38,8 @@ public enum TestUserData {
             .withPassword("password").withEmail("max.parent3@gmx.de").withPhoneNumber("0153323123").toDto("PARENT")),
     TEST_PARENT_6(User.UserBuilder.<IParent>next().withName("Parent_Test3").withFullname("Mustermann")
             .withPassword("password").withEmail("max.parent3@gmx.de").withPhoneNumber("0153323123").toDto("PARENT")),
+    TEST_PARENT_7(User.UserBuilder.<IParent>next().withName("Max_Parent_Test7").withFullname("Mustermann")
+            .withPassword("password").withEmail("max.parent3@gmx.de").withPhoneNumber("0153323123").toDto("PARENT")),
     TEST_USER(User.UserBuilder.<IUser>next().withName("Max_User").withFullname("Mustermann").withPassword("password")
             .withEmail("max.user@gmail.com").withPhoneNumber("0153323123").toDto("USER")),
     TEST_CHILD(User.UserBuilder.<IChild>next().withName("Max_Child").withFullname("Mustermann").withPassword("password")
@@ -52,6 +54,9 @@ public enum TestUserData {
             .withPassword("password").withEmail("max.child2@gmail.com").withSchoolClass("4a")
             .withPhoneNumber("0153323123").toDto("CHILD")),
     TEST_CHILD_5(User.UserBuilder.<IChild>next().withName("Child_Test5").withFullname("Mustermann")
+            .withPassword("password").withEmail("max.child2@gmail.com").withSchoolClass("1a")
+            .withPhoneNumber("0153323123").toDto("CHILD")),
+    TEST_CHILD_6(User.UserBuilder.<IChild>next().withName("Max_Child_Test6").withFullname("Mustermann 6")
             .withPassword("password").withEmail("max.child2@gmail.com").withSchoolClass("1a")
             .withPhoneNumber("0153323123").toDto("CHILD"));
 

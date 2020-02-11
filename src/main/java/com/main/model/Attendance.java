@@ -54,7 +54,9 @@ public class Attendance {
 
     public int determineStatus() {
         if (arrivalTime == null && leaveTime == null) {
-            if ((latestArrivalTime != null ? latestArrivalTime : afterSchoolCare.getStartTime()).isBefore(LocalDateTime.now())) {
+            if (afterSchoolCare == null || afterSchoolCare.getStartTime() == null) {
+                return AttendanceStatus.ERROR;
+            } else if ((latestArrivalTime != null ? latestArrivalTime : afterSchoolCare.getStartTime()).isBefore(LocalDateTime.now())) {
                 return AttendanceStatus.OVERDUE;
             } else return AttendanceStatus.REGISTERED;
         } else if (leaveTime == null) return AttendanceStatus.PRESENT;
