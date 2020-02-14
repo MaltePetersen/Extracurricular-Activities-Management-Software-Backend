@@ -112,16 +112,25 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     @Transactional
     public byte[] getAverageParticipantsList() throws Exception {
-
         File file = new File("H://CSV//averageParticipants.csv");
         if(!file.exists()) {
             boolean isCreated = file.createNewFile();
             if (!isCreated)
                 throw new Exception();
         }
+
         FileWriter fileWriter = new FileWriter(file);
-        String firstLine = "Uhrzeit; Montag; Dienstag; Mittwoch; Donnerstag; Freitag";
+        String firstLine = " ; ;Montag;Dienstag;Mittwoch;Donnerstag;Freitag;Summe";
+        String secondLineWeekdays = "Art der Angebote (Angabe im Antrag freiwillig, Im Verwendungsnachweis pflichtig) | Teilnehmer (TN)";
+        String secondLine = "\nZeit der Angebote von - bis (z.B. 7.00 -8.00 Uhr); " +
+                            "Umfang in Zeitstunden (0,5 oder 1,0);" +
+                            secondLineWeekdays + ";" +
+                            secondLineWeekdays + ";" +
+                            secondLineWeekdays + ";" +
+                            secondLineWeekdays + ";" +
+                            secondLineWeekdays + "\n";
         fileWriter.write(firstLine);
+        fileWriter.write(secondLine);
 
         byte[] bytes = FileUtil.readAsByteArray(file);
         System.out.println(firstLine);
