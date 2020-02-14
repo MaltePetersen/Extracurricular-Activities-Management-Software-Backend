@@ -104,7 +104,29 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
 
         byte[] bytes = FileUtil.readAsByteArray(file);
+        fileWriter.close();
         file.delete();
+        return bytes;
+    }
+
+    @Override
+    @Transactional
+    public byte[] getAverageParticipantsList() throws Exception {
+
+        File file = new File("H://CSV//averageParticipants.csv");
+        if(!file.exists()) {
+            boolean isCreated = file.createNewFile();
+            if (!isCreated)
+                throw new Exception();
+        }
+        FileWriter fileWriter = new FileWriter(file);
+        String firstLine = "Uhrzeit; Montag; Dienstag; Mittwoch; Donnerstag; Freitag";
+        fileWriter.write(firstLine);
+
+        byte[] bytes = FileUtil.readAsByteArray(file);
+        System.out.println(firstLine);
+        fileWriter.close();
+        //file.delete();
         return bytes;
     }
 

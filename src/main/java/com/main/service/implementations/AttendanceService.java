@@ -25,4 +25,6 @@ public interface AttendanceService {
     Attendance saveDto(AttendanceDTO dto);
 
     byte[] getAttendanceList() throws FileNotFoundException, Exception;
+
+    byte[] getAverageParticipantsList() throws FileNotFoundException, Exception;
 }

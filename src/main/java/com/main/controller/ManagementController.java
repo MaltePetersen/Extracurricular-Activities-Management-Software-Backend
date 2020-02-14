@@ -190,4 +190,17 @@ public class ManagementController {
         return new ResponseEntity<>(data, headers, HttpStatus.OK).getBody();
     }
 
+    //DurchschnittlicheTeilnehmerListe
+    @GetMapping("/averageList")
+    public byte[] getAverageParticipantsList() throws Exception {
+        byte [] data = attendanceService.getAverageParticipantsList();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType("application/csv"));
+        headers.setContentDispositionFormData("averageParticipants.csv", "averageParticipants.csv");
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
+        return new ResponseEntity<>(data, headers, HttpStatus.OK).getBody();
+    }
+
 }
