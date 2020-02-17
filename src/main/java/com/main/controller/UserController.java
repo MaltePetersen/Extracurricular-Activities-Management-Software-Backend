@@ -12,16 +12,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import com.main.dto.UserDTO;
@@ -209,4 +200,33 @@ public class UserController {
             return null;
         return userService.toDto(user);
     }
+
+    @PatchMapping("/profile")
+    public ResponseEntity<UserDTO> patchUserByAuth(@RequestParam UserDTO userDTO,
+                                   Authentication authentication){
+        if(authentication == null)
+            return ResponseEntity.status(403).build();
+
+        String username = userDTO.getUsername();
+        String email = userDTO.getEmail();
+
+        IUser user = userService.findByUsername(authentication.getName());
+
+        if(username != null){
+            if(!username.equals(user.getUsername())){
+                user.setUsername(username);
+            }
+        }
+
+        if(email != null){
+            if(email.length() > 6)
+                userService.changeEmail(user, email);
+        }
+
+        return ResponseEntity.ok( userService.toDto(user) );
+
+    }
+
+
+
 }

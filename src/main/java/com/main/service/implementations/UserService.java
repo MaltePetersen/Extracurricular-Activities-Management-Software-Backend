@@ -30,5 +30,8 @@ public interface UserService {
     UserDTO toDto(IUser user);
 
     void deleteByName(String username);
+    void changePassword(IUser user, String password);
+
+	void changeEmail(IUser user, String email);
 }
 
