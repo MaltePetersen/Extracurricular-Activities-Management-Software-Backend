@@ -115,11 +115,15 @@ public class AfterSchoolCareServiceImpl implements AfterSchoolCareService {
                 break;
         }
 
-        afterSchoolCare.setStartTime(afterSchoolCareDTO.getStartTime());
-        afterSchoolCare.setEndTime(afterSchoolCareDTO.getEndTime());
-        afterSchoolCare.setName(afterSchoolCareDTO.getName());
+        if (afterSchoolCare != null) {
+            afterSchoolCare.setStartTime(afterSchoolCareDTO.getStartTime());
+            afterSchoolCare.setEndTime(afterSchoolCareDTO.getEndTime());
+            afterSchoolCare.setName(afterSchoolCareDTO.getName());
 
-        return AfterSchoolCareConverter.toDto(save(afterSchoolCare));
+            return AfterSchoolCareConverter.toDto(save(afterSchoolCare));
+        } else {
+            return null;
+        }
     }
 
 
