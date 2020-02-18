@@ -8,6 +8,7 @@ import com.main.model.Attendance;
 import com.main.model.Role;
 import com.main.model.School;
 import com.main.model.User;
+import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.afterSchoolCare.AfternoonCare;
 import com.main.model.afterSchoolCare.Remedial;
 import com.main.model.interfaces.IUser;
@@ -117,6 +118,24 @@ public class AssuredEmployeeControllerTest extends AbstractAssuredTest {
 
         assertTrue(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCareWithUserSchool1.getId())));
         assertFalse(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testRemedialWithUserSchool2.getId())));
+    }
+
+    @Test
+    public void testGetAfterSchoolCaresWithEmployeeAuthorityAndType1() {
+        ValidatableResponse response = super.sendGetRequestWithAuth(employee, TestEmployeeControllerPath.AFTER_SCHOOL_CARES.getUri() + "?type=" + AfterSchoolCare.Type.AFTERNOON_CARE.getId()).then().assertThat().statusCode(200);
+        List<AfterSchoolCareDTO> resultAfternoonCares = Arrays.asList(response.extract().body().as(AfterSchoolCareDTO[].class));
+
+        assertTrue(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCareWithUserSchool1.getId())));
+        assertFalse(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testRemedialWithUserSchool2.getId())));
+    }
+
+    @Test
+    public void testGetAfterSchoolCaresWithEmployeeAuthorityAndType3() {
+        ValidatableResponse response = super.sendGetRequestWithAuth(employee, TestEmployeeControllerPath.AFTER_SCHOOL_CARES.getUri() + "?type=" + AfterSchoolCare.Type.REMEDIAL.getId()).then().assertThat().statusCode(200);
+        List<AfterSchoolCareDTO> resultAfternoonCares = Arrays.asList(response.extract().body().as(AfterSchoolCareDTO[].class));
+
+        assertFalse(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCareWithUserSchool1.getId())));
+        assertTrue(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testRemedialWithUserSchool2.getId())));
     }
 
     @Test

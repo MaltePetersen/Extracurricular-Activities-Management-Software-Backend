@@ -31,7 +31,9 @@ import org.springframework.web.context.request.WebRequest;
 import javax.transaction.Transactional;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -137,6 +139,7 @@ public class ParentController {
     @GetMapping("/booked_after_school_cares")
     public List<AfterSchoolCareDTO> getBookedAfterSchoolCares(Authentication auth) {
         return afterSchoolCareService.getAllByParent(auth.getName()).stream()
+                .filter(afterSchoolCare -> afterSchoolCare.getStartTime().isAfter(LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT)))
                 .peek(afterSchoolCare -> afterSchoolCare.setAttendances(afterSchoolCare.getParentFilteredAttendances(auth.getName())))
                 .map(AfterSchoolCareConverter::toDto)
                 .collect(Collectors.toList());
