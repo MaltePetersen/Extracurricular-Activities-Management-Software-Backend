@@ -2,13 +2,16 @@ package com.main.service.interfaces;
 
 import com.main.dto.AfterSchoolCareDTO;
 import com.main.dto.AttendanceDTO;
+import com.main.dto.WorkingGroupDTO;
 import com.main.dto.converters.AfterSchoolCareConverter;
 import com.main.model.Attendance;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.afterSchoolCare.AfterSchoolCareCreator;
+import com.main.model.afterSchoolCare.WorkingGroup;
 import com.main.repository.AfterSchoolCareRepository;
 import com.main.repository.AttendanceRepository;
 import com.main.service.implementations.AfterSchoolCareService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -91,19 +94,25 @@ public class AfterSchoolCareServiceImpl implements AfterSchoolCareService {
     }
 
     @Override
-    public AfterSchoolCareDTO createNew(AfterSchoolCareDTO afterSchoolCareDTO) {
-        AfterSchoolCare afterSchoolCare = null;
-
-
-
+    public AfterSchoolCareDTO createNew(@NotNull AfterSchoolCareDTO afterSchoolCareDTO) {
+        AfterSchoolCare afterSchoolCare;
 
         switch (afterSchoolCareDTO.getType()) {
             case 1:
-                AfterSchoolCareCreator.createAfternoonCare();
+                afterSchoolCare = AfterSchoolCareCreator.createAfternoonCare();
+                break;
             case 2:
-                AfterSchoolCareCreator.createWorkingGroup();
-            default:
-                AfterSchoolCareCreator.createAmplification();
+                afterSchoolCare = AfterSchoolCareCreator.createWorkingGroup();
+                ((WorkingGroup) afterSchoolCare).setExternal(((WorkingGroupDTO) afterSchoolCareDTO).isExternal());
+                break;
+            case 3:
+                afterSchoolCare = AfterSchoolCareCreator.createRemidial();
+                break;
+            case 4:
+                afterSchoolCare = AfterSchoolCareCreator.createAmplification();
+                break;
+            default: afterSchoolCare = null;
+                break;
         }
 
         afterSchoolCare.setStartTime(afterSchoolCareDTO.getStartTime());

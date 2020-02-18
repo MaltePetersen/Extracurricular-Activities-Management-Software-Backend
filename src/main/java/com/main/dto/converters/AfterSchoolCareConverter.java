@@ -36,7 +36,6 @@ public class AfterSchoolCareConverter {
 			afterSchoolCareDTO.setAttendances(
 					afterSchoolCare.getAttendances().stream().map(AttendanceConverter::toDto).collect(Collectors.toList()));
 		}
-
 		return afterSchoolCareDTO;
 	}
 }
