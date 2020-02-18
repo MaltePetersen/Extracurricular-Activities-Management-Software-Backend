@@ -72,7 +72,7 @@ public class School implements IContactDetails, ISchool {
 
 	public boolean removeEmployee(IEmployee employee) {
 		int oldSize = employees.size();
-		employees = employees.stream().filter(each -> each.getId() != employee.getId()).collect(Collectors.toList());
+		employees = employees.stream().filter(each -> !each.getId().equals(employee.getId())).collect(Collectors.toList());
 		return oldSize > employees.size();
 	}
 
@@ -82,7 +82,7 @@ public class School implements IContactDetails, ISchool {
 
 	public boolean removeSchoolCoordinator(ISchoolCoordinator schoolCoordinator) {
 		int oldSize = schoolCoordinators.size();
-		schoolCoordinators = schoolCoordinators.stream().filter(each -> each.getId() != schoolCoordinator.getId())
+		schoolCoordinators = schoolCoordinators.stream().filter(each -> !each.getId().equals(schoolCoordinator.getId()))
 				.collect(Collectors.toList());
 		return oldSize > schoolCoordinators.size();
 	}
@@ -93,7 +93,7 @@ public class School implements IContactDetails, ISchool {
 	
 	public boolean removeChild(IChild child) {
 		int oldSize = children.size();
-		schoolCoordinators = schoolCoordinators.stream().filter(each -> each.getId() != child.getId())
+		schoolCoordinators = schoolCoordinators.stream().filter(each -> !each.getId().equals(child.getId()))
 				.collect(Collectors.toList());
 		return oldSize > schoolCoordinators.size();
 	}
