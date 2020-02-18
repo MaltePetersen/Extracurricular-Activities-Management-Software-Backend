@@ -220,7 +220,7 @@ public class UserController {
 
         if(fullname != null){
             if(fullname.length() > 0){
-                userService.changeFullname(user, email);
+                userService.changeFullname(user, fullname);
             }
         }
 
