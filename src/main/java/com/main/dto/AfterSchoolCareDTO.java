@@ -2,7 +2,6 @@ package com.main.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.main.dto.converters.StringToLocalDatetimeConverter;
-import com.main.dto.interfaces.IUserDTO;
 import lombok.Data;
 
 import java.time.LocalDateTime;

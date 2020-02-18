@@ -24,90 +24,90 @@ import java.util.stream.StreamSupport;
 @Service
 public class AttendanceServiceImpl implements AttendanceService {
 
-    private AttendanceRepository repository;
-    private AfterSchoolCareService afterSchoolCareService;
-    private UserService userService;
+  private AttendanceRepository repository;
+  private AfterSchoolCareService afterSchoolCareService;
+  private UserService userService;
 
-    public AttendanceServiceImpl(AttendanceRepository repository, AfterSchoolCareService afterSchoolCareService, UserService userService) {
-        this.repository = repository;
-        this.afterSchoolCareService = afterSchoolCareService;
-        this.userService = userService;
+  public AttendanceServiceImpl(AttendanceRepository repository, AfterSchoolCareService afterSchoolCareService, UserService userService) {
+    this.repository = repository;
+    this.afterSchoolCareService = afterSchoolCareService;
+    this.userService = userService;
+  }
+
+  @Override
+  public List<Attendance> getAll() {
+    return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
+  }
+
+  @Override
+  public Attendance findOne(Long id) {
+    return repository.findById(id)
+            .orElseThrow(() -> new RuntimeException("attendance id not found: " + id));
+  }
+
+  @Override
+  public Attendance save(Attendance newAttendance) {
+    repository.save(newAttendance);
+
+    return newAttendance;
+  }
+
+  @Override
+  public Attendance saveByInputDTO(AttendanceInputDTO attendanceInputDTO, AfterSchoolCare afterSchoolCare) {
+    Attendance attendance = getAttendanceByInputDTO(attendanceInputDTO);
+    attendance.setAfterSchoolCare(afterSchoolCare);
+    save(attendance);
+    afterSchoolCare.addAttendance(attendance);
+    afterSchoolCareService.save(afterSchoolCare);
+
+    return attendance;
+  }
+
+  @NotNull
+  @Override
+  public Attendance getAttendanceByInputDTO(AttendanceInputDTO attendanceInputDTO) {
+    Attendance attendance = new Attendance();
+
+    attendance.setChild((User) userService.findByUsername(attendanceInputDTO.getChildUsername()));
+    attendance.setNote(attendanceInputDTO.getNote());
+    attendance.setChild((User) userService.findByUsername(attendanceInputDTO.getChildUsername()));
+    attendance.setPredefinedLeaveTime(attendanceInputDTO.getPredefinedLeaveTime());
+    attendance.setLatestArrivalTime(attendanceInputDTO.getLatestArrivalTime());
+    attendance.setAllowedToLeaveAfterFinishedHomework(attendanceInputDTO.isAllowedToLeaveAfterFinishedHomework());
+    return attendance;
+  }
+
+  @Override
+  public void deleteById(Long id) {
+    repository.deleteById(id);
+  }
+
+  @Override
+  @Transactional
+  public byte[] getAttendanceList() throws Exception {
+    List<Attendance> all = repository.findByIsClosedTrue();
+    File file = new File("attendance.csv");
+    if (!file.exists()) {
+      boolean isCreated = file.createNewFile();
+      if(!isCreated)
+        throw new Exception();
+    }
+    FileWriter fileWriter = new FileWriter(file);
+
+    for (Attendance attendance : all) {
+      String name = attendance.getChild().getFullname();
+      LocalDateTime arrival = attendance.getArrivalTime();
+      LocalDateTime leaveTime = attendance.getLeaveTime();
+      String type = attendance.getAfterSchoolCare().getType().name();
+      String line = name + ";" + arrival + ";" + leaveTime + ";" + type;
+      fileWriter.write(line);
     }
 
-    @Override
-    public List<Attendance> getAll() {
-        return StreamSupport.stream(repository.findAll().spliterator(), false).collect(Collectors.toList());
-    }
-
-    @Override
-    public Attendance findOne(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("attendance id not found: " + id));
-    }
-
-    @Override
-    public Attendance save(Attendance newAttendance) {
-        repository.save(newAttendance);
-
-        return newAttendance;
-    }
-
-    @Override
-    public Attendance saveByInputDTO(AttendanceInputDTO attendanceInputDTO, AfterSchoolCare afterSchoolCare) {
-        Attendance attendance = getAttendanceByInputDTO(attendanceInputDTO);
-        attendance.setAfterSchoolCare(afterSchoolCare);
-        save(attendance);
-        afterSchoolCare.addAttendance(attendance);
-        afterSchoolCareService.save(afterSchoolCare);
-
-        return attendance;
-    }
-
-    @NotNull
-    @Override
-    public Attendance getAttendanceByInputDTO(AttendanceInputDTO attendanceInputDTO) {
-        Attendance attendance = new Attendance();
-
-        attendance.setChild((User) userService.findByUsername(attendanceInputDTO.getChildUsername()));
-        attendance.setNote(attendanceInputDTO.getNote());
-        attendance.setChild((User) userService.findByUsername(attendanceInputDTO.getChildUsername()));
-        attendance.setPredefinedLeaveTime(attendanceInputDTO.getPredefinedLeaveTime());
-        attendance.setLatestArrivalTime(attendanceInputDTO.getLatestArrivalTime());
-        attendance.setAllowedToLeaveAfterFinishedHomework(attendanceInputDTO.isAllowedToLeaveAfterFinishedHomework());
-        return attendance;
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        repository.deleteById(id);
-    }
-
-    @Override
-    @Transactional
-    public byte[] getAttendanceList() throws Exception {
-        List<Attendance> all = repository.findByIsClosedTrue();
-        File file = new File("attendance.csv");
-        if (!file.exists()) {
-            boolean isCreated = file.createNewFile();
-            if(!isCreated)
-                throw new Exception();
-        }
-        FileWriter fileWriter = new FileWriter(file);
-
-        for (Attendance attendance : all) {
-            String name = attendance.getChild().getFullname();
-            LocalDateTime arrival = attendance.getArrivalTime();
-            LocalDateTime leaveTime = attendance.getLeaveTime();
-            String type = attendance.getAfterSchoolCare().getType().name();
-            String line = name + ";" + arrival + ";" + leaveTime + ";" + type;
-            fileWriter.write(line);
-        }
-
-        byte[] bytes = FileUtil.readAsByteArray(file);
-        fileWriter.close();
-        file.delete();
-        return bytes;
-    }
+    byte[] bytes = FileUtil.readAsByteArray(file);
+    fileWriter.close();
+    file.delete();
+    return bytes;
+  }
 
     @Override
     @Transactional
@@ -132,16 +132,16 @@ public class AttendanceServiceImpl implements AttendanceService {
         fileWriter.write(firstLine);
         fileWriter.write(secondLine);
 
-        byte[] bytes = FileUtil.readAsByteArray(file);
-        System.out.println(firstLine);
-        fileWriter.close();
-        //file.delete();
-        return bytes;
-    }
+    byte[] bytes = FileUtil.readAsByteArray(file);
+    System.out.println(firstLine);
+    fileWriter.close();
+    //file.delete();
+    return bytes;
+  }
 
-    @Override
-    public Attendance saveDto(AttendanceDTO dto) {
-        //TODO Missing converter
-        return null;
-    }
+  @Override
+  public Attendance saveDto(AttendanceDTO dto) {
+    //TODO Missing converter
+    return null;
+  }
 }

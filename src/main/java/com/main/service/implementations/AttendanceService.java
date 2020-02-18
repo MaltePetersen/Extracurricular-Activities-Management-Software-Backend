@@ -10,21 +10,21 @@ import java.util.List;
 
 public interface AttendanceService {
 
-    List<Attendance> getAll();
+  List<Attendance> getAll();
 
-    Attendance findOne(Long id);
+  Attendance findOne(Long id);
 
-    Attendance save(Attendance newAttendance);
+  Attendance save(Attendance newAttendance);
 
-    Attendance saveByInputDTO(AttendanceInputDTO attendanceInputDTO, AfterSchoolCare afterSchoolCare);
+  Attendance saveByInputDTO(AttendanceInputDTO attendanceInputDTO, AfterSchoolCare afterSchoolCare);
 
-    void deleteById(Long id);
+  void deleteById(Long id);
 
-    Attendance getAttendanceByInputDTO(AttendanceInputDTO dto);
+  Attendance getAttendanceByInputDTO(AttendanceInputDTO dto);
 
-    Attendance saveDto(AttendanceDTO dto);
+  Attendance saveDto(AttendanceDTO dto);
 
-    byte[] getAttendanceList() throws FileNotFoundException, Exception;
+  byte[] getAttendanceList() throws FileNotFoundException, Exception;
 
-    byte[] getAverageParticipantsList() throws FileNotFoundException, Exception;
+  byte[] getAverageParticipantsList() throws FileNotFoundException, Exception;
 }

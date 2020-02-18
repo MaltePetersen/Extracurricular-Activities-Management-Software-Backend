@@ -6,11 +6,15 @@ import java.util.stream.Collectors;
 
 import com.main.dto.AfterSchoolCareDTO;
 import com.main.dto.AttendanceDTO;
+import com.main.dto.SchoolDTO;
 import com.main.dto.converters.AfterSchoolCareConverter;
 import com.main.dto.converters.AttendanceConverter;
+import com.main.dto.converters.SchoolConverter;
+import com.main.model.School;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.service.implementations.AfterSchoolCareService;
 import com.main.service.implementations.AttendanceService;
+import com.main.service.implementations.SchoolService;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.Errors;
@@ -22,6 +26,8 @@ import com.main.model.User;
 import com.main.service.implementations.UserService;
 import com.main.util.UserDTOValidator;
 
+import javax.validation.constraints.Min;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/api/management")
@@ -32,12 +38,14 @@ public class ManagementController {
     private UserDTOValidator userDTOValidator;
     private AttendanceService attendanceService;
     private AfterSchoolCareService afterSchoolCareService;
+    private SchoolService schoolService;
 
-    public ManagementController(UserService userService, UserDTOValidator userDTOValidator, AttendanceService attendanceService, AfterSchoolCareService afterSchoolCareService) {
+    public ManagementController(UserService userService, UserDTOValidator userDTOValidator, AttendanceService attendanceService, AfterSchoolCareService afterSchoolCareService, SchoolService schoolService) {
         this.userService = userService;
         this.userDTOValidator = userDTOValidator;
         this.attendanceService = attendanceService;
         this.afterSchoolCareService = afterSchoolCareService;
+        this.schoolService = schoolService;
     }
 
 
@@ -203,4 +211,38 @@ public class ManagementController {
         return new ResponseEntity<>(data, headers, HttpStatus.OK).getBody();
     }
 
+    @GetMapping("/schools")
+    public List<SchoolDTO> getSchools() {
+        return schoolService.getAll().stream().map(SchoolConverter::toDto).collect(Collectors.toList());
+    }
+
+    @PostMapping("/school")
+    @ResponseStatus(HttpStatus.CREATED)
+    SchoolDTO createSchool(@RequestBody School newSchool) {
+        return SchoolConverter.toDto((School) schoolService.save(newSchool));
+    }
+
+    @GetMapping("/school/{id}")
+    SchoolDTO getSchool(@PathVariable @Min(1) Long id) {
+        return SchoolConverter.toDto(schoolService.findOne(id));
+    }
+
+    @PatchMapping("/school/{id}")
+    SchoolDTO changeSchool(@RequestBody SchoolDTO newSchool, @PathVariable Long id) {
+        School school = schoolService.findOne(id);
+
+        school.setName(newSchool.getName());
+        school.setAddress(newSchool.getAddress());
+        school.setEmail(newSchool.getEmail());
+        school.setPhoneNumber(newSchool.getPhoneNumber());
+
+        schoolService.save(school);
+
+        return SchoolConverter.toDto(school);
+    }
+
+    @DeleteMapping("/school/{id}")
+    void deleteSchool(@PathVariable Long id) {
+        schoolService.deleteById(id);
+    }
 }

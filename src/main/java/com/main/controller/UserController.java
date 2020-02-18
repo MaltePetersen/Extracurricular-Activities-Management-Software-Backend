@@ -12,16 +12,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import com.main.dto.UserDTO;
@@ -38,7 +29,6 @@ import com.main.util.events.OnResetPasswordEvent;
 
 import lombok.extern.java.Log;
 
-import javax.transaction.Transactional;
 import javax.validation.constraints.Email;
 
 @CrossOrigin
@@ -60,7 +50,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registration(@RequestBody UserDTO userDTO, Authentication auth, Errors errors,
+    public ResponseEntity<String> registration(@RequestBody UserDTO userDTO,
+                                               Authentication auth,
+                                               Errors errors,
                                                WebRequest request) {
         userDTOValidator.validate(userDTO, errors);
         if (errors.hasErrors()) {
@@ -209,4 +201,33 @@ public class UserController {
             return null;
         return userService.toDto(user);
     }
+
+    @PatchMapping("/profile")
+    public ResponseEntity<UserDTO> patchUserByAuth(@RequestBody UserDTO userDTO,
+                                   Authentication authentication){
+        if(authentication == null)
+            return ResponseEntity.status(403).build();
+
+        String email = userDTO.getEmail();
+        String fullname = userDTO.getFullname();
+
+        IUser user = userService.findByUsername(authentication.getName());
+
+        if(email != null){
+            if(email.length() > 6)
+                userService.changeEmail(user, email);
+        }
+
+        if(fullname != null){
+            if(fullname.length() > 0){
+                userService.changeFullname(user, fullname);
+            }
+        }
+
+        return ResponseEntity.ok( userService.toDto(user) );
+
+    }
+
+
+
 }
