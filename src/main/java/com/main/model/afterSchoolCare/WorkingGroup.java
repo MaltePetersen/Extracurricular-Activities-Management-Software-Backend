@@ -1,11 +1,14 @@
 package com.main.model.afterSchoolCare;
 
+import lombok.Data;
+
 import javax.persistence.Entity;
 
 @Entity
+@Data
 public class WorkingGroup extends AfterSchoolCare {
 
-    private boolean isExtern;
+    private boolean isExternal;
 
     public WorkingGroup() {
         super();
