@@ -107,8 +107,8 @@ public class EmployeeController {
                 .filter(afterSchoolCare -> !showOnlyOwn || afterSchoolCare.getOwner() != null && afterSchoolCare.getOwner().getUsername().equals(auth.getName()))
                 .filter(afterSchoolCare -> schoolId == null || afterSchoolCare.getParticipatingSchool() != null && afterSchoolCare.getParticipatingSchool().getId().equals(schoolId))
                 .filter(afterSchoolCare -> type == null || afterSchoolCare.getType().getId() == type)
-                .filter(afterSchoolCare -> startDate == null || afterSchoolCare.getEndTime().isAfter(startDate))
-                .filter(afterSchoolCare -> endDate == null || afterSchoolCare.getStartTime().isBefore(endDate))
+                .filter(afterSchoolCare -> startDate == null || afterSchoolCare.getEndTime() != null && afterSchoolCare.getEndTime().isAfter(startDate))
+                .filter(afterSchoolCare -> endDate == null || afterSchoolCare.getStartTime() != null && afterSchoolCare.getStartTime().isBefore(endDate))
                 .map(AfterSchoolCareConverter::toDto)
                 .collect(Collectors.toList());
     }
