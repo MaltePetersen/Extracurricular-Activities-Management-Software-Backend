@@ -1,7 +1,7 @@
 package com.main.data;
 
 public enum TestSchoolCoordinatorPath {
-    GET_SCHOOL("/api/sc/ag"), GET_SCHOOLS("/api/sc/ags");
+    GET_SCHOOL("/api/sc/ag"), ADD_SCHOOL("/api/sc/ag"), GET_SCHOOLS("/api/sc/ags");
 
     private String path;
 

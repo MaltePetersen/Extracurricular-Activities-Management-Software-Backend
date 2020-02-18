@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(User user) {
         user.setChildSchool(null);
         user.setParent(null);
-        
+
 
         user.setAfterSchoolCares(null);
         user.setAttendances(null);
@@ -172,7 +172,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO toDto(IUser user) {
-        return UserDTO.builder().username(user.getUsername()).email(((IContactDetails) user).getEmail()).build();
+        return UserDTO.builder().fullname(user.getFullname()).username(user.getUsername()).email(((IContactDetails) user).getEmail()).build();
     }
 
     public User findOne(Long id) {
@@ -196,5 +196,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserById(long id) {
         userRepository.delete(findOne(id));
+    }
+
+    @Override
+    public void changePassword(IUser user, String password) {
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save((User)user);
+
+    }
+
+    @Override
+    public void changeEmail(IUser iUser, String email) {
+        User user = (User) iUser;
+        user.setEmail(email);
+        update(user);
+    }
+
+    @Override
+    public void changeFullname(IUser iUser, String fullname) {
+        User user = (User) iUser;
+        user.setFullname(fullname);
+        update(user);
     }
 }

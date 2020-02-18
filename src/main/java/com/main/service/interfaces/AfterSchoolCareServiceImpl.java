@@ -97,6 +97,9 @@ public class AfterSchoolCareServiceImpl implements AfterSchoolCareService {
     public AfterSchoolCareDTO createNew(@NotNull AfterSchoolCareDTO afterSchoolCareDTO) {
         AfterSchoolCare afterSchoolCare = null;
 
+
+
+
         switch (afterSchoolCareDTO.getType()) {
             case 1:
                 afterSchoolCare = AfterSchoolCareCreator.createAfternoonCare();
