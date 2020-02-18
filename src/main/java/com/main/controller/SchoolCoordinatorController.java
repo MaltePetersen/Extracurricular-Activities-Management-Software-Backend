@@ -13,6 +13,7 @@ import com.main.model.interfaces.IUser;
 import com.main.service.implementations.AfterSchoolCareService;
 import com.main.service.implementations.SchoolService;
 import com.main.service.implementations.UserService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class SchoolCoordinatorController {
 
     //Add Working Group
     @PostMapping("/ag")
-    public AfterSchoolCareDTO addAWorkingGroup(@RequestBody AfterSchoolCareDTO afterSchoolCareDTO) {
+    public AfterSchoolCareDTO addAWorkingGroup(@NotNull @RequestBody AfterSchoolCareDTO afterSchoolCareDTO) {
         if (afterSchoolCareDTO.getType() != 1) {
             return null;
         }

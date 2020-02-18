@@ -1,5 +1,6 @@
 package com.main.assured;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.main.data.TestSchoolCoordinatorPath;
 import com.main.data.TestUserData;
 import com.main.dto.interfaces.IUserDTO;
@@ -8,6 +9,7 @@ import com.main.model.User;
 import com.main.model.afterSchoolCare.WorkingGroup;
 import com.main.model.interfaces.IUser;
 import com.main.model.user.UserRole;
+import org.hibernate.jdbc.Work;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,7 +59,6 @@ public class AssuredSchoolCoordinatorTest extends AbstractAssuredTest {
 
     @Test
     public void getAllWorkingGroupsTest() {
-
         System.out.println(userService.findAll());
         super.sendGetRequestWithAuth(userDTO, TestSchoolCoordinatorPath.GET_SCHOOLS.getUri())
                 .then().assertThat()
@@ -75,7 +76,15 @@ public class AssuredSchoolCoordinatorTest extends AbstractAssuredTest {
     }
 
     @Test
-    public void addWorkingGroup(){
+    public void addWorkingGroup() throws JsonProcessingException {
+        WorkingGroup workingGroup = new WorkingGroup();
+        workingGroup.setName("New Working Group");
+
+        String json =  mapToJson(workingGroup);
+
+        super.sendPatchWithAuthAndUserNameAndJSON( userDTO, TestSchoolCoordinatorPath.ADD_SCHOOL.getUri(), json).assertThat().statusCode(202);
+
+
 
     }
 
