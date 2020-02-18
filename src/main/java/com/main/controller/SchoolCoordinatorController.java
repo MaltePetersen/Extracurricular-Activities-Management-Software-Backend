@@ -42,7 +42,7 @@ public class SchoolCoordinatorController {
     //Add Working Group
     @PostMapping("/ag")
     public AfterSchoolCareDTO addAWorkingGroup(@RequestBody AfterSchoolCareDTO afterSchoolCareDTO) {
-        if (afterSchoolCareDTO.getType() != 2) {
+        if (afterSchoolCareDTO.getType() != 1) {
             return null;
         }
         afterSchoolCareDTO = afterSchoolCareService.createNew(afterSchoolCareDTO);

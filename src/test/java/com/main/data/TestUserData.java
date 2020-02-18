@@ -3,6 +3,7 @@ package com.main.data;
 import com.main.dto.interfaces.IUserDTO;
 import com.main.model.User;
 import com.main.model.interfaces.*;
+import com.main.model.user.UserRole;
 
 /**
  * Ein Enum welches UserDTOs enthält, welche zum Testen genutzt werden können.
@@ -25,7 +26,7 @@ public enum TestUserData {
     TEST_SCHOOL_COORDINATOR(User.UserBuilder.<ISchoolCoordinator>next().withName("Max_SCHOOL_COORDINATOR").withFullname("Mustermann")
 			.isSchoolCoordinator(true)
             .withPassword("password").withEmail("max.teacher@gmail.com").withPhoneNumber("0153323123")
-            .toDto("SCHOOL_COORDINATOR")),
+            .toDto(UserRole.ROLE_SCHOOLCOORDINATOR.toString())),
     TEST_PARENT(User.UserBuilder.<IParent>next().withName("Max_Parent").withFullname("Mustermann")
             .withPassword("password").withEmail("max.parent@gmx.de").withPhoneNumber("0153323123").toDto("PARENT")),
     TEST_PARENT_2(User.UserBuilder.<IParent>next().withName("Max_Parent2").withFullname("Mustermann")

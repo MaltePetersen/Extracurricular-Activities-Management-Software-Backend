@@ -29,7 +29,6 @@ import com.main.util.events.OnResetPasswordEvent;
 
 import lombok.extern.java.Log;
 
-import javax.transaction.Transactional;
 import javax.validation.constraints.Email;
 
 @CrossOrigin
@@ -51,7 +50,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registration(@RequestBody UserDTO userDTO, Authentication auth, Errors errors,
+    public ResponseEntity<String> registration(@RequestBody UserDTO userDTO,
+                                               Authentication auth,
+                                               Errors errors,
                                                WebRequest request) {
         userDTOValidator.validate(userDTO, errors);
         if (errors.hasErrors()) {
@@ -207,20 +208,20 @@ public class UserController {
         if(authentication == null)
             return ResponseEntity.status(403).build();
 
-        String username = userDTO.getUsername();
         String email = userDTO.getEmail();
+        String fullname = userDTO.getFullname();
 
         IUser user = userService.findByUsername(authentication.getName());
-
-        if(username != null){
-            if(!username.equals(user.getUsername())){
-                user.setUsername(username);
-            }
-        }
 
         if(email != null){
             if(email.length() > 6)
                 userService.changeEmail(user, email);
+        }
+
+        if(fullname != null){
+            if(fullname.length() > 0){
+                userService.changeFullname(user, email);
+            }
         }
 
         return ResponseEntity.ok( userService.toDto(user) );

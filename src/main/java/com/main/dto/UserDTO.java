@@ -16,12 +16,14 @@ public class UserDTO implements IUserDTO {
     private String username;
     @NotBlank(message = "Password is mandatory")
     private String password;
-   
+
     @Email
     @NotBlank(message = "Email is mandatory")
     private String email;
     @NotBlank(message = "Fullname is mandatory")
     private String fullname;
+
+
     private String schoolClass;
     //private Long childSchool;
 

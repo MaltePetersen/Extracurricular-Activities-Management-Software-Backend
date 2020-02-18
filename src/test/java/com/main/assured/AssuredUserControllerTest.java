@@ -33,40 +33,22 @@ public class AssuredUserControllerTest extends AbstractAssuredTest {
 
     private IUserDTO parent = TestUserData.TEST_PARENT_7.getUserDTO();
 
-    @Autowired
-    private VerificationTokenRepository verificationTokenRepo;
 
     @Override
     @Before
     @Transactional
     public void setUp() throws Exception {
         super.setUp();
-        parent.setPassword("Password123");
-        String value = mapToJson(parent);
-
-        IUser user = userService.findByUsername(parent.getUsername());
-        if (user == null) {
-            given().contentType("application/json").body(value).when().post(TestUserControllerPath.REGISTER.getUri()).then()
-                    .assertThat().statusCode(201);
-
-            String token = verificationTokenRepo.findByUser_Email(parent.getEmail()).getToken();
-
-            given().with().auth().preemptive().basic(parent.getUsername(), parent.getPassword()).log().headers().when()
-                    .get(TestUserControllerPath.EMAILCONFIRMATION.getUri() + token).then().assertThat().statusCode(202);
-        }
+        registerUser(parent);
     }
 
     @After
     public void tearDown(){
-        if(userService.findByUsername(parent.getUsername()) != null)
-            userService.deleteByName(parent.getUsername());
+        deleteUser(parent);
     }
-
-
 
     @Test
     public void registerNewParentTest() throws Exception {
-
 
         IUserDTO parent = TestUserData.TEST_PARENT_2.getUserDTO();
         parent.setPassword("Password123");
@@ -78,13 +60,11 @@ public class AssuredUserControllerTest extends AbstractAssuredTest {
 
         given().auth().preemptive().basic(parent.getUsername(), parent.getPassword()).log().headers().when()
                 .get(TestUserControllerPath.RESENDTOKEN.getUri()).then().statusCode(202);
-
     }
-
 
     @Test
     @Transactional
-    public void showProfileTest() throws Exception {
+    public void showProfileTest() {
         Response response = sendGetRequestWithAuth(parent, TestUserControllerPath.PROFILE.getUri());
 
         response.then().assertThat().statusCode(200);

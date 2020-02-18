@@ -31,7 +31,7 @@ public interface UserService {
 
     void deleteByName(String username);
     void changePassword(IUser user, String password);
-
 	void changeEmail(IUser user, String email);
+	void changeFullname(IUser user, String email);
 }
 

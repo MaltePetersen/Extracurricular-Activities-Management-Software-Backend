@@ -32,17 +32,17 @@ public class AssuredSchoolCoordinatorTest extends AbstractAssuredTest {
         if(myUser != null)
             return;
 
-        User user = (User) User.UserBuilder.next().withDto(userDTO).build();
-        user.setPassword(encoder.encode(user.getPassword()));
-        user = userService.update(user, UserRole.ROLE_SCHOOLCOORDINATOR);
+        registerUser(userDTO);
+        User user = (User) userService.findByUsername( userDTO.getUsername() );
+
 
         WorkingGroup workingGroup = new WorkingGroup();
         workingGroup.setName("Working Group");
         workingGroup.setOwner(user);
-
         afterSchoolCareService.save(workingGroup);
 
         id = workingGroup.getId().toString();
+        userService.update(user);
     }
 
     @After
