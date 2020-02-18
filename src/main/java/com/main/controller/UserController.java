@@ -203,7 +203,7 @@ public class UserController {
     }
 
     @PatchMapping("/profile")
-    public ResponseEntity<UserDTO> patchUserByAuth(@RequestParam UserDTO userDTO,
+    public ResponseEntity<UserDTO> patchUserByAuth(@RequestBody UserDTO userDTO,
                                    Authentication authentication){
         if(authentication == null)
             return ResponseEntity.status(403).build();
