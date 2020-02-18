@@ -31,6 +31,7 @@ public class AssuredEmployeeControllerTest extends AbstractAssuredTest {
     private AfternoonCare testAfternoonCareInFarFuture;
     private Remedial testRemedialWithUserSchool2;
     private AfternoonCare testAfternoonCareWithDifferentUser;
+    private AfternoonCare testAfternoonCareToClose;
 
     private School school1;
     private School school2;
@@ -84,7 +85,6 @@ public class AssuredEmployeeControllerTest extends AbstractAssuredTest {
         testAfternoonCareInFarFuture.setEndTime(LocalDateTime.of(2021, 5, 12, 13, 15));
         afterSchoolCareService.save(testAfternoonCareInFarFuture);
 
-
         testRemedialWithUserSchool2 = new Remedial();
         testRemedialWithUserSchool2.setName("Bio-Nachhilfe");
         testRemedialWithUserSchool2.setOwner((User) userService.findByUsername(employee.getUsername()));
@@ -92,6 +92,22 @@ public class AssuredEmployeeControllerTest extends AbstractAssuredTest {
         testRemedialWithUserSchool2.setStartTime(LocalDateTime.of(2020, 5, 12, 10, 0));
         testRemedialWithUserSchool2.setEndTime(LocalDateTime.of(2020, 5, 12, 13, 15));
         afterSchoolCareService.save(testRemedialWithUserSchool2);
+
+        testAfternoonCareToClose = new AfternoonCare();
+        testAfternoonCareToClose.setName("Zu schließende Nachmittagsbetreuung");
+        testAfternoonCareToClose.setOwner((User) userService.findByUsername(employee.getUsername()));
+        testAfternoonCareToClose.setStartTime(LocalDateTime.of(2020, 1, 12, 10, 0));
+        testAfternoonCareToClose.setEndTime(LocalDateTime.of(2020, 1, 12, 13, 15));
+        afterSchoolCareService.save(testAfternoonCareToClose);
+
+        Attendance attendance2 = new Attendance();
+        attendance2.setArrivalTime(LocalDateTime.of(2020, 1, 12, 10, 2));
+        attendance2.setLeaveTime(LocalDateTime.of(2020, 1, 12, 13, 15));
+        attendance2.setAfterSchoolCare(testAfternoonCareToClose);
+        attendance2.setChild((User) userService.findByUsername("Child_Test"));
+        attendanceService.save(attendance2);
+
+        testAfternoonCareToClose.addAttendance(attendance2);
 
         testAfternoonCareWithDifferentUser = new AfternoonCare();
         testAfternoonCareWithDifferentUser.setName("Test-Nachmittagsbetreuung (2)");
@@ -181,6 +197,22 @@ public class AssuredEmployeeControllerTest extends AbstractAssuredTest {
         assertTrue(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testRemedialWithUserSchool2.getId())));
         assertFalse(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCareWithUserSchool1.getId())));
         assertFalse(resultAfternoonCares.stream().anyMatch(afterSchoolCareDTO -> afterSchoolCareDTO.getId().equals(testAfternoonCareInFarFuture.getId())));
+    }
+
+    @Test
+    public void testCloseAfterSchoolCare() {
+        ValidatableResponse response = super.sendPatchWithAuthAndUserNameAndJSON(employee, TestEmployeeControllerPath.AFTER_SCHOOL_CARES.getUri()
+                + "/" + testAfternoonCareToClose.getId() + "/close", "").assertThat().statusCode(201);
+
+        AfterSchoolCareDTO resultAfternoonCare = response.extract().body().as(AfterSchoolCareDTO.class);
+
+        assertTrue(resultAfternoonCare.isClosed());
+    }
+
+    @Test
+    public void testCloseAfterSchoolCareNegative() {
+        super.sendPatchWithAuthAndUserNameAndJSON(employee, TestEmployeeControllerPath.AFTER_SCHOOL_CARES.getUri()
+                + "/" + testAfternoonCareWithUserSchool1.getId() + "/close", "").assertThat().statusCode(400);
     }
 
     @Test
