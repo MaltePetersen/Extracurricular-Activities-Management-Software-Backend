@@ -50,7 +50,7 @@ public class SchoolCoordinatorController {
             return null;
         }
         AfterSchoolCareDTO afterSchoolCareDTO = afterSchoolCareService.createNew(workingGroupDTO);
-        return workingGroupDTO;
+        return afterSchoolCareDTO;
     }
 
     //Add Child

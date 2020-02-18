@@ -95,10 +95,7 @@ public class AfterSchoolCareServiceImpl implements AfterSchoolCareService {
 
     @Override
     public AfterSchoolCareDTO createNew(@NotNull AfterSchoolCareDTO afterSchoolCareDTO) {
-        AfterSchoolCare afterSchoolCare = null;
-
-
-
+        AfterSchoolCare afterSchoolCare;
 
         switch (afterSchoolCareDTO.getType()) {
             case 1:
