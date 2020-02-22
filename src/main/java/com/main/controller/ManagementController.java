@@ -141,7 +141,7 @@ public class ManagementController {
     }
 
     @DeleteMapping("/afterSchoolCare/{id}")
-    public ResponseEntity<String> deleteAfterSchoolCare(@RequestBody(required = false) AfterSchoolCareDTO afterSchoolCareDTO, @PathVariable long id) {
+    public ResponseEntity<String> deleteAfterSchoolCare(@PathVariable long id) {
         AfterSchoolCare afterSchoolCare = afterSchoolCareService.findOne(id);
 
         if (afterSchoolCare == null) {
