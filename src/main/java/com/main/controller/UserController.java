@@ -69,7 +69,7 @@ public class UserController {
             eventPublisher
                     .publishEvent(new OnRegistrationCompleteEvent((User) registered, request.getLocale(), appUrl));
         } catch (Exception e) {
-            e.printStackTrace();
+            log.warning(e.getMessage());
             return new ResponseEntity<>("Fehler beim Versenden", HttpStatus.BAD_REQUEST);
         }
 
@@ -128,7 +128,7 @@ public class UserController {
             verificationTokenRepository.delete((VerificationToken) token);
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent((User) user, request.getLocale(), appUrl));
         } catch (Exception e) {
-            e.printStackTrace();
+            log.warning(e.getMessage());
         }
 
         return new ResponseEntity<>("The token was sent again", HttpStatus.ACCEPTED);
@@ -172,8 +172,7 @@ public class UserController {
 
 
         } catch (Exception e) {
-            log.info(e.getMessage());
-            e.printStackTrace();
+            log.warning(e.getMessage());
             return new ResponseEntity<>("Error while sending the message", HttpStatus.BAD_REQUEST);
         }
 

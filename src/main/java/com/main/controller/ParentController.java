@@ -40,6 +40,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static org.hibernate.bytecode.BytecodeLogger.LOGGER;
+
 @RestController
 @RequestMapping("/api/parent")
 @CrossOrigin
@@ -286,7 +288,7 @@ public class ParentController {
             String appUrl = request.getContextPath();
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.warn(e);
             return new ResponseEntity<>("Fehler beim Versenden", HttpStatus.BAD_REQUEST);
         }
 
