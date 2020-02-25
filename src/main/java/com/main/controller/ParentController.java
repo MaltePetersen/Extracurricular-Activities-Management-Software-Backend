@@ -94,8 +94,8 @@ public class ParentController {
 
     @GetMapping("/data")
     @Transactional
-    public  ResponseEntity getParent(Authentication auth) {
-        if(auth != null) {
+    public ResponseEntity getParent(Authentication auth) {
+        if (auth != null) {
             User parent = (User) userService.findByUsername(auth.getName());
             User.UserBuilder builder = User.UserBuilder.next();
             builder.withUser(parent);
@@ -125,12 +125,12 @@ public class ParentController {
     }
 
     @GetMapping("/school/{id}")
-    SchoolDTO getSchool(@PathVariable @Min(1) Long id) {
+    public SchoolDTO getSchool(@PathVariable @Min(1) Long id) {
         return SchoolConverter.toDto(schoolService.findOne(id));
     }
 
     @GetMapping("/after_school_cares/types")
-    Map<Integer, String> getAfterSchoolCaresTypes() {
+    public Map<Integer, String> getAfterSchoolCaresTypes() {
         return AfterSchoolCare.getTypes();
     }
 
@@ -171,7 +171,7 @@ public class ParentController {
 
     @PostMapping("/after_school_cares/{afterSchoolCareId}/attendance")
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity addAttendance(@RequestBody AttendanceInputDTO attendanceInputDTO, @PathVariable Long afterSchoolCareId) {
+    public ResponseEntity addAttendance(@RequestBody AttendanceInputDTO attendanceInputDTO, @PathVariable Long afterSchoolCareId) {
         // TODO: Eltern sollten nur Attendances für eigene Kinder erstellen dürfen
         AfterSchoolCare afterSchoolCare = afterSchoolCareService.findOne(afterSchoolCareId);
 
@@ -189,7 +189,7 @@ public class ParentController {
     }
 
     @PatchMapping("/attendance/{id}")
-    ResponseEntity updateAttendance(@RequestBody Map<String, String> update, @PathVariable Long id, Authentication auth) {
+    public ResponseEntity updateAttendance(@RequestBody Map<String, String> update, @PathVariable Long id, Authentication auth) {
         Attendance attendance = attendanceService.findOne(id);
 
         if (attendance.getAfterSchoolCare().isClosed()) {
@@ -242,7 +242,7 @@ public class ParentController {
     }
 
     @DeleteMapping("/attendance/{id}")
-    ResponseEntity<String> deleteAttendance(@PathVariable Long id) {
+    public ResponseEntity<String> deleteAttendance(@PathVariable Long id) {
         // TODO: Eltern sollten nur Attendances von eigenen Kindern entfernen dürfen
         attendanceService.deleteById(id);
         return new ResponseEntity<>("Deleted attendance: " + id, HttpStatus.NO_CONTENT);
@@ -262,16 +262,16 @@ public class ParentController {
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
     public ResponseEntity<String> createChild(@RequestBody @NotNull ChildDTO childDTO,
-                                      Authentication auth,
-                                      Errors errors,
-                                      WebRequest request) throws JsonProcessingException {
+                                              Authentication auth,
+                                              Errors errors,
+                                              WebRequest request) throws JsonProcessingException {
         UUID username = UUID.randomUUID();
         //childDTO.setUsername(username.toString());
         UUID email = UUID.randomUUID();
         //childDTO.setEmail(email.toString() + "@test.de");
         UserDTO userDTO = (UserDTO) childDTO.toUserDTO(username.toString(), "Password123", email.toString() + "@test.de");
         userDTOValidator.validate(userDTO, errors);
-        userDTO.setPassword( encoder.encode( userDTO.getPassword() ) );
+        userDTO.setPassword(encoder.encode(userDTO.getPassword()));
 
         if (errors.hasErrors()) {
             return new ResponseEntity<>(createErrorString(errors), HttpStatus.BAD_REQUEST);
@@ -311,7 +311,7 @@ public class ParentController {
 
     @PatchMapping("/child/{username}")
     @Transactional
-    IUserDTO updateChild(@RequestBody Map<String, String> update, @PathVariable String username) {
+    public IUserDTO updateChild(@RequestBody Map<String, String> update, @PathVariable String username) {
         User child = (User) userService.findByUsername(username);
 
         Long school;
@@ -347,7 +347,7 @@ public class ParentController {
     }
 
     @GetMapping("/child/{username}")
-    UserDTO getChild(@PathVariable @Min(1) String username) {
+    public UserDTO getChild(@PathVariable @Min(1) String username) {
         User.UserBuilder builder = User.UserBuilder.next();
         builder.withUser((User) userService.findByUsername(username));
         return (UserDTO) builder.toDto("CHILD");
@@ -356,7 +356,7 @@ public class ParentController {
     //Funktioniert noch nciht richtig, zum Schutz vor unerwarteten Auswirkungen erst einmal deaktiviert
     @DeleteMapping("/child/{username}")
     @Transactional
-    ResponseEntity<String> deleteChild(@PathVariable String username) {
+    public ResponseEntity<String> deleteChild(@PathVariable String username) {
         userService.deleteByName(username);
         return new ResponseEntity<>("Das Kind wurde erfolgreich gelöscht!", HttpStatus.OK);
     }

@@ -153,11 +153,11 @@ public class ManagementController {
     }
 
     @PostMapping("/afterSchoolCare")
-    public ResponseEntity<String> addAfterSchoolCare(@RequestBody(required = false) AfterSchoolCareDTO afterSchoolCareDTO){
+    public ResponseEntity<String> addAfterSchoolCare(@RequestBody(required = false) AfterSchoolCareDTO afterSchoolCareDTO) {
         AfterSchoolCareDTO response = afterSchoolCareService.createNew(afterSchoolCareDTO);
-        if(response == null){
+        if (response == null) {
             return ResponseEntity.unprocessableEntity().build();
-        }else{
+        } else {
             return ResponseEntity.ok().build();
         }
 
@@ -201,7 +201,7 @@ public class ManagementController {
     //DurchschnittlicheTeilnehmerListe
     @GetMapping("/averageList")
     public byte[] getAverageParticipantsList() throws Exception {
-        byte [] data = attendanceService.getAverageParticipantsList();
+        byte[] data = attendanceService.getAverageParticipantsList();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType("application/csv"));
@@ -218,17 +218,17 @@ public class ManagementController {
 
     @PostMapping("/school")
     @ResponseStatus(HttpStatus.CREATED)
-    SchoolDTO createSchool(@RequestBody School newSchool) {
+    public SchoolDTO createSchool(@RequestBody School newSchool) {
         return SchoolConverter.toDto((School) schoolService.save(newSchool));
     }
 
     @GetMapping("/school/{id}")
-    SchoolDTO getSchool(@PathVariable @Min(1) Long id) {
+    public SchoolDTO getSchool(@PathVariable @Min(1) Long id) {
         return SchoolConverter.toDto(schoolService.findOne(id));
     }
 
     @PatchMapping("/school/{id}")
-    SchoolDTO changeSchool(@RequestBody SchoolDTO newSchool, @PathVariable Long id) {
+    public SchoolDTO changeSchool(@RequestBody SchoolDTO newSchool, @PathVariable Long id) {
         School school = schoolService.findOne(id);
 
         school.setName(newSchool.getName());
@@ -242,7 +242,7 @@ public class ManagementController {
     }
 
     @DeleteMapping("/school/{id}")
-    void deleteSchool(@PathVariable Long id) {
+    public void deleteSchool(@PathVariable Long id) {
         schoolService.deleteById(id);
     }
 }

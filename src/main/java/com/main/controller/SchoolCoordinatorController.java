@@ -136,17 +136,17 @@ public class SchoolCoordinatorController {
 
     @PostMapping("/school")
     @ResponseStatus(HttpStatus.CREATED)
-    SchoolDTO createSchool(@RequestBody School newSchool) {
+    public SchoolDTO createSchool(@RequestBody School newSchool) {
         return SchoolConverter.toDto((School) schoolService.save(newSchool));
     }
 
     @GetMapping("/school/{id}")
-    SchoolDTO getSchool(@PathVariable @Min(1) Long id) {
+    public SchoolDTO getSchool(@PathVariable @Min(1) Long id) {
         return SchoolConverter.toDto(schoolService.findOne(id));
     }
 
     @PatchMapping("/school/{id}")
-    SchoolDTO changeSchool(@RequestBody SchoolDTO newSchool, @PathVariable Long id) {
+    public SchoolDTO changeSchool(@RequestBody SchoolDTO newSchool, @PathVariable Long id) {
         School school = schoolService.findOne(id);
 
         school.setName(newSchool.getName());
@@ -160,7 +160,7 @@ public class SchoolCoordinatorController {
     }
 
     @DeleteMapping("/school/{id}")
-    void deleteSchool(@PathVariable Long id) {
+    public void deleteSchool(@PathVariable Long id) {
         schoolService.deleteById(id);
     }
 }
