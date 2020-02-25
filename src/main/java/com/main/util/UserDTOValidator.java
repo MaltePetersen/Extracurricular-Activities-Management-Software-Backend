@@ -1,13 +1,9 @@
 package com.main.util;
 
-import org.springframework.stereotype.Component;
-import org.springframework.validation.Errors;
-
 import com.main.dto.interfaces.IUserDTO;
 import com.main.service.implementations.UserService;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.Errors;
 
 @Component
 public class UserDTOValidator {
@@ -59,10 +55,6 @@ public class UserDTOValidator {
         if(result < 2){
             errors.reject("Please follow the password policy");
         }
-
-
-
-
     }
 
     private void validateFullname(String fullname, Errors errors) {

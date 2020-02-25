@@ -2,8 +2,6 @@ package com.main.dto;
 
 import java.time.LocalDateTime;
 
-import javax.validation.constraints.NotBlank;
-
 import lombok.Data;
 
 @Data

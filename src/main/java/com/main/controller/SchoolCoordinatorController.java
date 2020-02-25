@@ -14,9 +14,6 @@ import com.main.model.interfaces.IUser;
 import com.main.service.implementations.AfterSchoolCareService;
 import com.main.service.implementations.SchoolService;
 import com.main.service.implementations.UserService;
-import org.jetbrains.annotations.NotNull;
-import org.aspectj.lang.annotation.After;
-import org.hibernate.jdbc.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,8 +46,7 @@ public class SchoolCoordinatorController {
         if (workingGroupDTO.getType() != 2) {
             return null;
         }
-        AfterSchoolCareDTO afterSchoolCareDTO = afterSchoolCareService.createNew(workingGroupDTO);
-        return afterSchoolCareDTO;
+        return afterSchoolCareService.createNew(workingGroupDTO);
     }
 
     //Add Child

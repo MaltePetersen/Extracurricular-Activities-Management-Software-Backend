@@ -2,7 +2,6 @@ package com.main.dto.converters;
 
 import com.main.dto.SchoolDTO;
 import com.main.model.School;
-import org.springframework.stereotype.Component;
 
 public class SchoolConverter {
 

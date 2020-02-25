@@ -110,9 +110,7 @@ public class ParentController {
     public ResponseEntity<Void> isParent(Authentication auth) {
         if (auth != null) {
             List<String> roles = new ArrayList<>();
-            auth.getAuthorities().forEach((a) -> {
-                roles.add(a.getAuthority());
-            });
+            auth.getAuthorities().forEach(a -> roles.add(a.getAuthority()));
             if (roles.contains("ROLE_PARENT")) {
                 return new ResponseEntity<>(HttpStatus.ACCEPTED);
             }
@@ -253,7 +251,7 @@ public class ParentController {
     @GetMapping("/children")
     @Transactional
     public List<UserDTO> getChilds(Authentication auth) {
-        return ((User) userService.findByUsername(auth.getName())).getChildren().stream().map((child) -> {
+        return ((User) userService.findByUsername(auth.getName())).getChildren().stream().map(child -> {
             User.UserBuilder<IUser> builder = User.UserBuilder.next();
             builder.withUser(child);
             return (UserDTO) builder.toDto("CHILD");

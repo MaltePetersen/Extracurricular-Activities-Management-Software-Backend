@@ -1,19 +1,10 @@
 package com.main.model;
 
-import java.time.LocalDateTime;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 import com.main.model.afterSchoolCare.AfterSchoolCare;
-import com.main.model.interfaces.IChild;
-import com.main.model.interfaces.IUser;
 import lombok.Data;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /***
  * Eine Klasse für die Anwesenheit. Pro Kind und Nachmittagsobjekt gibt es eine Anwesenheit.

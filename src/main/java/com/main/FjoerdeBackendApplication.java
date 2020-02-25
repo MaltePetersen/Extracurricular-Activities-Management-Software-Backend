@@ -5,9 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @SpringBootApplication
 @EnableScheduling
 public class FjoerdeBackendApplication extends SpringBootServletInitializer {
