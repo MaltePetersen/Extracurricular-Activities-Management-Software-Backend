@@ -84,33 +84,6 @@ public class AttendanceServiceImpl implements AttendanceService {
 
   @Override
   @Transactional
-  public byte[] getAttendanceList() throws Exception {
-    List<Attendance> all = repository.findByIsClosedTrue();
-    File file = new File("attendance.csv");
-    if (!file.exists()) {
-      boolean isCreated = file.createNewFile();
-      if(!isCreated)
-        throw new Exception();
-    }
-    FileWriter fileWriter = new FileWriter(file);
-
-    for (Attendance attendance : all) {
-      String name = attendance.getChild().getFullname();
-      LocalDateTime arrival = attendance.getArrivalTime();
-      LocalDateTime leaveTime = attendance.getLeaveTime();
-      String type = attendance.getAfterSchoolCare().getType().name();
-      String line = name + ";" + arrival + ";" + leaveTime + ";" + type;
-      fileWriter.write(line);
-    }
-
-    byte[] bytes = FileUtil.readAsByteArray(file);
-    fileWriter.close();
-    file.delete();
-    return bytes;
-  }
-
-  @Override
-  @Transactional
   public byte[] getAverageParticipantsList() throws Exception {
 
     File file = new File("H://CSV//averageParticipants.csv");

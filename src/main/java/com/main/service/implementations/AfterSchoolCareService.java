@@ -4,6 +4,7 @@ import com.main.dto.AfterSchoolCareDTO;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.Attendance;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface AfterSchoolCareService {
@@ -24,4 +25,6 @@ public interface AfterSchoolCareService {
     AfterSchoolCareDTO createNew(AfterSchoolCareDTO afterSchoolCareDTO);
 
     void update(AfterSchoolCare afterSchoolCare, AfterSchoolCareDTO afterSchoolCareDTO);
+
+    byte[] getAttendanceList() throws Exception;
 }

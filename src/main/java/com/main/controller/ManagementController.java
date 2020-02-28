@@ -187,15 +187,15 @@ public class ManagementController {
 
     //Anwesenheitsliste
     @GetMapping("/list")
-    public byte[] getAttendanceList() throws Exception {
-        byte[] data = attendanceService.getAttendanceList();
+    public ResponseEntity<byte[]> getAttendanceList() throws Exception {
+        byte[] data = afterSchoolCareService.getAttendanceList();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType("application/csv"));
+        headers.setContentType( MediaType.APPLICATION_PDF);
         headers.setContentDispositionFormData("attendanceList.csv", "attendanceList.csv");
         headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 
-        return new ResponseEntity<>(data, headers, HttpStatus.OK).getBody();
+        return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
 
     //DurchschnittlicheTeilnehmerListe

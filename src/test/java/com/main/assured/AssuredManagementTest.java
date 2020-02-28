@@ -2,6 +2,7 @@ package com.main.assured;
 
 import com.main.data.TestManagementControllerPath;
 import com.main.data.TestUserData;
+import com.main.dto.AttendanceDTO;
 import com.main.dto.UserDTO;
 import com.main.dto.interfaces.IUserDTO;
 import com.main.model.Role;
@@ -57,8 +58,8 @@ public class AssuredManagementTest extends AbstractAssuredTest {
 
     @Test
     public void getAttendanceList(){
-        byte[] response = super.sendGetRequestWithAuth(userDTO, TestManagementControllerPath.GET_ATTENDANCE_LIST.getUri()).asByteArray();
-        System.out.println(response.length);
+        String response =  super.sendGetRequestWithAuth(userDTO, TestManagementControllerPath.GET_ATTENDANCE_LIST.getUri()).asString();
+        System.out.println("Response: " + response);
 
     }
 
