@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static org.hibernate.bytecode.BytecodeLogger.LOGGER;
+
 @Service
 public class AttendanceServiceImpl implements AttendanceService {
 
@@ -106,30 +108,30 @@ public class AttendanceServiceImpl implements AttendanceService {
                 .map(AfterSchoolCareConverter::toDto)
                 .collect(Collectors.toList());
 
-        FileWriter fileWriter = new FileWriter(file);
-        String firstSectionHeader = "Betreuungsangebote in der Primarstufe und Betreuungs- und Ganztagsangebote im Rahmen der Offenen Ganztagsschule\n";
-        String columnHeaders = " ; ;Montag;Dienstag;Mittwoch;Donnerstag;Freitag;Summe\n";
-        String secondLineWeekdays = "Art der Angebote (Angabe im Antrag freiwillig, Im Verwendungsnachweis pflichtig) | Teilnehmer (TN)";
-        String secondLine = "Zeit der Angebote von - bis (z.B. 7.00 -8.00 Uhr); " +
-                "Umfang in Zeitstunden (0,5 oder 1,0);" +
-                secondLineWeekdays + ";" +
-                secondLineWeekdays + ";" +
-                secondLineWeekdays + ";" +
-                secondLineWeekdays + ";" +
-                secondLineWeekdays + "\n";
-        String secondSectionHeader = "Betreuungs- und Ganztagsangebote sind in der Sekundarstufe I nur ergänzend zu den Unterrichtszeiten und in der Primarstufe" +
-                "nur vor und nach den Verlässlichen Schulzeiten von vier (Klassen 1+2) und fünf (Klassen 3+4) Zeitstunden förderfähig\n";
-        //Vormittags
-        fileWriter.write(firstSectionHeader);
-        fileWriter.write(columnHeaders);
-        fileWriter.write(secondLine);
-        for (AfterSchoolCareDTO afterSchoolCare : afterSchoolCaresMorning) {
-            for (LocalTime time = LocalTime.of(6, 00, 00); time.isBefore(LocalTime.of(12, 00, 00)); time.plusMinutes(30)){
-                fileWriter.write(afterSchoolCare.getStartTime().toLocalTime().toString() + ";"
-                        + "0,5 ;"
-                        + afterSchoolCare.getName() + " | " + afterSchoolCare.getAttendances().size() + "\n");
+        try (FileWriter fileWriter = new FileWriter(file)) {
+            String firstSectionHeader = "Betreuungsangebote in der Primarstufe und Betreuungs- und Ganztagsangebote im Rahmen der Offenen Ganztagsschule\n";
+            String columnHeaders = " ; ;Montag;Dienstag;Mittwoch;Donnerstag;Freitag;Summe\n";
+            String secondLineWeekdays = "Art der Angebote (Angabe im Antrag freiwillig, Im Verwendungsnachweis pflichtig) | Teilnehmer (TN)";
+            String secondLine = "Zeit der Angebote von - bis (z.B. 7.00 -8.00 Uhr); " +
+                    "Umfang in Zeitstunden (0,5 oder 1,0);" +
+                    secondLineWeekdays + ";" +
+                    secondLineWeekdays + ";" +
+                    secondLineWeekdays + ";" +
+                    secondLineWeekdays + ";" +
+                    secondLineWeekdays + "\n";
+            String secondSectionHeader = "Betreuungs- und Ganztagsangebote sind in der Sekundarstufe I nur ergänzend zu den Unterrichtszeiten und in der Primarstufe" +
+                    "nur vor und nach den Verlässlichen Schulzeiten von vier (Klassen 1+2) und fünf (Klassen 3+4) Zeitstunden förderfähig\n";
+            //Vormittags
+            fileWriter.write(firstSectionHeader);
+            fileWriter.write(columnHeaders);
+            fileWriter.write(secondLine);
+            for (AfterSchoolCareDTO afterSchoolCare : afterSchoolCaresMorning) {
+                for (LocalTime time = LocalTime.of(6, 00, 00); time.isBefore(LocalTime.of(12, 00, 00)); time = time.plusMinutes(30)) {
+                    fileWriter.write(afterSchoolCare.getStartTime().toLocalTime().toString() + ";"
+                            + "0,5 ;"
+                            + afterSchoolCare.getName() + " | " + afterSchoolCare.getAttendances().size() + "\n");
+                }
             }
-        }
         /*
 
                     String monday = "";
@@ -167,18 +169,22 @@ public class AttendanceServiceImpl implements AttendanceService {
                     }
 */
 
-        //Nachmittags
-        fileWriter.write(secondSectionHeader);
-        for (AfterSchoolCareDTO afterSchoolCare : afterSchoolCaresAfternoon) {
-            fileWriter.write(afterSchoolCare.getStartTime().toLocalTime().toString() + ";"
-                    + "0,5 ;"
-                    + afterSchoolCare.getName() + " | " + afterSchoolCare.getAttendances().size() + "\n");
-        }
+            //Nachmittags
+            fileWriter.write(secondSectionHeader);
+            for (AfterSchoolCareDTO afterSchoolCare : afterSchoolCaresAfternoon) {
+                fileWriter.write(afterSchoolCare.getStartTime().toLocalTime().toString() + ";"
+                        + "0,5 ;"
+                        + afterSchoolCare.getName() + " | " + afterSchoolCare.getAttendances().size() + "\n");
+            }
 
-        byte[] bytes = FileUtil.readAsByteArray(file);
-        fileWriter.close();
-        //file.delete();
-        return bytes;
+            byte[] bytes = FileUtil.readAsByteArray(file);
+            fileWriter.close();
+            //file.delete();
+            return bytes;
+        } catch (Exception e) {
+            LOGGER.warn(e);
+        }
+        return new byte[0];
     }
 
     @Override
