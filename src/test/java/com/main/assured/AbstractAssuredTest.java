@@ -19,7 +19,6 @@ import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
-import org.hibernate.usertype.UserType;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -73,7 +72,7 @@ public abstract class AbstractAssuredTest {
     }
 
     @Transactional
-    protected User registerUser(IUserDTO userDTO) throws JsonProcessingException {
+    protected void registerUser(IUserDTO userDTO) throws JsonProcessingException {
         userDTO.setPassword("Password123");
 
         UserRole oldRole = null;
@@ -111,7 +110,6 @@ public abstract class AbstractAssuredTest {
             userDTO.setUserType(oldRole.toString());
         }
 
-        return (User) user;
     }
 
     protected void deleteUser(IUserDTO userDTO) {

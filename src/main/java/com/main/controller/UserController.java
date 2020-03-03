@@ -73,6 +73,8 @@ public class UserController {
             return new ResponseEntity<>("Fehler beim Versenden", HttpStatus.BAD_REQUEST);
         }
 
+
+
         return new ResponseEntity<>("Created: " + registered.getRoles(), HttpStatus.CREATED);
     }
 

@@ -23,7 +23,7 @@ public class Privilege implements IPrivilege {
 	}
 
 	public Privilege() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	/**
