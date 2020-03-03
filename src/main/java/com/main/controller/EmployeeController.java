@@ -59,34 +59,9 @@ public class EmployeeController {
         return schoolService.getAll().stream().map(SchoolConverter::toDto).collect(Collectors.toList());
     }
 
-    @PostMapping("/school")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ISchool createSchool(@RequestBody School newSchool) {
-        return schoolService.save(newSchool);
-    }
-
     @GetMapping("/school/{id}")
     public SchoolDTO getSchool(@PathVariable @Min(1) Long id) {
         return SchoolConverter.toDto(schoolService.findOne(id));
-    }
-
-    @PatchMapping("/school/{id}")
-    public SchoolDTO changeSchool(@RequestBody School newSchool, @PathVariable Long id) {
-        School school = schoolService.findOne(id);
-
-        school.setName(newSchool.getName());
-        school.setAddress(newSchool.getAddress());
-        school.setEmail(newSchool.getEmail());
-        school.setPhoneNumber(newSchool.getPhoneNumber());
-
-        schoolService.save(school);
-
-        return SchoolConverter.toDto(school);
-    }
-
-    @DeleteMapping("/school/{id}")
-    public void deleteSchool(@PathVariable Long id) {
-        schoolService.deleteById(id);
     }
 
     /**
