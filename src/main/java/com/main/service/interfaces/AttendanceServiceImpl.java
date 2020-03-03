@@ -1,7 +1,9 @@
 package com.main.service.interfaces;
 
+import com.main.dto.AfterSchoolCareDTO;
 import com.main.dto.AttendanceDTO;
 import com.main.dto.AttendanceInputDTO;
+import com.main.dto.converters.AfterSchoolCareConverter;
 import com.main.model.Attendance;
 import com.main.model.User;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
@@ -122,8 +124,17 @@ public class AttendanceServiceImpl implements AttendanceService {
                 throw new Exception();
         }
 
-        List<AfterSchoolCare> allAfterSchoolCares = afterSchoolCareService.getAll();
+        List<AfterSchoolCareDTO> afterSchoolCaresMorning = afterSchoolCareService.getAll().stream()
+                .filter(afterSchoolCare -> afterSchoolCare.getEndTime() != null && afterSchoolCare.getEndTime().toLocalTime().isAfter(LocalTime.of(6, 00, 00)))
+                .filter(afterSchoolCare -> afterSchoolCare.getStartTime() != null && afterSchoolCare.getStartTime().toLocalTime().isBefore(LocalTime.NOON))
+                .map(AfterSchoolCareConverter::toDto)
+                .collect(Collectors.toList());
 
+        List<AfterSchoolCareDTO> afterSchoolCaresAfternoon = afterSchoolCareService.getAll().stream()
+                .filter(afterSchoolCare -> afterSchoolCare.getEndTime() != null && afterSchoolCare.getEndTime().toLocalTime().isAfter(LocalTime.NOON))
+                .filter(afterSchoolCare -> afterSchoolCare.getStartTime() != null && afterSchoolCare.getStartTime().toLocalTime().isBefore(LocalTime.of(20, 00, 00)))
+                .map(AfterSchoolCareConverter::toDto)
+                .collect(Collectors.toList());
 
         FileWriter fileWriter = new FileWriter(file);
         String firstSectionHeader = "Betreuungsangebote in der Primarstufe und Betreuungs- und Ganztagsangebote im Rahmen der Offenen Ganztagsschule\n";
@@ -142,14 +153,14 @@ public class AttendanceServiceImpl implements AttendanceService {
         fileWriter.write(firstSectionHeader);
         fileWriter.write(columnHeaders);
         fileWriter.write(secondLine);
-        /*for (AfterSchoolCare afterSchoolCare : allAfterSchoolCares) {
-
-
-            for (LocalTime localTime = LocalTime.of(6, 00, 00);
-                 localTime.isBefore(LocalTime.NOON);
-                 localTime.plusMinutes(30)) {
-                if (afterSchoolCare.getStartTime().toLocalTime().isBefore(localTime) &&
-                        afterSchoolCare.getEndTime().toLocalTime().isBefore(localTime.plusMinutes(30))) {
+        for (AfterSchoolCareDTO afterSchoolCare : afterSchoolCaresMorning) {
+            for (LocalTime time = LocalTime.of(6, 00, 00); time.isBefore(LocalTime.of(12, 00, 00)); time.plusMinutes(30)){
+                fileWriter.write(afterSchoolCare.getStartTime().toLocalTime().toString() + ";"
+                        + "0,5 ;"
+                        + afterSchoolCare.getName() + " | " + afterSchoolCare.getAttendances().size() + "\n");
+            }
+        }
+        /*
 
                     String monday = "";
                     int mondayParticipants = 0;
@@ -184,82 +195,15 @@ public class AttendanceServiceImpl implements AttendanceService {
                             fridayParticipants = afterSchoolCare.getAttendances().size();
                             break;
                     }
-                    double sum = (mondayParticipants + tuesdayParticipants + wednesdayParticipants + thursdayParticipants + fridayParticipants) * 0.5;
-
-                    fileWriter.write(localTime.toString() + ";"
-                            + "0,5 ;"
-                            + monday + "| " + mondayParticipants + ";"
-                            + tuesday + "| " + tuesdayParticipants + ";"
-                            + wednesday + "| " + wednesdayParticipants + ";"
-                            + thursday + "| " + thursdayParticipants + ";"
-                            + friday + "| " + fridayParticipants + ";"
-                            + sum + "\n");
-
-                }
-
-
-            }
-        }
 */
+
         //Nachmittags
         fileWriter.write(secondSectionHeader);
-        for (AfterSchoolCare afterSchoolCare : allAfterSchoolCares) {
-          for (LocalTime localTime = LocalTime.of(12, 00, 00);
-               localTime.isBefore(LocalTime.of(20, 00, 00));
-               localTime.plusMinutes(30)) {
-            if (afterSchoolCare.getStartTime().toLocalTime().isBefore(localTime) &&
-                    afterSchoolCare.getEndTime().toLocalTime().isBefore(localTime.plusMinutes(30))) {
-
-              String monday = "";
-              int mondayParticipants = 0;
-              String tuesday = "";
-              int tuesdayParticipants = 0;
-              String wednesday = "";
-              int wednesdayParticipants = 0;
-              String thursday = "";
-              int thursdayParticipants = 0;
-              String friday = "";
-              int fridayParticipants = 0;
-
-              switch (afterSchoolCare.getStartTime().getDayOfWeek()) {
-                case MONDAY:
-                  monday = afterSchoolCare.getName();
-                  mondayParticipants = afterSchoolCare.getAttendances().size();
-                  break;
-                case TUESDAY:
-                  tuesday = afterSchoolCare.getName();
-                  tuesdayParticipants = afterSchoolCare.getAttendances().size();
-                  break;
-                case WEDNESDAY:
-                  wednesday = afterSchoolCare.getName();
-                  wednesdayParticipants = afterSchoolCare.getAttendances().size();
-                  break;
-                case THURSDAY:
-                  thursday = afterSchoolCare.getName();
-                  thursdayParticipants = afterSchoolCare.getAttendances().size();
-                  break;
-                case FRIDAY:
-                  friday = afterSchoolCare.getName();
-                  fridayParticipants = afterSchoolCare.getAttendances().size();
-                  break;
-              }
-              double sum = (mondayParticipants + tuesdayParticipants + wednesdayParticipants + thursdayParticipants + fridayParticipants) * 0.5;
-
-              fileWriter.write(localTime.toString() + ";"
-                      + "0,5 ;"
-                      + monday + "| " + mondayParticipants + ";"
-                      + tuesday + "| " + tuesdayParticipants + ";"
-                      + wednesday + "| " + wednesdayParticipants + ";"
-                      + thursday + "| " + thursdayParticipants + ";"
-                      + friday + "| " + fridayParticipants + ";"
-                      + sum + "\n");
-
-            }
-
-
-          }
-
-    }
+        for (AfterSchoolCareDTO afterSchoolCare : afterSchoolCaresAfternoon) {
+            fileWriter.write(afterSchoolCare.getStartTime().toLocalTime().toString() + ";"
+                    + "0,5 ;"
+                    + afterSchoolCare.getName() + " | " + afterSchoolCare.getAttendances().size() + "\n");
+        }
 
         byte[] bytes = FileUtil.readAsByteArray(file);
         fileWriter.close();
