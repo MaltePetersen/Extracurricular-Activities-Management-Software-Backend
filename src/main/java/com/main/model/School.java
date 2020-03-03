@@ -1,27 +1,14 @@
 package com.main.model;
 
+import com.main.model.afterSchoolCare.AfterSchoolCare;
+import com.main.model.interfaces.*;
+import lombok.Data;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotBlank;
-
-import com.main.model.afterSchoolCare.AfterSchoolCare;
-import com.main.model.interfaces.IChild;
-import com.main.model.interfaces.IContactDetails;
-import com.main.model.interfaces.IEmployee;
-import com.main.model.interfaces.ISchool;
-import com.main.model.interfaces.ISchoolCoordinator;
-
-import lombok.Data;
 
 @Entity
 @Data
@@ -72,7 +59,7 @@ public class School implements IContactDetails, ISchool {
 
 	public boolean removeEmployee(IEmployee employee) {
 		int oldSize = employees.size();
-		employees = employees.stream().filter(each -> each.getId() != employee.getId()).collect(Collectors.toList());
+		employees = employees.stream().filter(each -> !each.getId().equals(employee.getId())).collect(Collectors.toList());
 		return oldSize > employees.size();
 	}
 
@@ -82,7 +69,7 @@ public class School implements IContactDetails, ISchool {
 
 	public boolean removeSchoolCoordinator(ISchoolCoordinator schoolCoordinator) {
 		int oldSize = schoolCoordinators.size();
-		schoolCoordinators = schoolCoordinators.stream().filter(each -> each.getId() != schoolCoordinator.getId())
+		schoolCoordinators = schoolCoordinators.stream().filter(each -> !each.getId().equals(schoolCoordinator.getId()))
 				.collect(Collectors.toList());
 		return oldSize > schoolCoordinators.size();
 	}
@@ -93,7 +80,7 @@ public class School implements IContactDetails, ISchool {
 	
 	public boolean removeChild(IChild child) {
 		int oldSize = children.size();
-		schoolCoordinators = schoolCoordinators.stream().filter(each -> each.getId() != child.getId())
+		schoolCoordinators = schoolCoordinators.stream().filter(each -> !each.getId().equals(child.getId()))
 				.collect(Collectors.toList());
 		return oldSize > schoolCoordinators.size();
 	}

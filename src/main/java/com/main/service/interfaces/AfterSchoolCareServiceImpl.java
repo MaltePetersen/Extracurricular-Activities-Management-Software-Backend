@@ -11,14 +11,20 @@ import com.main.model.afterSchoolCare.WorkingGroup;
 import com.main.repository.AfterSchoolCareRepository;
 import com.main.repository.AttendanceRepository;
 import com.main.service.implementations.AfterSchoolCareService;
+import org.aspectj.util.FileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.FileWriter;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import static org.hibernate.bytecode.BytecodeLogger.LOGGER;
 
 @Service
 public class AfterSchoolCareServiceImpl implements AfterSchoolCareService {
@@ -111,15 +117,20 @@ public class AfterSchoolCareServiceImpl implements AfterSchoolCareService {
             case 4:
                 afterSchoolCare = AfterSchoolCareCreator.createAmplification();
                 break;
-            default: afterSchoolCare = null;
+            default:
+                afterSchoolCare = null;
                 break;
         }
 
-        afterSchoolCare.setStartTime(afterSchoolCareDTO.getStartTime());
-        afterSchoolCare.setEndTime(afterSchoolCareDTO.getEndTime());
-        afterSchoolCare.setName(afterSchoolCareDTO.getName());
+        if (afterSchoolCare != null) {
+            afterSchoolCare.setStartTime(afterSchoolCareDTO.getStartTime());
+            afterSchoolCare.setEndTime(afterSchoolCareDTO.getEndTime());
+            afterSchoolCare.setName(afterSchoolCareDTO.getName());
 
-        return AfterSchoolCareConverter.toDto(save(afterSchoolCare));
+            return AfterSchoolCareConverter.toDto(save(afterSchoolCare));
+        } else {
+            return null;
+        }
     }
 
 
@@ -135,12 +146,44 @@ public class AfterSchoolCareServiceImpl implements AfterSchoolCareService {
         if (afterSchoolCareDTO.getAttendances() != null) {
             for (AttendanceDTO attendanceDTO : afterSchoolCareDTO.getAttendances()) {
                 Optional<Attendance> optionalAttendance = attendanceRepository.findById(attendanceDTO.getId());
-                if(optionalAttendance.isPresent()){
+                if (optionalAttendance.isPresent()) {
                     Attendance attendance = optionalAttendance.get();
                     afterSchoolCare.addAttendance(attendance);
                 }
             }
         }
         //TODO Adding User change
+    }
+
+    @Override
+    @Transactional
+    public byte[] getAttendanceList() throws Exception {
+        List<Attendance> all = repository.findByClosedTrue().stream().map(AfterSchoolCare::getAttendances).collect(ArrayList::new, List::addAll, List::addAll);
+
+        File file = new File("attendance.csv");
+        if (!file.exists()) {
+            boolean isCreated = file.createNewFile();
+            if (!isCreated)
+                throw new Exception();
+        }
+        try (FileWriter fileWriter = new FileWriter(file);
+        ) {
+
+            for (Attendance attendance : all) {
+                String name = attendance.getChild().getFullname();
+                LocalDateTime arrival = attendance.getArrivalTime();
+                LocalDateTime leaveTime = attendance.getLeaveTime();
+                String type = attendance.getAfterSchoolCare().getType().name();
+                String line = name + ";" + arrival + ";" + leaveTime + ";" + type;
+                fileWriter.write(line);
+                fileWriter.flush();
+            }
+            byte[] bytes = FileUtil.readAsByteArray(file);
+
+            return bytes;
+        } catch (Exception e) {
+            LOGGER.warn(e);
+        }
+        return new byte[0];
     }
 }

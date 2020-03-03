@@ -76,7 +76,9 @@ public class UserServiceImpl implements UserService {
         role = roleRepository.findByName(UserRole.byRole(userDTO.getUserType().toString()).toString());
 
         if (roles.contains("ROLE_MANAGEMENT")) {
-            return saveUser(User.UserBuilder.<User>next().withDto(userDTO).withRole(role).build());
+            User user = User.UserBuilder.<User>next().withDto(userDTO).withRole(role).build();
+            user.setVerified(true);
+            return saveUser(user);
         } else if (roles.contains("ROLE_PARENT") && userDTO.getUserType().equals("CHILD")) {
             return saveUser(User.UserBuilder.<User>next().withDto(userDTO).withRole(role).build());
         } else if (roles.contains("ROLE_SCHOOLCOORDINATOR")

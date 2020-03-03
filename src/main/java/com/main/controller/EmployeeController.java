@@ -7,9 +7,7 @@ import com.main.dto.converters.AfterSchoolCareConverter;
 import com.main.dto.converters.SchoolConverter;
 import com.main.dto.converters.StringToLocalDatetimeConverter;
 import com.main.model.Attendance;
-import com.main.model.School;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
-import com.main.model.interfaces.ISchool;
 import com.main.service.implementations.AfterSchoolCareService;
 import com.main.service.implementations.AttendanceService;
 import com.main.service.implementations.SchoolService;
@@ -59,34 +57,9 @@ public class EmployeeController {
         return schoolService.getAll().stream().map(SchoolConverter::toDto).collect(Collectors.toList());
     }
 
-    @PostMapping("/school")
-    @ResponseStatus(HttpStatus.CREATED)
-    ISchool createSchool(@RequestBody School newSchool) {
-        return schoolService.save(newSchool);
-    }
-
     @GetMapping("/school/{id}")
-    SchoolDTO getSchool(@PathVariable @Min(1) Long id) {
+    public SchoolDTO getSchool(@PathVariable @Min(1) Long id) {
         return SchoolConverter.toDto(schoolService.findOne(id));
-    }
-
-    @PatchMapping("/school/{id}")
-    SchoolDTO changeSchool(@RequestBody School newSchool, @PathVariable Long id) {
-        School school = schoolService.findOne(id);
-
-        school.setName(newSchool.getName());
-        school.setAddress(newSchool.getAddress());
-        school.setEmail(newSchool.getEmail());
-        school.setPhoneNumber(newSchool.getPhoneNumber());
-
-        schoolService.save(school);
-
-        return SchoolConverter.toDto(school);
-    }
-
-    @DeleteMapping("/school/{id}")
-    void deleteSchool(@PathVariable Long id) {
-        schoolService.deleteById(id);
     }
 
     /**
@@ -115,29 +88,29 @@ public class EmployeeController {
 
     @PostMapping("/after_school_cares")
     @ResponseStatus(HttpStatus.CREATED)
-    AfterSchoolCareDTO createAfterSchoolCare(@RequestBody AfterSchoolCare newAfterSchoolCare) {
+    public AfterSchoolCareDTO createAfterSchoolCare(@RequestBody AfterSchoolCare newAfterSchoolCare) {
         return AfterSchoolCareConverter.toDto(afterSchoolCareService.save(newAfterSchoolCare));
     }
 
     @GetMapping("/after_school_cares/{id}")
-    AfterSchoolCareDTO getAfterSchoolCare(@PathVariable @Min(1) Long id) {
+    public AfterSchoolCareDTO getAfterSchoolCare(@PathVariable @Min(1) Long id) {
         return AfterSchoolCareConverter.toDto(afterSchoolCareService.findOne(id));
     }
 
     @DeleteMapping("/after_school_cares/{id}")
-    void deleteAfterSchoolCare(@PathVariable Long id) {
+    public void deleteAfterSchoolCare(@PathVariable Long id) {
         afterSchoolCareService.deleteById(id);
     }
 
     @PatchMapping("/after_school_cares/{id}/close")
     @Transactional
-    ResponseEntity closeAfterSchoolCare(@PathVariable @Min(1) Long id) {
+    public ResponseEntity closeAfterSchoolCare(@PathVariable @Min(1) Long id) {
         AfterSchoolCare afterSchoolCare = afterSchoolCareService.findOne(id);
 
         if (afterSchoolCare.getAttendances().stream().allMatch(attendance -> attendance.determineStatus() == 4)) {
             afterSchoolCare.setClosed(true);
             afterSchoolCareService.save(afterSchoolCare);
-            for (Attendance attendance : afterSchoolCare.getAttendances()){
+            for (Attendance attendance : afterSchoolCare.getAttendances()) {
                 attendance.setClosed(true);
             }
         } else {
@@ -159,7 +132,7 @@ public class EmployeeController {
      * @return Gibt die verknüpfte AfterSchoolCare als DTO oder eine Fehlermeldung zurück
      */
     @PatchMapping("/attendance/{id}")
-    ResponseEntity updateAttendance(@RequestBody Map<String, String> update, @PathVariable Long id) {
+    public ResponseEntity updateAttendance(@RequestBody Map<String, String> update, @PathVariable Long id) {
         Attendance attendance = attendanceService.findOne(id);
 
         if (!attendance.getAfterSchoolCare().isClosed()) {
@@ -218,22 +191,22 @@ public class EmployeeController {
 
     @PostMapping("/invoice")
     @ResponseStatus(HttpStatus.CREATED)
-    void createInvoice(@RequestBody InvoiceDTO invoiceDTO) {
+    public void createInvoice(@RequestBody InvoiceDTO invoiceDTO) {
         invoiceDTOs.add(invoiceDTO);
     }
 
     @GetMapping("/invoice/{id}")
-    InvoiceDTO getInvoices(@PathVariable @Min(1) int id) {
+    public InvoiceDTO getInvoices(@PathVariable @Min(1) int id) {
         return invoiceDTOs.get(id - 1);
     }
 
     @PatchMapping("/invoice/{id}")
-    void changeInvoice(@RequestBody InvoiceDTO invoiceDTO, @PathVariable int id) {
+    public void changeInvoice(@RequestBody InvoiceDTO invoiceDTO, @PathVariable int id) {
         invoiceDTOs.set(id - 1, invoiceDTO);
     }
 
     @DeleteMapping("/invoice/{id}")
-    void deleteInvoice(@PathVariable int id) {
+    public void deleteInvoice(@PathVariable int id) {
         invoiceDTOs.remove(id - 1);
     }
 

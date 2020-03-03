@@ -7,7 +7,6 @@ import com.main.dto.converters.AfterSchoolCareConverter;
 import com.main.model.Attendance;
 import com.main.model.User;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
-import com.main.repository.AfterSchoolCareRepository;
 import com.main.repository.AttendanceRepository;
 import com.main.service.implementations.AfterSchoolCareService;
 import com.main.service.implementations.AttendanceService;
@@ -19,8 +18,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.FileWriter;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,33 +82,6 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public void deleteById(Long id) {
         repository.deleteById(id);
-    }
-
-    @Override
-    @Transactional
-    public byte[] getAttendanceList() throws Exception {
-        List<Attendance> all = repository.findByIsClosedTrue();
-        File file = new File("attendance.csv");
-        if (!file.exists()) {
-            boolean isCreated = file.createNewFile();
-            if (!isCreated)
-                throw new Exception();
-        }
-        FileWriter fileWriter = new FileWriter(file);
-
-        for (Attendance attendance : all) {
-            String name = attendance.getChild().getFullname();
-            LocalDateTime arrival = attendance.getArrivalTime();
-            LocalDateTime leaveTime = attendance.getLeaveTime();
-            String type = attendance.getAfterSchoolCare().getType().name();
-            String line = name + ";" + arrival + ";" + leaveTime + ";" + type;
-            fileWriter.write(line);
-        }
-
-        byte[] bytes = FileUtil.readAsByteArray(file);
-        fileWriter.close();
-        file.delete();
-        return bytes;
     }
 
     @Override

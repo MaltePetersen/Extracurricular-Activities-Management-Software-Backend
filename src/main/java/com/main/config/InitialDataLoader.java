@@ -17,7 +17,10 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 
 @Component
@@ -193,7 +196,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 		Amplification amplification = new Amplification();
 		amplification.setName("Deutsch Verstärkung");
-		amplification.setStartTime(LocalDateTime.of(2020, 6, 17, 10, 45));
+		amplification.setStartTime(LocalDateTime.of(2020, 6, 17, 10, 30));
 		amplification.setEndTime(LocalDateTime.of(2020, 6, 17, 11, 30));
 		amplification.setParticipatingSchool(school2);
 		amplification.setOwner(userRepository.findByUsername("Employee_Test2"));

@@ -1,6 +1,5 @@
 package com.main.model.user;
 
-import com.main.model.User;
 import org.springframework.security.core.GrantedAuthority;
 
 public enum UserRole implements GrantedAuthority {

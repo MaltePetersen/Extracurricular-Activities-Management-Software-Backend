@@ -32,7 +32,7 @@ import lombok.extern.java.Log;
 @Component
 public class ScheduledTask {
 	
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("DD.MM.yyyy HH:mm:ss");
+	private final SimpleDateFormat dateFormat = new SimpleDateFormat("DD.MM.yyyy HH:mm:ss");
 
 	private VerificationTokenRepository verificationTokenRepository;
 	

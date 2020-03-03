@@ -1,27 +1,16 @@
 package com.main.model;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.*;
-import javax.transaction.Transactional;
-import javax.validation.constraints.NotBlank;
-
-import com.main.dto.ChildDTO;
 import com.main.dto.SimpleUserDTO;
 import com.main.dto.UserDTO;
 import com.main.dto.interfaces.IUserDTO;
 import com.main.model.afterSchoolCare.AfterSchoolCare;
-import com.main.model.interfaces.IChild;
-import com.main.model.interfaces.IEmployee;
-import com.main.model.interfaces.IManagement;
-import com.main.model.interfaces.IParent;
-import com.main.model.interfaces.ITeacher;
-import com.main.model.interfaces.IUser;
-
+import com.main.model.interfaces.*;
 import lombok.Data;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data

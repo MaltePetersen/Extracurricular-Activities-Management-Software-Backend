@@ -1,7 +1,5 @@
 package com.main.dto.interfaces;
 
-import com.main.dto.SchoolDTO;
-
 public interface IUserDTO {
 
 	String getUserType();
