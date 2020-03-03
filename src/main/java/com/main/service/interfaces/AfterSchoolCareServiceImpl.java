@@ -18,13 +18,13 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import static org.hibernate.bytecode.BytecodeLogger.LOGGER;
 
 @Service
 public class AfterSchoolCareServiceImpl implements AfterSchoolCareService {
@@ -181,8 +181,8 @@ public class AfterSchoolCareServiceImpl implements AfterSchoolCareService {
             byte[] bytes = FileUtil.readAsByteArray(file);
 
             return bytes;
-        }catch(Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            LOGGER.warn(e);
         }
         return new byte[0];
     }
