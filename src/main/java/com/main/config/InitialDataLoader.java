@@ -174,7 +174,6 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 		attendance5.setChild(userRepository.findByUsername("Child_Test4"));
 		attendanceRepository.save(attendance5);
 
-		afternoonCare.setClosed(true);
 		afterSchoolCareService.save(afternoonCare);
 
 		Remedial remedial = new Remedial();
