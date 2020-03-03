@@ -197,7 +197,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
 
 		Amplification amplification = new Amplification();
 		amplification.setName("Deutsch Verstärkung");
-		amplification.setStartTime(LocalDateTime.of(2020, 6, 17, 10, 45));
+		amplification.setStartTime(LocalDateTime.of(2020, 6, 17, 10, 30));
 		amplification.setEndTime(LocalDateTime.of(2020, 6, 17, 11, 30));
 		amplification.setParticipatingSchool(school2);
 		amplification.setOwner(userRepository.findByUsername("Employee_Test2"));
