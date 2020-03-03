@@ -27,41 +27,41 @@ public class UserData {
         User.UserBuilder<User> builder = User.UserBuilder.next();
 
 
-        User parent = builder.withName("Parent_Test").withPassword(encoder.encode("password")).withFullname("Craig Walls").withEmail("craig@walls.com").withPhoneNumber("112").build();
+        User parent = builder.withName("Parent_Test").withPassword(encoder.encode("password")).withFullname("Bernd Huber").withEmail("craig@walls.com").withPhoneNumber("112").build();
         builder = User.UserBuilder.next();
-        User parent2 = builder.withName("Parent_Test2").withPassword(encoder.encode("password")).withFullname("Craig Walls 2").withEmail("craig2@walls.com").withPhoneNumber("112").build();
+        User parent2 = builder.withName("Parent_Test2").withPassword(encoder.encode("password")).withFullname("Martina Otto").withEmail("craig2@walls.com").withPhoneNumber("112").build();
         builder = User.UserBuilder.next();
         User parent3 = builder.withName("Parent_Test3").withPassword(encoder.encode("password")).withFullname("Andreas Müller").withEmail("andreas@müller.com").withPhoneNumber("112").build();
         builder = User.UserBuilder.next();
-        User management = builder.withName("Management_Test").withPassword(encoder.encode("password")).withFullname("Malte Petersen")
-                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").build();
+        User management = builder.withName("Management_Test").withPassword(encoder.encode("password")).withFullname("Barbara Richter")
+                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Bahnhofstraße 1").withSubject("Geschichte").withIban("1374816241982437").build();
         builder = User.UserBuilder.next();
-        User employee = builder.withName("Employee_Test").withPassword(encoder.encode("password")).withFullname("Malte Petersen")
-                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").build();
+        User employee = builder.withName("Employee_Test").withPassword(encoder.encode("password")).withFullname("Manfred Fischer")
+                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Bahnhofstraße 1").withSubject("Geschichte").withIban("1374816241982437").build();
         builder = User.UserBuilder.next();
-        User employee2 = builder.withName("Employee_Test2").withPassword(encoder.encode("password")).withFullname("Mitarbeiter Malte 2")
-                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").build();
+        User employee2 = builder.withName("Employee_Test2").withPassword(encoder.encode("password")).withFullname("Gisela Wagner")
+                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Bahnhofstraße 1").withSubject("Geschichte").withIban("1374816241982437").build();
         builder = User.UserBuilder.next();
-        User teacher = builder.withName("Teacher_Test").withPassword(encoder.encode("password")).withFullname("Malte Petersen")
-                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").build();
+        User teacher = builder.withName("Teacher_Test").withPassword(encoder.encode("password")).withFullname("Irmgard Schuster")
+                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Bahnhofstraße 1").withSubject("Geschichte").withIban("1374816241982437").build();
         builder = User.UserBuilder.next();
-        User child = builder.withName("Child_Test").withPassword(encoder.encode("password")).withFullname("Malte Petersen")
-                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").withSchoolClass("7a").build();
+        User child = builder.withName("Child_Test").withPassword(encoder.encode("password")).withFullname("Peter Müller")
+                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Bahnhofstraße 1").withSubject("Geschichte").withIban("1374816241982437").withSchoolClass("7a").build();
         builder = User.UserBuilder.next();
-        User child2 = builder.withName("Child_Test2").withPassword(encoder.encode("password")).withFullname("Malte Petersen 2")
-                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").withSchoolClass("7b").build();
+        User child2 = builder.withName("Child_Test2").withPassword(encoder.encode("password")).withFullname("Benno Breitkopf")
+                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Bahnhofstraße 1").withSubject("Geschichte").withIban("1374816241982437").withSchoolClass("7b").build();
         builder = User.UserBuilder.next();
         User child3 = builder.withName("Child_Test3").withPassword(encoder.encode("password")).withFullname("Benno Müller")
-                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").withSchoolClass("7b").build();
+                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Bahnhofstraße 1").withSubject("Geschichte").withIban("1374816241982437").withSchoolClass("7b").build();
         builder = User.UserBuilder.next();
         User child4 = builder.withName("Child_Test4").withPassword(encoder.encode("password")).withFullname("Merlin Wizard")
-                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").withSchoolClass("3b").build();
+                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Bahnhofstraße 1").withSubject("Geschichte").withIban("1374816241982437").withSchoolClass("3b").build();
         builder = User.UserBuilder.next();
         User child5 = builder.withName("Child_Test5").withPassword(encoder.encode("password")).withFullname("Nathalie Müller")
-                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").withSchoolClass("3b").build();
+                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Bahnhofstraße 1").withSubject("Geschichte").withIban("1374816241982437").withSchoolClass("3b").build();
         builder = User.UserBuilder.next();
-        User schoolCoordinator =  builder.withName("School_Coordinator_Test").withPassword(encoder.encode("password")).withFullname("Malte Petersen")
-                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Geschichte").withSubject("Geschichte").withIban("1374816241982437").build();
+        User schoolCoordinator =  builder.withName("School_Coordinator_Test").withPassword(encoder.encode("password")).withFullname("Uwe Bauer")
+                .withEmail("malte.petersen@web.de").withPhoneNumber("123-123-1234").withAddress("Bahnhofstraße 1").withSubject("Geschichte").withIban("1374816241982437").build();
 
         parent.setVerified(true);
         parent2.setVerified(true);
