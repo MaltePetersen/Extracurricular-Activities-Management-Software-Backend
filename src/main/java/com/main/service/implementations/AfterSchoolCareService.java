@@ -1,10 +1,9 @@
 package com.main.service.implementations;
 
 import com.main.dto.AfterSchoolCareDTO;
-import com.main.model.afterSchoolCare.AfterSchoolCare;
 import com.main.model.Attendance;
+import com.main.model.afterSchoolCare.AfterSchoolCare;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface AfterSchoolCareService {
