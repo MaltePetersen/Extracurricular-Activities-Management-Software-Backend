@@ -1,23 +1,7 @@
+# Extracurricular Activities Management Software Backend
 
-Header should include Content-Type application/json 
-
-You will need to verify the use before using it(if it isnt a CHILD or a USER.
- 
-There are following test user to play around with: 
- * Parent_Test 
- * Employee_Test 
- * Employee_SchoolCoordinator_Test 
- * Management_Test 
- * Teacher_Test 
- * Teacher_SchoolCoordinator_Test 
- * User_Test 
- * Child_Test
- 
-The password is always password
-One Paragraph of project description goes here
-
-
-
+This repository is part of the Extracurricular Activities Management Software.
+It provides a REST API for the project.
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -47,6 +31,22 @@ localhost:8080
 ## Running the tests
 
 Explain how to run the automated tests for this system
+## Example Users
+Header should include Content-Type application/json 
+You will need to verify the use before using it(if it isnt a CHILD or a USER.
+ 
+There are following test user to play around with: 
+ * Parent_Test 
+ * Employee_Test 
+ * Employee_SchoolCoordinator_Test 
+ * Management_Test 
+ * Teacher_Test 
+ * Teacher_SchoolCoordinator_Test 
+ * User_Test 
+ * Child_Test
+ 
+The password is always password
+One Paragraph of project description goes here
 
 ## Example Body User Creation with Rest Endpoint /register
 
@@ -65,21 +65,6 @@ Explain how to run the automated tests for this system
 "isSchoolCoordinator" : false
 }
 ```
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
 
 ## Deployment
 
@@ -89,23 +74,19 @@ mvn clean install
 ```
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
 * [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* **Malte Petersen** - *Project Lead* - [MaltePetersen](https://github.com/MaltePetersen)
+* **Markus** - *Backend developer* - [Oberstrike](https://github.com/Oberstrike)
+* **Bendix** - *Backend developer* - [TaskPlays](https://github.com/TaskPlays)
+* **Timo** - *Backend developer* - [Sibo0](https://github.com/Sibo0)
+* **Hendrik** - *Frontend developer* - [PeterPan86](https://github.com/PeterPan86)
+* **Daniel Last** - *Frontend developer* - [DanielLast1997](https://github.com/DanielLast1997)
 
 ## License
 
@@ -113,7 +94,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* DHSH
+* Fjoerde
 
