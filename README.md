@@ -76,9 +76,6 @@ mvn clean install
 
 * [Maven](https://maven.apache.org/) - Dependency Management
 
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 * **Malte Petersen** - *Project Lead* - [MaltePetersen](https://github.com/MaltePetersen)
@@ -90,7 +87,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.md](https://github.com/MaltePetersen/Extracurricular-Activities-Management-Software-Backend/blob/master/LICENSE) file for details
 
 ## Acknowledgments
 
